@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-s3-buckets
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: loki
+      containers:
+        - name: aws-cli
+          image: amazon/aws-cli
+          command: ["sh", "-c"]
+          args:
+          - >
+            aws s3 mb s3://chunks-loki-cluster-prod --region us-east-1 && 
+            aws s3 mb s3://ruler-loki-cluster-prod --region us-east-1;
+      restartPolicy: OnFailure

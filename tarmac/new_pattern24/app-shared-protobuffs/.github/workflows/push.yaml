@@ -1,0 +1,163 @@
+name: buf-push
+on:
+  workflow_dispatch:
+
+  push:
+    #This Github Action will be executed only when the changes are applied to the main branch but also occur only in the proto/ folder.
+    branches:
+      - main
+    paths:
+      - proto/**
+      - python/**
+
+env:
+  NEXUS_PYPI_URL: https://sonatype.cliniciannexus.com/repository/cn_pypi/
+  NEXUS_RUBY_URL: https://sonatype.cliniciannexus.com/repository/cn_ruby/
+
+jobs:
+  protobuf-build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: "1.28.1"
+          buf_domain: clinician-nexus.buf.dev
+          buf_user: ${{ secrets.BUF_PRO_USER }}
+          buf_api_token: ${{ secrets.BUF_PRO_TOKEN }}
+          github_token: ${{ github.token }}
+      - uses: bufbuild/buf-lint-action@v1
+        with:
+          input: "proto"
+      - uses: bufbuild/buf-breaking-action@v1
+        continue-on-error: true # while in early development, just warn on breaking changes
+        with:
+          input: "proto"
+          against: "https://github.com/${{ github.repository }}.git#branch=main,ref=HEAD~1,subdir=proto"
+      - uses: bufbuild/buf-push-action@v1
+        with:
+          # BUF_PRO_TOKEN is a GitHub org-level secret tied to BSR bot user
+          buf_token: ${{ secrets.BUF_PRO_TOKEN }}
+          # If the repo does not exist, create it as private
+          create_visibility: private
+          # If branch is not main, make the (BSR) commit a draft
+          draft: ${{ github.ref_name != 'main'}}
+          input: "proto"
+      ###Python configuration###
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+        env:
+          # Required to detect python properly
+          AGENT_TOOLSDIRECTORY: ${{ runner.tool_cache }}
+      ##Ruby configuration###
+      - name: Ruby version
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - name: Buf Generate
+        run: |
+          cd python
+          buf generate clinician-nexus.buf.dev/bufbuild/reflect
+          ./create_init_py.sh
+      - uses: abatilo/actions-poetry@v2
+      - uses: actions/cache@v3
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: python/.venv
+          key: venv-${{ hashFiles('python/poetry.lock') }}
+      - name: Zip python folder
+        run: |
+          zip -r python.zip python/
+      - name: Upload Python folder as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-python-artifacts
+          path: python.zip
+      - name: Upload Ruby folder as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-ruby-artifacts
+          path: ruby
+
+  python-build-and-push:
+    runs-on: ubuntu-latest
+    name: "Python protobuf - package"
+    needs: protobuf-build-and-push
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates
+      - name: Download Python artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: generated-python-artifacts
+      - name: Unzip artifact
+        run: unzip -o python.zip
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+        env:
+          # Required to detect python properly
+          AGENT_TOOLSDIRECTORY: ${{ runner.tool_cache }}
+      - uses: abatilo/actions-poetry@v2
+      - uses: actions/cache@v3
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: python/.venv
+          key: venv-${{ hashFiles('python/poetry.lock') }}
+      - name: Install dependencies
+        run: |
+          cd python
+          poetry config http-basic.buf ${{ secrets.BUF_PRO_USER }} ${{ secrets.BUF_PRO_TOKEN }}
+          poetry install --all-extras
+      - name: Build & publish
+        run: |
+          pip install twine
+          cd python
+          poetry build
+          export TWINE_USERNAME=${{ secrets.NEXUS_USER }}
+          export TWINE_PASSWORD=${{ secrets.NEXUS_PASSWORD }}
+          export TWINE_NON_INTERACTIVE=1
+          export TWINE_REPOSITORY_URL=$NEXUS_PYPI_URL
+          twine upload dist/*
+
+  ruby-build-and-push:
+    runs-on: ubuntu-latest
+    name: "Ruby protobuf - package"
+    needs: protobuf-build-and-push
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with:
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+      - name: Download Ruby artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: generated-ruby-artifacts
+          path: ruby
+      - name: Ruby version
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - name: Compute short versions of SHASUM
+        id: shorten
+        run: |
+          echo "sha=$(git rev-parse --short=10 HEAD)" >> $GITHUB_OUTPUT
+      - name: Generate .gem file
+        env:
+          NEW_BRANCH_NAME: push-ruby-files-${{ steps.shorten.outputs.sha }}
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_EMAIL}"
+          git checkout -b "${{ env.NEW_BRANCH_NAME }}"
+          gem install nexus
+          gem build ruby_gemspec/buf_gem.gemspec
+          gem nexus ./*.gem --url ${{ env.NEXUS_RUBY_URL }} --credential ${{ secrets.NEXUS_USER }}:${{ secrets.NEXUS_PASSWORD }}

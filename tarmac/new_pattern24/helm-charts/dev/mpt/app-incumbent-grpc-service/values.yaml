@@ -1,0 +1,47 @@
+fullnameOverride: app-incumbent-grpc-service-dev
+namespace:
+  name: mpt
+  
+service:
+  port: 8004
+  targetPort: 8004
+  name: app-incumbent-grpc-service-dev
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-incumbent-grpc-service-ecr-repo'
+  tag: '3ee178bce4'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+serviceAccountName:
+  create: false
+  name: app-incumbent-api-sa
+  automountServiceAccountToken: true
+
+
+envvars:
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+  - name: "CN_AWSCONFIGURATION__AWSBUCKETNAME"
+    value: "dev-mpt-etl-source-data-472485266432"
+
+
+##we set limit of memory in the pods to 256Mi
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "256Mi"
+
+environment: dev

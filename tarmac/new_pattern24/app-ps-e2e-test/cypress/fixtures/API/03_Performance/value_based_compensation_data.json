@@ -1,0 +1,56 @@
+{
+    "mockData": {
+        "userId": 1004,
+        "tenant": 1,
+        "dashboardKey": 2,
+        "cardKey": 12,
+        "specialties": 2223,
+        "periodId": 1,
+        "yearMonth": 202201,
+        "valueBasedCompResponse": {
+            "cardSettings": {
+                "title": "Value Based Compensation",
+                "infoIcon": "Value Based Compensation is paid following year-end review"
+            },
+            "detail": [
+                {
+                    "measureTypeDescription": "Outcomes",
+                    "compEligible": 2000,
+                    "compEarned": 2000
+                },
+                {
+                    "measureTypeDescription": "Patient Experience",
+                    "compEligible": 2000,
+                    "compEarned": 2000
+                },
+                {
+                    "measureTypeDescription": "Quality",
+                    "compEligible": 4000,
+                    "compEarned": 2500
+                }
+            ]
+        }
+    },
+    "realData": {
+        "userId": "IZ187",
+        "tenant": 2,
+        "dashboardKey": 4,
+        "cardKey": 12,
+        "specialties": 1320,
+        "periodId": 2,
+        "yearMonth": 202308,
+        "valueBasedCompResponse": {
+            "cardSettings": {
+                "title": "Value Based Compensation",
+                "infoIcon": "Value Based Compensation is paid following year-end review"
+            },
+            "detail": [
+                {
+                    "measureTypeDescription": "Quality",
+                    "compEligible": 35000,
+                    "compEarned": 15000
+                }
+            ]
+        }
+    }
+}

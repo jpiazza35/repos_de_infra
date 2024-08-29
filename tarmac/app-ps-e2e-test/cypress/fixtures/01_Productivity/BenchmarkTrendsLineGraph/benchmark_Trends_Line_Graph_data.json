@@ -1,0 +1,15 @@
+{
+    "BenchmarkLineGraphLabel": {
+        "MonthlywRVUFTETrendsTitle": "Monthly wRVU per FTE Trends",
+        "SCANational2022": "SC - National - 2023",
+        "P90Survey": "P90 Survey",
+        "P75Survey": "P75 Survey",
+        "P50Survey": "P50 Survey",
+        "P25Survey": "P25 Survey",
+        "ExportDataPDF": "Export Data to PDF",
+        "ExportDataCSV": "Export Data to CSV",
+        "ExportDataExcel": "Export Data to Excel",
+        "currentYTD": "Current YTD",
+        "PriorYTD": "Prior YTD"
+    }
+}

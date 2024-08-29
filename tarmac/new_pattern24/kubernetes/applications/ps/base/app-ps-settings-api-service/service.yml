@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-ps-settings-api-service
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: https
+    port: 10002
+    protocol: TCP
+    targetPort: 10002
+  selector:
+    app.kubernetes.io/instance: app-settings-api-service
+    app.kubernetes.io/name: app-ps-settings-api-service
+  sessionAffinity: None
+  type: ClusterIP

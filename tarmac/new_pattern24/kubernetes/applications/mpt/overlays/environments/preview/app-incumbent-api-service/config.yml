@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-incumbent-api-service
+data:
+  key: ""
+  env: preview
+  url: preview.cliniciannexus
+  app: app-incumbent-api-service
+  ecr: app-incumbent-api-service-ecr-repo
+  acm: "arn:aws:acm:us-east-1:071766652168:certificate/ca119fb6-99bc-4f92-9754-20efa05cb39e"

@@ -1,0 +1,253 @@
+Parameters:
+  AccessKeysRotatedParamMaxAccessKeyAge:
+    Default: '90'
+    Type: String
+  IamPasswordPolicyParamMaxPasswordAge:
+    Default: '90'
+    Type: String
+  IamPasswordPolicyParamMinimumPasswordLength:
+    Default: '12'
+    Type: String
+  IamPasswordPolicyParamPasswordReusePrevention:
+    Default: '4'
+    Type: String
+  IamPasswordPolicyParamRequireLowercaseCharacters:
+    Default: 'true'
+    Type: String
+  IamPasswordPolicyParamRequireNumbers:
+    Default: 'true'
+    Type: String
+  IamPasswordPolicyParamRequireSymbols:
+    Default: 'false'
+    Type: String
+  IamPasswordPolicyParamRequireUppercaseCharacters:
+    Default: 'false'
+    Type: String
+Resources:
+  ################################################################################
+  #
+  #   Conformance Pack:
+  #     Operational Best Practices for Amazon S3.
+  #
+  ################################################################################
+
+  S3BucketLevelPublicAccessProhibited:
+    Properties:
+      ConfigRuleName: s3-bucket-level-public-access-prohibited
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::S3::Bucket
+      Source:
+        Owner: AWS
+        SourceIdentifier: S3_BUCKET_LEVEL_PUBLIC_ACCESS_PROHIBITED
+    Type: AWS::Config::ConfigRule
+
+  S3BucketServerSideEncryptionEnabled:
+    Properties:
+      ConfigRuleName: s3-bucket-server-side-encryption-enabled
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::S3::Bucket
+      Source:
+        Owner: AWS
+        SourceIdentifier: S3_BUCKET_SERVER_SIDE_ENCRYPTION_ENABLED
+    Type: AWS::Config::ConfigRule
+
+  S3BucketSslRequestsOnly:
+    Properties:
+      ConfigRuleName: s3-bucket-ssl-requests-only
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::S3::Bucket
+      Source:
+        Owner: AWS
+        SourceIdentifier: S3_BUCKET_SSL_REQUESTS_ONLY
+    Type: AWS::Config::ConfigRule
+
+  S3BucketVersioningEnabled:
+    Properties:
+      ConfigRuleName: s3-bucket-versioning-enabled
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::S3::Bucket
+      Source:
+        Owner: AWS
+        SourceIdentifier: S3_BUCKET_VERSIONING_ENABLED
+    Type: AWS::Config::ConfigRule
+
+  ################################################################################
+  #
+  #   Conformance Pack:
+  #     Operational Best Practices for AWS Identity and Access Management (IAM)
+  #
+  #   See Parameters section for names and descriptions of required parameters.
+  #
+  ################################################################################
+
+  AccessKeysRotated:
+    Properties:
+      ConfigRuleName: access-keys-rotated
+      InputParameters:
+        maxAccessKeyAge:
+          Fn::If:
+            - accessKeysRotatedParamMaxAccessKeyAge
+            - Ref: AccessKeysRotatedParamMaxAccessKeyAge
+            - Ref: AWS::NoValue
+      Source:
+        Owner: AWS
+        SourceIdentifier: ACCESS_KEYS_ROTATED
+    Type: AWS::Config::ConfigRule
+
+  IamPasswordPolicy:
+    Properties:
+      ConfigRuleName: iam-password-policy
+      InputParameters:
+        MaxPasswordAge:
+          Fn::If:
+            - iamPasswordPolicyParamMaxPasswordAge
+            - Ref: IamPasswordPolicyParamMaxPasswordAge
+            - Ref: AWS::NoValue
+        MinimumPasswordLength:
+          Fn::If:
+            - iamPasswordPolicyParamMinimumPasswordLength
+            - Ref: IamPasswordPolicyParamMinimumPasswordLength
+            - Ref: AWS::NoValue
+        PasswordReusePrevention:
+          Fn::If:
+            - iamPasswordPolicyParamPasswordReusePrevention
+            - Ref: IamPasswordPolicyParamPasswordReusePrevention
+            - Ref: AWS::NoValue
+        RequireLowercaseCharacters:
+          Fn::If:
+            - iamPasswordPolicyParamRequireLowercaseCharacters
+            - Ref: IamPasswordPolicyParamRequireLowercaseCharacters
+            - Ref: AWS::NoValue
+        RequireNumbers:
+          Fn::If:
+            - iamPasswordPolicyParamRequireNumbers
+            - Ref: IamPasswordPolicyParamRequireNumbers
+            - Ref: AWS::NoValue
+        RequireSymbols:
+          Fn::If:
+            - iamPasswordPolicyParamRequireSymbols
+            - Ref: IamPasswordPolicyParamRequireSymbols
+            - Ref: AWS::NoValue
+        RequireUppercaseCharacters:
+          Fn::If:
+            - iamPasswordPolicyParamRequireUppercaseCharacters
+            - Ref: IamPasswordPolicyParamRequireUppercaseCharacters
+            - Ref: AWS::NoValue
+      Source:
+        Owner: AWS
+        SourceIdentifier: IAM_PASSWORD_POLICY
+    Type: AWS::Config::ConfigRule
+
+  IamUserMfaEnabled:
+    Properties:
+      ConfigRuleName: iam-user-mfa-enabled
+      Source:
+        Owner: AWS
+        SourceIdentifier: IAM_USER_MFA_ENABLED
+    Type: AWS::Config::ConfigRule
+
+  MfaEnabledForIamConsoleAccess:
+    Properties:
+      ConfigRuleName: mfa-enabled-for-iam-console-access
+      Source:
+        Owner: AWS
+        SourceIdentifier: MFA_ENABLED_FOR_IAM_CONSOLE_ACCESS
+    Type: AWS::Config::ConfigRule
+
+  ################################################################################
+  #
+  #   Conformance Pack:
+  #     Operational Best Practices for Databases Services.
+  #
+  ################################################################################
+
+  DbInstanceBackupEnabled:
+    Properties:
+      ConfigRuleName: db-instance-backup-enabled
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::RDS::DBInstance
+      Source:
+        Owner: AWS
+        SourceIdentifier: DB_INSTANCE_BACKUP_ENABLED
+    Type: AWS::Config::ConfigRule
+
+  RdsInstancePublicAccessCheck:
+    Properties:
+      ConfigRuleName: rds-instance-public-access-check
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::RDS::DBInstance
+      Source:
+        Owner: AWS
+        SourceIdentifier: RDS_INSTANCE_PUBLIC_ACCESS_CHECK
+    Type: AWS::Config::ConfigRule
+
+  RdsSnapshotsPublicProhibited:
+    Properties:
+      ConfigRuleName: rds-snapshots-public-prohibited
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::RDS::DBSnapshot
+          - AWS::RDS::DBClusterSnapshot
+      Source:
+        Owner: AWS
+        SourceIdentifier: RDS_SNAPSHOTS_PUBLIC_PROHIBITED
+    Type: AWS::Config::ConfigRule
+
+  RdsInstanceDefaultAdminCheck:
+    Properties:
+      ConfigRuleName: rds-instance-default-admin-check
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::RDS::DBInstance
+      Source:
+        Owner: AWS
+        SourceIdentifier: RDS_INSTANCE_DEFAULT_ADMIN_CHECK
+    Type: AWS::Config::ConfigRule
+
+Conditions:
+  accessKeysRotatedParamMaxAccessKeyAge:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: AccessKeysRotatedParamMaxAccessKeyAge
+  iamPasswordPolicyParamMaxPasswordAge:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: IamPasswordPolicyParamMaxPasswordAge
+  iamPasswordPolicyParamMinimumPasswordLength:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: IamPasswordPolicyParamMinimumPasswordLength
+  iamPasswordPolicyParamPasswordReusePrevention:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: IamPasswordPolicyParamPasswordReusePrevention
+  iamPasswordPolicyParamRequireLowercaseCharacters:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: IamPasswordPolicyParamRequireLowercaseCharacters
+  iamPasswordPolicyParamRequireNumbers:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: IamPasswordPolicyParamRequireNumbers
+  iamPasswordPolicyParamRequireSymbols:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: IamPasswordPolicyParamRequireSymbols
+  iamPasswordPolicyParamRequireUppercaseCharacters:
+    Fn::Not:
+    - Fn::Equals:
+      - ''
+      - Ref: IamPasswordPolicyParamRequireUppercaseCharacters

@@ -1,0 +1,31 @@
+fullnameOverride: app-user-grpc-service
+namespace:
+  name: mpt
+
+service:
+  port: 7051
+  targetPort: 7051
+  name: app-user-grpc-service
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-user-grpc-service-ecr-repo'
+  tag: '012b7233fa'
+  pullPolicy: 'Always'
+
+replicaCount: 2
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  
+ingress:
+  enabled: false
+
+envvars:
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+
+environment: devops

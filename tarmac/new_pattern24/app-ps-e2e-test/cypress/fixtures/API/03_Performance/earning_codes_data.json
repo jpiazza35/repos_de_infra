@@ -1,0 +1,66 @@
+{
+    "mockData": {
+        "userId": 1004,
+        "tenant": 1,
+        "dashboardKey": 2,
+        "cardKey": 9,
+        "specialties": 2223,
+        "periodId": 1,
+        "yearMonth": 202201,
+        "earningCodesResponse": {
+            "cardSettings": {
+                "title": "Earning Codes",
+                "infoIcon": ""
+            },
+            "detail": [
+                {
+                    "amount": 94,
+                    "total": 100,
+                    "percentage": 94,
+                    "name": "Productivity"
+                },
+                {
+                    "amount1": 5,
+                    "total1": 100,
+                    "percentage1": 5,
+                    "name1": "Value Based"
+                },
+                {
+                    "amount2": 1,
+                    "total2": 100,
+                    "percentage2": 1,
+                    "name2": "Teaching"
+                }
+            ]
+        }
+    },
+    "realData": {
+        "userId": "NG44",
+        "tenant": 1,
+        "dashboardKey": 2,
+        "cardKey": 9,
+        "specialties": 1210,
+        "periodId": 2,
+        "yearMonth": 202301,
+        "earningCodesResponse": {
+            "cardSettings": {
+                "title": "Earning Codes",
+                "infoIcon": ""
+            },
+            "detail": [
+                {
+                    "amount": 21628.64,
+                    "total": 49326.83,
+                    "percentaje": 43.8476,
+                    "name": "Other"
+                },
+                {
+                    "amount": 27698.19,
+                    "total": 49326.83,
+                    "percentaje": 56.1523,
+                    "name": "Provider Draw"
+                }
+            ]
+        }
+    }
+}

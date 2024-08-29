@@ -1,0 +1,50 @@
+crd:
+  create: true
+originalMatchLabels: true
+eniConfig:
+  create: true
+  region: ${aws_region}
+  subnets:
+    ${az0_id}:
+      id: ${az0_subnet_id}
+      securityGroups:
+      - ${security_group}
+    ${az1_id}:
+      id: ${az1_subnet_id}
+      securityGroups:
+      - ${security_group}
+    ${az2_id}:
+      id: ${az2_subnet_id}
+      securityGroups:
+      - ${security_group}
+env:
+  AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG: true
+  ENI_CONFIG_LABEL_DEF: "failure-domain.beta.kubernetes.io/zone"
+  ANNOTATE_POD_IP: true
+
+
+init:
+  image:
+    tag: v1.16.0
+    domain: amazonaws.com
+    region: ${aws_region}
+    endpoint: ecr
+    account: "602401143452"
+
+
+nodeAgent:
+  image:
+    tag: v1.0.7
+    domain: amazonaws.com
+    region: ${aws_region}
+    endpoint: ecr
+    account: "602401143452"
+
+
+image:
+  tag: v1.16.0
+  domain: amazonaws.com
+  region: ${aws_region}
+  endpoint: ecr
+  account: "602401143452"
+  pullPolicy: Always

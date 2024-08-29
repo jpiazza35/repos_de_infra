@@ -1,0 +1,39 @@
+loki:
+  isDefault: true
+  storage:
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+    type: s3
+    s3:
+      region: us-east-1
+      s3ForcePathStyle: false
+      insecure: false
+  minio:
+    enabled: false
+  tracing:
+    enabled: true
+test:
+  enabled: false
+monitoring:
+  datasource:
+    enabled: false
+    jsonData: "{}"
+    uid: ""
+    editable: true
+  selfMonitoring:
+    grafanaAgent:
+      installOperator: false
+    basicAuth:
+      enabled: true
+      # -- Existing basic auth secret to use. Must contain '.htpasswd'
+      existingSecret: loki-gateway-auth
+serviceAccount:
+  annotations:
+    "eks.amazonaws.com/role-arn": "arn:aws:iam::946884638317:role/cluster-dev-ZZaNzO-worker-node-eks-node-group"
+gateway:
+  basicAuth:
+    enabled: false
+    username: ""
+    password: ""
+    existingSecret: null

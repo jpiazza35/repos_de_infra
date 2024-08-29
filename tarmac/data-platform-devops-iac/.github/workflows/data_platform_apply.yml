@@ -1,0 +1,455 @@
+name: 'Terraform Apply for Databricks IAC'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    paths:
+    - 'terraform/databricks/**/**'
+    - '.github/workflows/data_platform*'
+
+env:
+  AWS_REGION: us-east-1
+  VAULT_AWSLB_SG_ID: "sg-059e1bfdc0847f319"
+  VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+  SLACK_CHANNEL_ID: "#devops-pipeline-alerts"
+  ORG: clinician-nexus
+  TF_WORKSPACE: sdlc
+
+jobs:
+  terraform-plan:
+    name: 'Terraform Plan'
+    runs-on:
+      - self-hosted
+      - sharedservices
+    defaults:
+      run:
+        working-directory: terraform/databricks
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: tibdex/github-app-token@v1
+      id: get_installation_token
+      with:
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_id: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: |
+        git config --global url."https://${{ steps.get_installation_token.outputs.token }}:x-oauth-basic@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+        
+    - name: Install Azure CLI
+      uses: elstudio/action-install-azure-cli@v1
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+    - name: Configure AWS credentials from SS_NETWORK account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::298556582965:role/aws-networking-github-oidc-custom-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSNetworkConfig
+
+    - name: Setup Profile for ss_network
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_network
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_network
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_network
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_network
+
+    - name: Configure AWS credentials from D_DATA_PLATFORM account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::130145099123:role/data-platform-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: DDPConfig
+
+    - name: Setup Profile for d_data_platform
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile d_data_platform
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile d_data_platform
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile d_data_platform
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile d_data_platform
+
+    - name: Configure AWS credentials from P_DATA_PLATFORM account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::417425771013:role/data-platform-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: PDPConfig
+
+    - name: Setup Profile for p_data_platform
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile p_data_platform
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile p_data_platform
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile p_data_platform
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile p_data_platform
+
+    - name: Configure AWS credentials from SS_TOOLS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSToolsConfig
+      
+    - name: Setup Profile for ss_tools
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_tools
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_tools
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_tools
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_tools
+    
+    - name: Configure AWS credentials from SS_DATABRICKS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::230176594509:role/databricks-sdlc-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SDLCDatabricksConfig
+
+    - name: Get Runner IP
+      run: |
+         echo "ip=$(curl icanhazip.com)" >> $GITHUB_ENV
+
+    - name: Add IP to Vault SG for access
+      run: |
+        aws ec2 authorize-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --ip-permissions '[
+          {
+            "IpProtocol": "tcp", 
+            "FromPort": 8200, 
+            "ToPort": 8200, 
+            "IpRanges": [
+              {
+                "CidrIp": "'"$ip/32"'",
+                "Description": "Github Runner IP"
+              }
+            ]
+          }
+        ]'
+      
+    - name: Import Secrets
+      id: import-secrets
+      uses: hashicorp/vault-action@v2.7.3
+      with:
+        url: https://vault.cliniciannexus.com:8200
+        role: gha-role
+        method: jwt
+        jwtGithubAudience: gha
+        secrets: |
+            devops/secrets/bi-platform databricks_username | DATABRICKS_USERNAME ;
+            devops/secrets/bi-platform databricks_password | DATABRICKS_PASSWORD ;
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+  
+    - name: Terraform Init
+      id: init
+      run: |
+        terraform init
+      
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
+    # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
+    - name: Terraform Plan
+      id: tf-plan
+      run: |
+        export exitcode=0
+        terraform plan -var-file tfvars/${{ env.TF_WORKSPACE }}_terraform.tfvars -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+        
+        if [ $exitcode -eq 1 ]; then
+          echo Terraform Plan Failed!
+          exit 1
+        else 
+          exit 0
+        fi
+      env:
+        DATABRICKS_USERNAME: ${{ env.DATABRICKS_USERNAME }}
+        DATABRICKS_PASSWORD: ${{ env.DATABRICKS_PASSWORD }}
+        DATABRICKS_HOST: https://cn-sdlc-databricks.cloud.databricks.com
+        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+    
+    # Save plan to artifacts  
+    - name: Publish Terraform Plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: tfplan
+        path: ${{ github.workspace }}/terraform/databricks/tfplan
+        
+    - name: Create String Output
+      id: tf-plan-string
+      run: |
+        TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+        
+        delimiter="$(openssl rand -hex 8)"
+        echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+        echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+        echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo '```terraform' >> $GITHUB_OUTPUT
+        echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+        echo '```' >> $GITHUB_OUTPUT
+        echo "</details>" >> $GITHUB_OUTPUT
+        echo "${delimiter}" >> $GITHUB_OUTPUT
+        
+    - name: Publish Terraform Plan to Task Summary
+      env:
+        SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+      run: |
+        echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+      
+    - name: Push Terraform Output to PR
+      if: github.event_name == 'pull_request'
+      # if: github.ref != 'refs/heads/main'
+      uses: actions/github-script@v6
+      env:
+        SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const body = `#### Terraform Initialization \`${{ steps.init.outcome }}\`
+          #### Terraform Validation \`${{ steps.validate.outcome }}\`
+          #### Terraform Plan \`${{ steps.tf-plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${process.env.SUMMARY}
+          \`\`\`
+
+          </details>
+          *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          })
+    
+    - name: Remove IP from Vault SG
+      if: always()
+      run: |
+        aws ec2 revoke-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --protocol tcp \
+          --port 8200 \
+          --cidr $ip/32
+          
+    # - name: Slack Notify
+    #   uses: rtCamp/action-slack-notify@v2
+    #   if: failure()
+    #   env:
+    #     SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+    #     SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+    #     SLACK_MESSAGE: ':cry: data-platform-devops-iac Pull Request Terraform Plan Step :small_red_triangle_down:'
+    #     SLACK_TITLE: SDLC_DATABRICKS Pull Request Github Action - data-platform-devops-iac
+    #     SLACK_USERNAME: DevOps
+    #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  terraform-apply:
+    name: 'Terraform Apply'
+    needs: terraform-plan
+    runs-on:
+      - self-hosted
+      - sharedservices
+    defaults:
+      run:
+        working-directory: terraform/databricks
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: tibdex/github-app-token@v1
+      id: get_installation_token
+      with:
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_id: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: |
+        git config --global url."https://${{ steps.get_installation_token.outputs.token }}:x-oauth-basic@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+        
+    - name: Install Azure CLI
+      uses: elstudio/action-install-azure-cli@v1
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+    - name: Configure AWS credentials from SS_NETWORK account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::298556582965:role/aws-networking-github-oidc-custom-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSNetworkConfig
+
+    - name: Setup Profile for ss_network
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_network
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_network
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_network
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_network
+
+    - name: Configure AWS credentials from D_DATA_PLATFORM account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::130145099123:role/data-platform-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: DDPConfig
+
+    - name: Setup Profile for d_data_platform
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile d_data_platform
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile d_data_platform
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile d_data_platform
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile d_data_platform
+
+    - name: Configure AWS credentials from P_DATA_PLATFORM account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::417425771013:role/data-platform-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: PDPConfig
+
+    - name: Setup Profile for p_data_platform
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile p_data_platform
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile p_data_platform
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile p_data_platform
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile p_data_platform
+
+    - name: Configure AWS credentials from SS_TOOLS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSToolsConfig
+      
+    - name: Setup Profile for ss_tools
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_tools
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_tools
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_tools
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_tools
+    
+    - name: Configure AWS credentials from SS_DATABRICKS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::230176594509:role/databricks-sdlc-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SDLCDatabricksConfig
+
+    - name: Get Runner IP
+      run: |
+         echo "ip=$(curl icanhazip.com)" >> $GITHUB_ENV
+
+    - name: Add IP to Vault SG for access
+      run: |
+        aws ec2 authorize-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --ip-permissions '[
+          {
+            "IpProtocol": "tcp", 
+            "FromPort": 8200, 
+            "ToPort": 8200, 
+            "IpRanges": [
+              {
+                "CidrIp": "'"$ip/32"'",
+                "Description": "Github Runner IP"
+              }
+            ]
+          }
+        ]'
+      
+    - name: Import Secrets
+      id: import-secrets
+      uses: hashicorp/vault-action@v2.7.3
+      with:
+        url: https://vault.cliniciannexus.com:8200
+        role: gha-role
+        method: jwt
+        jwtGithubAudience: gha
+        secrets: |
+            devops/secrets/bi-platform databricks_username | DATABRICKS_USERNAME ;
+            devops/secrets/bi-platform databricks_password | DATABRICKS_PASSWORD ;
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+  
+    - name: Terraform Init
+      id: init
+      run: |
+        terraform init
+      
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v3
+      with:
+        name: tfplan
+        path: ${{ github.workspace }}/terraform/databricks
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
+
+    - name: Remove IP from Vault SG
+      if: always()
+      run: |
+        aws ec2 revoke-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --protocol tcp \
+          --port 8200 \
+          --cidr $ip/32
+      
+    # - name: Slack Notify
+    #   uses: rtCamp/action-slack-notify@v2
+    #   if: always()
+    #   env:
+    #     SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+    #     SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+    #     SLACK_MESSAGE: 'data-platform-devops-iac Terraform Apply Step :rocket:'
+    #     SLACK_TITLE: SDLC_DATABRICKS Apply Github Action - data-platform-devops-iac
+    #     SLACK_USERNAME: DevOps
+    #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

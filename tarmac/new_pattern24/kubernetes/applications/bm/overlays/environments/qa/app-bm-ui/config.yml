@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-bm-ui
+data:
+  key: ""
+  env: qa
+  app: app-bm-ui
+  ecr: app-bm-ui-ecr-repo
+  
+

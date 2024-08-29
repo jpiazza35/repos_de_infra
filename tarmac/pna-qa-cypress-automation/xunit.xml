@@ -1,0 +1,22 @@
+<testsuite name="Mocha Tests" tests="20" failures="0" errors="0" skipped="0" timestamp="Mon, 03 Jul 2023 15:57:28 GMT" time="91.097">
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Select Client and Engagement - Version" time="8.992"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Navigate to QC Reports" time="0.177"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Delete all previously downloaded files" time="0.148"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the header of QC Reports list" time="0.117"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the list of QC Reports" time="0.205"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Count of Modified Records by Username report download file" time="5.667"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Provider with Duplicate Locations - Nightly Report download file" time="5.663"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Total cFTE &#x3E;1 per Provider for all Active Locations download file" time="5.326"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Total Work Days &#x3E; 7 days per Provider for all Active Locations report download file" time="5.255"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Provider Name Variation - Nightly Report download file" time="5.506"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Same NPI Assigned to Multiple Providers download file" time="5.348"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Status Detail download file" time="5.103"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Status Summary download file" time="5.466"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Supply Roster Datasource Uploads download file" time="5.111"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the User Access List download file" time="5.509"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Active records with Blank Data download file" time="5.599"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Call Status Count Per Username download file" time="5.727"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Engagement Service Area and Zip Codes download file" time="5.152"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Engagement Specialties download file" time="5.145"/>
+<testcase classname="PNA Supply - QC Reports Smoke Test" name="05: Verify the Engagement Demand Data download file" time="5.556"/>
+</testsuite>

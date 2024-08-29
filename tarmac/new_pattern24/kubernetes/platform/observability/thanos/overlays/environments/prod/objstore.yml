@@ -1,0 +1,5 @@
+type: s3
+config:
+  bucket: cluster-prod-prometheus-thanos-bucket
+  endpoint: s3.us-east-1.amazonaws.com
+  region: us-east-1

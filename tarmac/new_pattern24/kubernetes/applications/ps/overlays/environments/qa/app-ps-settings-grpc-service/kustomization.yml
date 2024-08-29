@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: ps
+resources:
+- ../../../../base/app-ps-settings-grpc-service
+- ingress.yml
+- config.yml
+replacements:
+- path: replacements.yml
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=qa,Team=devops
+  target:
+    kind: Ingress
+images:
+- name: app-ps-settings-grpc-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-ps-settings-grpc-service-ecr-repo
+  digest: sha256:57af4705a7fda9a1eaa5c113c756a64330e621e91d6e8f4b3a8bc9c22f281a6c

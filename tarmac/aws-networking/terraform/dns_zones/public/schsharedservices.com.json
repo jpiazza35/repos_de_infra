@@ -1,0 +1,74 @@
+{
+    "ZoneDefinition": {
+        "Name": "schsharedservices.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "schsharedservices.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 schsharedservices-com.mail.protection.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "schsharedservices.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms87597024"
+                },
+                {
+                    "Value": "v=spf1 include:spf.protection.outlook.com -all"
+                },
+                {
+                    "Value": "lucid-verification=dvvHtaLpqf!7zefZbRPG"
+                }
+            ]
+        },
+        {
+            "Name": "_dmarc.schsharedservices.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=DMARC1;p=none;fo=1;rua=mailto:1e078f1b@mxtoolbox.dmarc-report.com;ruf=mailto:1e078f1b@forensics.dmarc-report.com;adkim=r;aspf=r"
+                }
+            ]
+        },
+        {
+            "Name": "selector1._domainkey.schsharedservices.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector1-schsharedservices-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector2._domainkey.schsharedservices.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector2-schsharedservices-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "autodiscover.schsharedservices.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.outlook.com."
+                }
+            ]
+        }
+    ]
+}

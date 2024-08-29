@@ -1,0 +1,55 @@
+#cloud-config
+repo_update: true
+repo_upgrade: all
+cloud_final_modules:
+  - [scripts-user, always]
+
+output:
+    init:
+      output: "> /var/log/cloud-init.out"
+      error: "> /var/log/cloud-init.err"
+    config: "tee -a /var/log/cloud-config.log"
+    final:
+      - ">> /var/log/cloud-final.out"
+      - "/var/log/cloud-final.err"
+
+write_files: 
+  - path: /usr/local/trustgrid/license.txt
+    owner: root:root
+    permissions: "0644"
+    content: ${license}
+  - path: /etc/cloudwatch.cfg
+    owner: root:root
+    permissions: "0644"
+    content: |
+      [general]
+      state_file = /var/awslogs/state/agent-state
+
+      [/var/log/syslog]
+      file = /var/log/syslog
+      log_group_name = /trustgrid/var/log/syslog
+      log_stream_name = ${prefix}-node
+
+      [/var/log/trustgrid/tg-default.log]
+      file = /var/log/trustgrid/tg-default.log
+      log_group_name = /trustgrid/var/log/trustgrid/tg-default.log
+      log_stream_name = tg-${prefix}-node
+      datetime_format = %b %d %H:%M:%S
+
+runcmd:
+  - apt-mark hold ansible
+  - apt-get update
+  - apt-get install -y python3-pip
+  - cd /opt/trustgrid 
+  - ansible-playbook packer.yml
+  - rm -rf /opt/trustgrid
+  - cd /usr/local/trustgrid && bin/register.sh
+  - mv /usr/local/trustgrid/tg-apt.crt /etc/apt/ssl/tg-apt.crt
+  - chown _apt:root /etc/apt/ssl
+  - apt-get update
+  ## Install CloudWatch Logs Agent
+  - curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
+  - chmod +x ./awslogs-agent-setup.py
+  - ./awslogs-agent-setup.py -n -r ${region} -c /etc/cloudwatch.cfg
+  ## Restart tgnode service
+  - systemctl restart tgnode

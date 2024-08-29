@@ -1,0 +1,23 @@
+[
+    {
+      "environment": [
+      ],
+      "name": "${container_name}",
+      "image": "${ecr_url}/${ecr_name}:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 8080
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "ecs/${container_name}", 
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]

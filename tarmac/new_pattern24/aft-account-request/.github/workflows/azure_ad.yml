@@ -1,0 +1,125 @@
+name: AWS Account AD Group Creation
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    paths:
+    - 'terraform/**'
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  OIDC_CERT: ${{ secrets.CERT }}
+  OIDC_KEY: ${{ secrets.KEY }}
+  APP_ID: ${{ secrets.OIDC_APP_ID }}
+  AWS_ACCOUNT_NAMES: ""
+  SLACK_CHANNEL_ID: "#devops-pipeline-alerts"
+
+jobs:
+  AD_Group:
+    name: Create AD Group for Vended AWS Account
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create PFX
+        run: |
+          echo "$OIDC_CERT" | base64 --decode > cert.crt
+          echo "$OIDC_KEY" | base64 --decode > priv.key
+          openssl pkcs12 -export -out cert.pfx -inkey priv.key -in cert.crt -passout pass:
+
+      - name: Get AWS Vended Account Name
+        id: get_aws_acct_name
+        run: |
+          acct_name=$(grep account_name terraform.tfvars | awk -F'=' '{print $2}'| awk '{gsub(/"/, ""); print $1}')
+          emails=()
+
+          for acc in ${acct_name}
+          do
+            emails+=("AWS-$acc-ROOT")
+          done
+          echo "AWS_ACCOUNT_NAMES=${emails[@]}" >> $GITHUB_ENV 
+
+          echo "AWS_ACCOUNT_NAMES=${emails[@]}" >> ${{ github.workspace }}/acct_names.txt
+          
+        working-directory: terraform
+
+      - name: Publish AWS_ACCOUNT_NAMES
+        uses: actions/upload-artifact@v3
+        with:
+          name: AWS_ACCOUNT_NAMES
+          path: ${{ github.workspace }}/acct_names.txt
+        
+      - name: Connect to Exchange via OIDC
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+          Install-Module -Name ExchangeOnlineManagement
+          Import-Module ExchangeOnlineManagement
+          Install-Module -Name PSWSMan
+          Install-WSMan
+          Connect-ExchangeOnline -AppId "${{ env.APP_ID }}" -Certificate cert.pfx -Organization sullivancotter.onmicrosoft.com
+          # Check if it exists
+          $emails = Write-Output ${{ env.AWS_ACCOUNT_NAMES }}
+          foreach ($email in $emails) {
+            if ( (Get-DistributionGroup -Identity $email -ErrorAction SilentlyContinue)) { 
+              Write-Host "Distribution Group Email Already Exists, skipping." 
+              } else {
+              (
+                New-DistributionGroup -Name $email -DisplayName $email -Type Distribution -PrimarySmtpAddress "$email@sullivancotter.com" -Members "itops@sullivancotter.com" -ManagedBy "patriciaanong@cliniciannexus.com" -RequireSenderAuthenticationEnabled $False
+              )
+            }
+          }
+          
+  slackNotification:
+    runs-on: ubuntu-latest
+    if: always()
+    name: Post Workflow Status To Slack
+    needs:
+      - AD_Group
+    steps:
+      - name: Download AWS_ACCOUNT_NAMES
+        uses: actions/download-artifact@v3
+        with:
+          name: AWS_ACCOUNT_NAMES
+          path: ${{ github.workspace }}
+
+      - name: Set AWS_ACCOUNT_NAMES as environment variable
+        shell: bash
+        run: |
+          cat ${{ github.workspace }}/acct_names.txt >> $GITHUB_ENV
+
+      - name: Validate environment variable
+        shell: bash
+        run: |
+          echo ${{ env.AWS_ACCOUNT_NAMES }}
+
+      - name: Slack Notify
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ env.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "text": "The Azure AD Distribution Email Creation Job has a status of: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "The Azure AD Distribution Email Creation Job has a status of: *${{ job.status }}*\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

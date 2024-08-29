@@ -1,0 +1,115 @@
+{
+    "ProjectAPIUrl":"https://mpt.dev.cliniciannexus.com/",
+    "QaApiUrl":"https://mpt.qa.cliniciannexus.com/",
+    "OrgId": "90",
+    "fileOrgKey": 90,
+    "fileLogKey": 11,
+    "aggregateMethodKey": 1,
+    "projectVersion": 48,
+    "projectVersionId": 2,
+    "projectVersionId1": 112,
+    "standardJobCodes": "3030",
+    "projectVersionIdPricingSheet": 132,
+    "MarketPriciingSheetId": 463,
+    "MarketPriciingSheetId1": 76,
+    "projectVersionIdDeleted": 58,
+    "projectVersionIdFinal": 49,
+    "standardJobSearch":"reg",
+    "jobMatchStatusKey": 7,
+    "jobMatchStatusKeyComplete": 10,
+    "filterInput": "SullivanCotter",
+    "filterColumn": "organizationName",
+    "mappingData":[
+        "sourceDataAgregationKey",
+        "aggregationMethodKey",
+        "fileLogKey",
+        "fileOrgKey",
+        "organizationName",
+        "jobCode",
+        "positionCode",
+        "jobTitle",
+        "jobGroup",
+        "marketSegmentId",
+        "incumbentCount" ,
+        "fteCount",
+        "locationDescription",
+        "jobFamily",
+        "payGrade",
+        "payType",
+        "positionCodeDescription",
+        "jobLevel",
+        "benchmarkDataTypes",
+        "marketSegmentName",
+        "standardJobCode",
+        "standardJobTitle",
+        "standardJobDescription",
+        "jobMatchStatusName",
+        "jobMatchNote"
+    ],
+    "searchStandardsData": [
+        "standardJobDescription",
+        "standardJobCode",
+        "standardJobTitle"
+    ],
+    "searchStandardsJobcode": "3030",
+    "benchMarkData":{
+        "BaseHourlyRate":"Base Pay Hourly Rate",
+        "PayMidPoint":"Pay Range Midpoint",
+        "PayRngMax":"Pay Range Maximum",
+        "PayRngMin":"Pay Range Minimum"
+    },
+    "jobMatchDtl":[ "jobCode","jobTitle","jobDescription","publisherName","publisherKey","jobMatchNote","jobMatchStatusName","jobMatchStatusKey","standardJobs"],
+    "benchmarkData": [
+        "benchmarkJobCode",
+        "jobTitle",
+        "jobDescription",
+        "publisherName",
+        "publisherKey",
+        "jobMatchNote",
+        "jobMatchStatusName",
+        "jobMatchStatusKey",
+        "standardJobs"
+    ],
+    "EmployeeViewVersionID":179,
+    "EmployeeLevelPostData": {
+        "benchmarks": [
+          {
+            "id": 299,
+            "title": "Test",
+            "agingFactor": 2,
+            "order": 1,
+            "percentiles": [
+              3
+            ],
+            "comparisons": [
+              {
+                "id": 45,
+                "title": "string",
+                "agingFactor": 0,
+                "order": 0,
+                "percentiles": [
+                  50
+                ]
+              }
+            ]
+          }
+        ],
+        "filter": {
+          "clientJobCodeTitle": "string",
+          "clientJobGroupList": [
+            "string"
+          ],
+          "marketSegmentList": [
+            {
+              "id": 0,
+              "name": "string"
+            }
+          ],
+          "jobMatchingStatus": 7,
+          "sortBy": [
+            0
+          ]
+        }
+      }
+  
+}

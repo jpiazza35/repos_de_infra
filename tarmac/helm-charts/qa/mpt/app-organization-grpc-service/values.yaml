@@ -1,0 +1,44 @@
+fullnameOverride: app-organization-grpc-service-qa
+namespace:
+  name: mpt
+  
+service:
+  port: 7004
+  targetPort: 7004
+  name: app-organization-grpc-service-qa
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-organization-grpc-service-ecr-repo'
+  tag: 'b97f8669a5'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+securityContext:
+  runAsUser: 1000  # UID user
+  runAsNonRoot: true
+
+
+ingress:
+  enabled: false
+
+envvars:
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+
+##we set limit of memory in the pods to 256Mi
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "256Mi"
+
+    
+environment: qa

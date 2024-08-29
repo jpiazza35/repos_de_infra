@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${istio_ingress_name}
+  namespace: ${istio_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: ${istio_ingress_name}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-port: '15021'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:209629152050:certificate/760254d2-a68b-44b6-b5ce-7e7a7b20e7a9
+    alb.ingress.kubernetes.io/subnets: subnet-0a9ee62798d49a0c8, subnet-09b754b17345d12d6
+    alb.ingress.kubernetes.io/tags: Environment=istio-mpt,Team=devops
+spec:
+  ingressClassName: alb
+  tls:
+  - hosts:
+       - "${istio_ingress_hostname}"
+    secretName: ${istio_cert_secret_name}
+  defaultBackend:
+    service:
+      name: ${istio_ingress_helm_name}
+      port:
+        name: ${istio_gw_port_name}
+  rules:
+    - host: "${istio_ingress_hostname}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ${istio_ingress_helm_name}
+                port: 
+                  name: ${istio_gw_port_name}
+            

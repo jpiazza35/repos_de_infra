@@ -1,0 +1,240 @@
+﻿<style>
+    @font-face {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 300;
+        src: local('Roboto Light'), local('Roboto-Light'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/Pru33qjShpZSmG3z6VYwnT8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+    }
+
+    @font-face {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Roboto Regular'), local('Roboto-Regular'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/Xyjz-jNkfiYuJf8UC3Lizw.woff) format('woff');
+    }
+
+    @font-face {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 500;
+        src: local('Roboto Medium'), local('Roboto-Medium'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/oOeFwZNlrTefzLYmlVV1UD8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+    }
+
+    @font-face {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Roboto Bold'), local('Roboto-Bold'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/97uahxiqZRoncBaCEI3aWz8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+    }
+
+    div {
+        font-family: 'Roboto';
+    }
+
+    .header {
+        display: flex;
+        border-bottom: 1px solid black;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+    }
+
+    .header-left, .header-right {
+        flex-direction: row;
+        width: 50%;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+    }
+
+    .header-group {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #OrgName {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .body {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #0000002d;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+        background-color: #0076BD;
+        border-bottom: 1px solid #0000002d;
+        color: white;
+        padding: 0.5rem 1rem;
+    }
+
+    .card-title {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 1rem 1rem 0rem 1rem;
+    }
+
+    .card-group {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+
+    .card-group-1 {
+        display: flex;
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+
+    .card-group-2 {
+        display: flex;
+        margin-bottom: 1rem;
+        width: 50%;
+    }
+
+    .card-group-3 {
+        display: flex;
+        margin-bottom: 1rem;
+        width: 33%;
+    }
+
+    .card-group-4 {
+        display: flex;
+        margin-bottom: 1rem;
+        width: 25%;
+    }
+
+    .label {
+        font-weight: bold;
+    }
+
+    .card-label, .card-label-flex-2 {
+        font-weight: bold;
+        flex: 1;
+        font-size: 0.6rem;
+    }
+
+    .card-label-flex-2 {
+        flex: 2;
+    }
+
+    .card-label-default {
+        font-weight: bold;
+        font-size: 0.6rem;
+    }
+
+    .value {
+        margin-left: 5px;
+    }
+
+    .card-value, .card-value-flex-2 {
+        flex: 1;
+        font-size: 0.6rem;
+        margin-left: 3px;
+    }
+
+    .card-value-flex-2 {
+        flex: 2;
+    }
+
+    .card-value-area {
+        background-color: #EEEEEE;
+        border: 1px solid #0000002d;
+        flex: 1;
+        font-style: italic;
+        font-size: 0.6rem;
+        padding: 3px 2px;
+        margin-left: 3px;
+        width: 100%;
+    }
+
+    .card-value-note {
+        background-color: white;
+        border: 1px solid #0000002d;
+        flex: 1;
+        font-style: italic;
+        font-size: 0.6rem;
+        padding: 3px 2px;
+        margin-left: 3px;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    table, tr, td, th {
+        border: 1px solid #00000014;
+        font-size: 0.6rem;
+    }
+
+    thead tr {
+        vertical-align: top;
+        background-color: #808080;
+        color: white;
+    }
+
+    thead td, thead th {
+        border: 1px solid white;
+    }
+
+    tbody td {
+        text-align: left;
+    }
+
+    #surveyDetails tr:nth-child(even) {
+        background-color: #EDEDED;
+    }
+
+    #surveyAverage {
+        background-color: #E2E2E2;
+    }
+
+        #surveyAverage td:first-child {
+            border: none;
+            font-weight: bold;
+            text-align: right;
+        }
+
+    .nodata {
+        padding: 0px 0px 8px 7px;
+        font-weight: bold;
+        color: red;
+    }
+
+    .keyvalue {
+        width: 450px;
+        float: left;
+        margin-bottom: 5px;
+        font-size: 0.6em;        
+    }
+
+    .mykey {
+        width: 200px;
+        float:left;
+        font-weight:bold;
+    }
+
+    .myvalue {
+        width: 250px;
+        float: left;
+    }    
+</style>

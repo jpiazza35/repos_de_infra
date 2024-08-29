@@ -1,0 +1,646 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: monitoring
+
+helmCharts:
+- includeCRDs: true
+  name: kube-prometheus-stack
+  namespace: monitoring
+  releaseName: prometheus
+  repo: https://prometheus-community.github.io/helm-charts
+  valuesFile: values.yml
+  version: 56.9.0
+
+patches:
+- patch: |-
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: prometheus-grafana-test
+      namespace: monitoring 
+    $patch: delete
+- patch: |-
+    $patch: delete
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: prometheus-grafana-test
+      namespace: monitoring
+
+resources:
+
+  - resources
+
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
+
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
+
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
+  
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
+  
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
+
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+  
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+  
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
+  
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+  
+  # - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.70.0/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
+
+configMapGenerator:
+  - name: grafana-dashboards-api
+    #  behavior: replace
+    files:
+      - grafana-dashboard/api.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
+  - name: grafana-dashboards-argocd
+    #  behavior: replace
+    files:
+      - grafana-dashboard/argocd.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
+  - name: grafana-dashboards-asg
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-autoscaling.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
+  - name: grafana-dashboards-acm
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-certificate-manager.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
+  - name: grafana-dashboards-cw-browser
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-cloudwatch-browser.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
+  - name: grafana-dashboards-cw-logs
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-cloudwatch-logs.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"
+  - name: grafana-dashboards-cw-synthetics
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-cloudwatch-synthetics.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+  - name: grafana-dashboards-cw-usage
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-cloudwatch-usage-metrics.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"     
+  - name: grafana-dashboards-cni
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-cni-metrics.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"         
+  - name: grafana-dashboards-codebuild
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-codebuild.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"    
+  - name: grafana-dashboards-dynamodb
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-dynamodb.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  - name: grafana-dashboards-ebs
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-ebs.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+      
+  - name: grafana-dashboards-ec2
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-ec2.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+          
+  - name: grafana-dashboards-ecs
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-ecs.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-efs
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-efs.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"         
+      
+  - name: grafana-dashboards-eks
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-eks.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"         
+      
+  - name: grafana-dashboards-alb
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-alb.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"    
+
+  - name: grafana-dashboards-elb
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-elb.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"    
+  
+  - name: grafana-dashboards-eventbridge
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-eventbridge.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-lambda
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-lambda.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"      
+  
+  - name: grafana-dashboards-rds
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-rds.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+  
+  - name: grafana-dashboards-r53
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-route-53.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-s3
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-s3.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-sns
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-sns.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-sqs
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-sqs.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-xray
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-x-ray.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-cert-manager
+    #  behavior: replace
+    files:
+      - grafana-dashboard/cert_manager.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-cluster
+    #  behavior: replace
+    files:
+      - grafana-dashboard/compute-resources-cluster.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+  
+  - name: grafana-dashboards-ns
+    #  behavior: replace
+    files:
+      - grafana-dashboard/compute-resources-namespace-workloads.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+  
+  - name: grafana-dashboards-node-pods
+    #  behavior: replace
+    files:
+      - grafana-dashboard/compute-resources-node-pods.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+  
+  - name: grafana-dashboards-pods
+    #  behavior: replace
+    files:
+      - grafana-dashboard/compute-resources-pod.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+      
+  - name: grafana-dashboards-workloads
+    #  behavior: replace
+    files:
+      - grafana-dashboard/compute-resources-workload.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-ns-pods
+    #  behavior: replace
+    files:
+      - grafana-dashboard/computer-resources-namespace-pods.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"   
+
+  - name: grafana-dashboards-coredns
+    #  behavior: replace
+    files:
+      - grafana-dashboard/coredns.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-grafana
+    #  behavior: replace
+    files:
+      - grafana-dashboard/grafana.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-istio-control-plane
+    #  behavior: replace
+    files:
+      - grafana-dashboard/istio-control-plane.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-istio-mesh
+    #  behavior: replace
+    files:
+      - grafana-dashboard/istio-mesh.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-istio-performance
+    #  behavior: replace
+    files:
+      - grafana-dashboard/istio-performance.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-istio-svc
+    #  behavior: replace
+    files:
+      - grafana-dashboard/istio-service.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+      
+  - name: grafana-dashboards-istio-workloads
+    #  behavior: replace
+    files:
+      - grafana-dashboard/istio-workload.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-k8s-events
+    #  behavior: replace
+    files:
+      - grafana-dashboard/kubectl-events-dashboard.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+      
+  - name: grafana-dashboards-kubelet
+    #  behavior: replace
+    files:
+      - grafana-dashboard/kubelet.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+          
+  - name: grafana-dashboards-eks-cluster
+    #  behavior: replace
+    files:
+      - grafana-dashboard/kubernetes-eks-cluster.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-mpt-apps
+    #  behavior: replace
+    files:
+      - grafana-dashboard/mpt-apps.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+          
+  - name: grafana-dashboards-networking-cluster
+    #  behavior: replace
+    files:
+      - grafana-dashboard/networking-cluster.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+            
+  - name: grafana-dashboards-networking-ns-pods
+    #  behavior: replace
+    files:
+      - grafana-dashboard/networking-namespace-pods.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+          
+  - name: grafana-dashboards-networking-ns-workloads
+    #  behavior: replace
+    files:
+      - grafana-dashboard/networking-namespace-workload.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-networking-pods
+    #  behavior: replace
+    files:
+      - grafana-dashboard/networking-pods.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-networking-workloads
+    #  behavior: replace
+    files:
+      - grafana-dashboard/networking-workload.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-nodes
+    #  behavior: replace
+    files:
+      - grafana-dashboard/node.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-pv
+    #  behavior: replace
+    files:
+      - grafana-dashboard/persistent-volumes.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-ping-monitoring
+    #  behavior: replace
+    files:
+      - grafana-dashboard/ping-monitoring.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-prometheus
+    #  behavior: replace
+    files:
+      - grafana-dashboard/prometheus-overview.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-proxy
+    #  behavior: replace
+    files:
+      - grafana-dashboard/proxy.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+      
+  - name: grafana-dashboards-sts
+    #  behavior: replace
+    files:
+      - grafana-dashboard/statefulsets.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+      
+  - name: grafana-dashboards-use-method-cluster
+    #  behavior: replace
+    files:
+      - grafana-dashboard/use-method-cluster.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+      
+  - name: grafana-dashboards-use-method-node
+    #  behavior: replace
+    files:
+      - grafana-dashboard/use-method-node.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-volumes
+    #  behavior: replace
+    files:
+      - grafana-dashboard/volume-alerting.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+
+  - name: grafana-dashboards-kafka-overview
+    #  behavior: replace
+    files:
+      - grafana-dashboard/kafka_overview.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-kafka-metrics
+    #  behavior: replace
+    files:
+      - grafana-dashboard/kafka_metrics.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-aws-msk
+    #  behavior: replace
+    files:
+      - grafana-dashboard/aws-msk.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-msk-cluster-overview
+    #  behavior: replace
+    files:
+      - grafana-dashboard/msk-cluster-overview.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-msk-overview
+    #  behavior: replace
+    files:
+      - grafana-dashboard/msk-overview.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"  
+  
+  - name: grafana-dashboards-faro
+    #  behavior: replace
+    files:
+      - grafana-dashboard/grafana-app-agent-receiver.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1" 
+
+  - name: grafana-dashboards-faro-frontend
+    #  behavior: replace
+    files:
+      - grafana-dashboard/grafana-frontend-app.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1" 
+
+  - name: prometheus-rules
+    files:
+      - prometheus_rules/certificate_alerts/certificate_rules.yml
+      - prometheus_rules/certificate_alerts/certmanager.yml
+      - prometheus_rules/container_alerts/container_rules.yml
+      - prometheus_rules/container_alerts/container_rules_test.yml
+      - prometheus_rules/coredns_alerts/coredns_rules.yml
+      - prometheus_rules/coredns_alerts/coredns_rules_test.yml
+      - prometheus_rules/job_alerts/job_rules.yml
+      - prometheus_rules/node_alerts/node_rules.yml
+      - prometheus_rules/nodepool_alerts/nodepool_rules.yml
+      - prometheus_rules/pod_alerts/pod_rules.yml
+      - prometheus_rules/prometheus_alerts/prometheus_rules.yml
+    options:
+      disableNameSuffixHash: true
+      labels:
+        prometheus: custom-rules

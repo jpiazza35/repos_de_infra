@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-kube-prometheus-prometheus
+  namespace: monitoring
+spec:
+  externalLabels:
+    cluster: devops
+    environment: devops
+  externalUrl: https://monitoring.devops.cliniciannexus.com/prometheus/
+  containers:
+    - name: prometheus
+      startupProbe:
+        failureThreshold: 120 # periodSeconds is 15 so this would give (120 x 15s = 1800s) for the WAL replay
+        initialDelaySeconds: 600 # 10 minutes before even checking the probe 
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 15Gi
+        storageClassName: gp3

@@ -1,0 +1,35 @@
+fullnameOverride: app-survey-api-service
+namespace:
+  name: mpt
+
+service:
+  port: 7286
+  targetPort: 7286
+  name: app-survey-api-service
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-survey-api-service-ecr-repo'
+  tag: '0e4df28a15'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+envvars:
+  - name: "CN_USERSERVERURL"
+    value: "https://mpt.dev.cliniciannexus.com:7051"
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+  - name: "CN_OLDSURVEYDATA__ISENABLED"
+    value: "\"true\""
+    
+environment: devops

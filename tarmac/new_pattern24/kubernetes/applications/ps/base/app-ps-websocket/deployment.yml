@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: app-ps-websocket
+    app.kubernetes.io/name: app-ps-websocket
+  name: app-ps-websocket
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-ps-websocket
+      app.kubernetes.io/name: app-ps-websocket
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: app-ps-websocket
+        app.kubernetes.io/name: app-ps-websocket
+    spec:
+      containers:
+      - env:
+        - name: WEBSOCKET_HTTPS_PORT
+          value: ""
+        - name: WEBSOCKET_HTTP_PORT
+          value: ""          
+        image: app-ps-websocket
+        imagePullPolicy: Always
+        name: app-ps-websocket
+        ports:
+        - containerPort: 8084
+          name: websocket
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

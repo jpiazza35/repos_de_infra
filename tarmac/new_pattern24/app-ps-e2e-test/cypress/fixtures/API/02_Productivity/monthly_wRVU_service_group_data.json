@@ -1,0 +1,155 @@
+{
+    "mockData": {
+        "userId": 1004,
+        "tenant": 1,
+        "dashboardKey": 1,
+        "cardKey": 4,
+        "specialties": 1110,
+        "periodId": 5,
+        "yearMonth": 202308,
+        "monthlywRVUServiceGroupResponse": {
+            "cardSettings": {
+                "title": "Monthly wRVU by Service Group",
+                "infoIcon": ""
+            },
+            "detail": {
+                "data": [
+                    {
+                        "values": [
+                            17.95,
+                            0,
+                            1.92,
+                            0,
+                            2.56,
+                            14.39,
+                            5.12,
+                            16.27
+                        ],
+                        "name": "Hospital"
+                    },
+                    {
+                        "values": [
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0.45,
+                            -0.45
+                        ],
+                        "name": "Imaging"
+                    },
+                    {
+                        "values": [
+                            212.19,
+                            206.09,
+                            224.76,
+                            225.76,
+                            221.9,
+                            201.4,
+                            256.58,
+                            238.75
+                        ],
+                        "name": "Office Established"
+                    },
+                    {
+                        "values": [
+                            17.97,
+                            10.85,
+                            6.2,
+                            5.63,
+                            15.13,
+                            12.24,
+                            11.31,
+                            16.98
+                        ],
+                        "name": "Office New"
+                    },
+                    {
+                        "values": [
+                            21.86,
+                            26.18,
+                            35.61,
+                            17.89,
+                            36.18,
+                            21.63,
+                            24.68,
+                            26.32
+                        ],
+                        "name": "Other"
+                    },
+                    {
+                        "values": [
+                            64.14,
+                            79.38,
+                            78.41,
+                            69.51,
+                            67.79,
+                            47.93,
+                            61.69,
+                            70.95
+                        ],
+                        "name": "Preventative"
+                    },
+                    {
+                        "values": [
+                            6.66,
+                            25.84,
+                            16.12,
+                            6.92,
+                            16.49,
+                            5.03,
+                            23.56,
+                            1.64
+                        ],
+                        "name": "SNF"
+                    },
+                    {
+                        "values": [
+                            10.47,
+                            9.12,
+                            12.63,
+                            5.96,
+                            7.32,
+                            4.93,
+                            11.79,
+                            12.02
+                        ],
+                        "name": "Surgical"
+                    }
+                ],
+                "dates": [
+                    "1/1/2023",
+                    "2/1/2023",
+                    "3/1/2023",
+                    "4/1/2023",
+                    "5/1/2023",
+                    "6/1/2023",
+                    "7/1/2023",
+                    "8/1/2023"
+                ]
+            }
+        }
+    },
+    "fy_realData": {
+        "userId": "BS216",
+        "tenant": 2,
+        "dashboardKey": 3,
+        "cardKey": 3,
+        "specialties": 1320,
+        "periodId": 2,
+        "yearMonth": 202309,
+        "monthlywRVUServiceGroupResponse": {}
+    },
+    "cy_realData": {
+        "userId": "RA41",
+        "tenant": 1,
+        "dashboardKey": 1,
+        "cardKey": 3,
+        "specialties": 1110,
+        "periodId": 2,
+        "yearMonth": 202309,
+        "monthlywRVUServiceGroupResponse": {}
+    }
+}

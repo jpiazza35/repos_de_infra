@@ -1,0 +1,36 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: incident-bot
+  annotations:
+    alb.ingress.kubernetes.io/group.name: "sharedservices"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:163032254965:certificate/b4b71ab9-d237-4833-996e-277ab5b075c1
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+    alb.ingress.kubernetes.io/listen-ports: '[
+      {
+        "HTTPS": 3000
+      }]'
+    alb.ingress.kubernetes.io/healthcheck-path: /api/v1/health
+    alb.ingress.kubernetes.io/success-codes: "200,302"
+    alb.ingress.kubernetes.io/ip-address-type: ipv4
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    external-dns.alpha.kubernetes.io/hostname: incident-bot.cliniciannexus.com
+spec:
+  ingressClassName: alb
+  defaultBackend:
+    service:
+      name: incident-bot
+      port:
+        name: http
+  rules:
+    - host: incident-bot.cliniciannexus.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: incident-bot
+                port:
+                  name: http

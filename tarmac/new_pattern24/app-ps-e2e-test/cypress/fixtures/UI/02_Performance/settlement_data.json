@@ -1,0 +1,36 @@
+{
+    "mockData": {
+        "settlementLabel": {
+            "settlementTitle": "Settlement",
+            "infoIcon": "",
+            "compensationEarnedTitle": "Compensation Earned",
+            "compensationPaidTitle": "Compensation Paid",
+            "cumulativeDifferenceTitle": "Cumulative Difference",
+            "settlementAdjustmentTitle": "Settlement Adjustment",
+            "finalSettlementTitle": "Final Settlement",
+            "YTDCompEarned": "YTD Comp Earned",
+            "YTDCompPaid": "YTD Comp Paid",
+            "YTDCumulativeDiff": "YTD Cumulative Diff",
+            "settlementAdj": "Settlement Adj",
+            "finalSettlement": "Final Settlement",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    },
+    "realData": {
+        "settlementLabel": {
+            "settlementTitle": "Settlement",
+            "infoIcon": "",
+            "compensationEarnedTitle": "Compensation Earned",
+            "compensationPaidTitle": "Compensation Paid",
+            "cumulativeDifferenceTitle": "Cumulative Difference",
+            "settlementAdjustmentTitle": "Settlement Adjustment",
+            "finalSettlementTitle": "Final Settlement",
+            "YTDCompEarned": "YTD Comp Earned",
+            "YTDCompPaid": "YTD Comp Paid",
+            "YTDCumulativeDiff": "YTD Cumulative Diff",
+            "settlementAdj": "Settlement Adj",
+            "finalSettlement": "Final Settlement",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    }
+}

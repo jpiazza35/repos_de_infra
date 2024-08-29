@@ -1,0 +1,44 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+    name: app-ps-performance-service-preview
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+    selector:
+      app.kubernetes.io/instance: app-ps-performance-service
+      app.kubernetes.io/name: app-ps-performance-service
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: app-ps-ui-preview
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+    selector:
+      app.kubernetes.io/instance: app-ps-ui
+      app.kubernetes.io/name: app-ps-ui
+    sessionAffinity: None
+    type: ClusterIP
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,240 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dwb
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/clinician-nexus/kubernetes
+      revision: main
+      directories:
+        - path: applications/dwb/overlays/environments/qa/*
+      values:
+        app: "{{path.basename}}"
+        namespace: dwb
+        ecr: "{{path.basename}}-ecr-repo"
+  template:
+    metadata:
+      name: '{{values.app}}'
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: "{{values.app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{values.ecr}}:qa"
+        argocd-image-updater.argoproj.io/app-dwb-ui.allow-tags: regexp:^[0-9a-f]+-qa+$
+        argocd-image-updater.argoproj.io/app-dwb-ui.update-strategy: latest
+        argocd-image-updater.argoproj.io/{{values.app}}.update-strategy: digest
+        argocd-image-updater.argoproj.io/{{values.app}}.kustomize.image-name: "{{values.app}}"
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+        argocd-image-updater.argoproj.io/write-back-target: kustomization
+        argocd-image-updater.argoproj.io/{{values.app}}.force-update: "true"
+        application: "{{values.app}}"
+        argocd-image-updater.argoproj.io/{{values.app}}.pull-secret: ext:/scripts/ecr-login.sh
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      source:
+        repoURL: https://github.com/clinician-nexus/kubernetes
+        targetRevision: main
+        path: applications/dwb/overlays/environments/qa/{{path.basename}}
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{values.namespace}}'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mpt
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/clinician-nexus/kubernetes
+      revision: main
+      directories:
+        - path: applications/mpt/overlays/environments/qa/*
+      values:
+        app: "{{path.basename}}"
+        namespace: mpt
+        ecr: "{{path.basename}}-ecr-repo"
+  template:
+    metadata:
+      name: '{{values.app}}'
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: "{{values.app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{values.ecr}}:qa"
+        argocd-image-updater.argoproj.io/{{values.app}}.update-strategy: digest
+        argocd-image-updater.argoproj.io/{{values.app}}.kustomize.image-name: "{{values.app}}"
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+        argocd-image-updater.argoproj.io/write-back-target: kustomization
+        argocd-image-updater.argoproj.io/{{values.app}}.force-update: "true"
+        application: "{{values.app}}"
+        argocd-image-updater.argoproj.io/{{values.app}}.pull-secret: ext:/scripts/ecr-login.sh
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      source:
+        repoURL: https://github.com/clinician-nexus/kubernetes
+        targetRevision: main
+        path: applications/mpt/overlays/environments/qa/{{path.basename}}
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{values.namespace}}'
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: mpt-argo-pr
+#   namespace: argocd
+# spec:
+#   generators:
+#   - matrix:
+#       - git:
+#           repoURL: https://github.com/clinician-nexus/kubernetes
+#           revision: main
+#           directories:
+#             - path: applications/mpt/base/*
+#           values:
+#             app: "{{path.basename}}"
+#             namespace: mpt
+#             ecr: "{{path.basename}}-ecr-repo"
+#       - pullRequest:
+#           github:
+#             owner: clinician-nexus
+#             repo: kubernetes
+#             appSecretName: gh-creds
+#             # tokenRef:
+#             #   secretName: gh-creds
+#             #   key: token
+#           requeueAfterSeconds: 60
+#   template:
+#     metadata:
+#       name: '{{values.app}}-{{branch}}-{{number}}'
+#       # annotations:
+#       #   argocd-image-updater.argoproj.io/image-list: "{{values.app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{values.ecr}}:*"
+#       #   argocd-image-updater.argoproj.io/{{values.app}}.kustomize.image-name: "{{values.app}}"
+#       #   argocd-image-updater.argoproj.io/write-back-method: git
+#       #   argocd-image-updater.argoproj.io/git-branch: main
+#       #   argocd-image-updater.argoproj.io/write-back-target: kustomization
+#       #   argocd-image-updater.argoproj.io/{{values.app}}.force-update: "true"
+#       #   application: "{{values.app}}"
+#       #   argocd-image-updater.argoproj.io/{{values.app}}.pull-secret: ext:/scripts/ecr-login.sh
+#     spec:
+#       project: default
+#       syncPolicy:
+#         automated:
+#           prune: true
+#         syncOptions:
+#           - Validate=false
+#           - CreateNamespace=true
+#       source:
+#         repoURL: https://github.com/clinician-nexus/kubernetes
+#         targetRevision: '{{head_sha}}'
+#         path: applications/mpt/overlays/environments/qa/{{path.basename}}
+#       destination:
+#         server: 'https://kubernetes.default.svc'
+#         namespace: '{{values.namespace}}-{{head_sha}}'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ps
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/clinician-nexus/kubernetes
+      revision: main
+      directories:
+        - path: applications/ps/overlays/environments/qa/*
+      values:
+        app: "{{path.basename}}"
+        namespace: ps
+        ecr: "{{path.basename}}-ecr-repo"
+  template:
+    metadata:
+      name: '{{values.app}}'
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: "{{values.app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{values.ecr}}:qa"
+        argocd-image-updater.argoproj.io/app-ps-ui.allow-tags: regexp:^[0-9a-f]+-qa+$
+        argocd-image-updater.argoproj.io/app-ps-ui.update-strategy: latest
+        argocd-image-updater.argoproj.io/{{values.app}}.update-strategy: digest
+        argocd-image-updater.argoproj.io/{{values.app}}.kustomize.image-name: "{{values.app}}"
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+        argocd-image-updater.argoproj.io/write-back-target: kustomization
+        argocd-image-updater.argoproj.io/{{values.app}}.force-update: "true"
+        application: "{{values.app}}"
+        argocd-image-updater.argoproj.io/{{values.app}}.pull-secret: ext:/scripts/ecr-login.sh
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      source:
+        repoURL: https://github.com/clinician-nexus/kubernetes
+        targetRevision: main
+        path: applications/ps/overlays/environments/qa/{{path.basename}}
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{values.namespace}}'
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bm
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/clinician-nexus/kubernetes
+      revision: main
+      directories:
+        - path: applications/bm/overlays/environments/qa/*
+      values:
+        app: "{{path.basename}}"
+        namespace: bm
+        ecr: "{{path.basename}}-ecr-repo"
+  template:
+    metadata:
+      name: '{{values.app}}'
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: "{{values.app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{values.ecr}}:qa"
+        argocd-image-updater.argoproj.io/app-bm-ui.allow-tags: regexp:^[0-9a-f]+-qa+$
+        argocd-image-updater.argoproj.io/app-bm-ui.update-strategy: latest
+        argocd-image-updater.argoproj.io/{{values.app}}.update-strategy: digest
+        argocd-image-updater.argoproj.io/{{values.app}}.kustomize.image-name: "{{values.app}}"
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+        argocd-image-updater.argoproj.io/write-back-target: kustomization
+        argocd-image-updater.argoproj.io/{{values.app}}.force-update: "true"
+        application: "{{values.app}}"
+        argocd-image-updater.argoproj.io/{{values.app}}.pull-secret: ext:/scripts/ecr-login.sh
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      source:
+        repoURL: https://github.com/clinician-nexus/kubernetes
+        targetRevision: main
+        path: applications/bm/overlays/environments/qa/{{path.basename}}
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{values.namespace}}'

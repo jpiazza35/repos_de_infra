@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../../base
+- serviceaccount.yaml
+
+patches:
+- patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/args/-
+      value: --txt-owner-id=sharedservices
+    - op: add
+      path: /spec/template/spec/containers/0/args/-
+      value: --domain-filter=cliniciannexus.com
+    - op: add
+      path: /spec/template/spec/containers/0/args/-
+      value: --domain-filter=sullivancotter.com
+  target: 
+    group: apps
+    kind: Deployment
+    name: external-dns
+    version: v1
+
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/eks.amazonaws.com~1role-arn
+      value: arn:aws:iam::163032254965:role/external-dns-role
+  target:
+    kind: ServiceAccount
+    name: external-dns
+    version: v1

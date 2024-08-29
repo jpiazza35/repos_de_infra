@@ -1,0 +1,26 @@
+name: Calling kubelinter golden pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  security-events: write
+  issues: write
+  pull-requests: write
+
+  
+  
+jobs:
+  call-workflow:
+    uses: clinician-nexus/ci_tools/.github/workflows/kubelinter.yml@main
+    with:
+      directory: './results'
+      result_qa: './results-qa'
+      result_dev: './results-dev'
+      result_prod: './results-prod'
+      config: '.kube-linter-config.yml'

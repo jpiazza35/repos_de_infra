@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: oncall-redis-replicas
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+      - name: redis
+        env:
+        - name: REDIS_MASTER_HOST
+          value: oncall-redis-master-0.oncall-redis-headless.oncall.svc.cluster.local

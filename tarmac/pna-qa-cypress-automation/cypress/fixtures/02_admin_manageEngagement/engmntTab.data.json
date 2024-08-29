@@ -1,0 +1,40 @@
+{
+    "engmntStatus": [
+        "All",
+        "Active",
+        "Inactive"
+    ],
+
+    "versionYr": [
+        "All",
+        "2019",
+        "2020",
+        "v23"
+    ],
+
+    "gridHeadersList": [
+        "Action",
+        "CES Org",
+        "Engagement Name",
+        "Version Year",
+        "Engagement Date",
+        "Patient Management Factor %",
+        "Report Year 1",
+        "Report Year 2",
+        "Status",
+        "Engagement Key"
+    ],
+    
+    "engmntPatientMngmntList": [
+        "Select below",
+        "0%",
+        "25%",
+        "50%",
+        "75%",
+        "100%"
+    ],
+
+    "newCreatedEngmntName": [
+        "September Automation Test"
+    ]
+}

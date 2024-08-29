@@ -1,0 +1,236 @@
+# https://docs.bigeye.com/docs/agent-connection
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-va2-sql01-bigeye-agent-config
+data:
+  agent.yaml: |
+    # Company Information
+    companyUuid: ${COMPANY_UUID}
+
+    # Data Sources
+    sources:
+      - identifier: '_PPM_COMMON_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: _PPM_COMMON_PROD
+      - identifier: '_PPM_DM_Base'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: _PPM_DM_Base
+      - identifier: 'PPM_C0001_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0001_PROD
+      - identifier: 'PPM_C0006_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0006_PROD
+      - identifier: 'PPM_C0007_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0007_PROD
+      - identifier: 'PPM_C0008_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0008_PROD
+      - identifier: 'PPM_C0010_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0010_PROD
+      - identifier: 'PPM_C0011_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0011_PROD
+      - identifier: 'PPM_C0012_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0012_PROD
+      - identifier: 'PPM_C0013_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0013_PROD
+      - identifier: 'PPM_C0014_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0014_PROD
+      - identifier: 'PPM_C0015_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0015_PROD
+      - identifier: 'PPM_C0016_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0016_PROD
+      - identifier: 'PPM_C0017_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0017_PROD
+      - identifier: 'PPM_C0018_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0018_PROD
+      - identifier: 'PPM_C0019_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0019_PROD
+      - identifier: 'PPM_C0020_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0020_PROD
+      - identifier: 'PPM_C0021_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0021_PROD
+      - identifier: 'PPM_C0022'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0022_PROD
+      - identifier: 'PPM_C0023'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0023_PROD
+      - identifier: 'PPM_C0024_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0024_PROD
+      - identifier: 'PPM_C0025_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0025_PROD
+      - identifier: 'PPM_C0026_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0026_PROD
+      - identifier: 'PPM_C0027_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0027_PROD
+      - identifier: 'PPM_C0028_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0028_PROD
+      - identifier: 'PPM_C0029_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PPM_C0029_PROD
+
+    # Workflow Configuration
+    workflowUrl: app-workflows.bigeye.com
+
+    # Mutual TLS Configuration
+    mutualTlsEnabled: true
+    mtlsCertLocation: /app/config/mtls.pem
+    mtlsKeyLocation: /app/config/mtls.key
+
+    # Encryption Keys
+    publicEncryptionKeyDir: /app/config
+    privateEncryptionKeyPath: /app/config/private.pem
+
+    # Logging Options
+    logQueries: false  # Not recommended for production
+    healthLoggerEnabled: true

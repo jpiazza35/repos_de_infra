@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: root-ca
+spec:
+  duration: 2160h0m0s # 90d
+  renewBefore: 360h0m0s # 15d
+  commonName: "*.qa.cliniciannexus.com"
+  secretName: root-certs
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 4096
+  dnsNames:
+    - "qa.cliniciannexus.com"
+  issuerRef:
+    name: vault-cert-issuer
+    kind: ClusterIssuer

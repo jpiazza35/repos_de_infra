@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+data:
+  url: https://argocd.dev.cliniciannexus.com
+  dex.config: |-
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: $argocd:GITHUB_OIDC_CLIENT_ID
+          clientSecret: $argocd:GITHUB_OIDC_CLIENT_SECRET
+          orgs:
+            - name: clinician-nexus
+          useLoginAsID: true
+          teamNameField: slug
+          loadAllGroups: true

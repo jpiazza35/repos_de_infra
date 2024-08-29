@@ -1,0 +1,124 @@
+{
+    "ZoneDefinition": {
+        "Name": "nationalappadvisorycouncil.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "nationalappadvisorycouncil.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "35.173.82.140"
+                },
+                {
+                    "Value": "35.174.132.21"
+                },
+                {
+                    "Value": "35.169.50.49"
+                }
+            ]
+        },
+        {
+            "Name": "nationalappadvisorycouncil.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 nationalappadvisorycouncil-com.mail.protection.outlook.com"
+                }
+            ]
+        },
+        {
+            "Name": "nationalappadvisorycouncil.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=spf1 include:spf.protection.outlook.com -all"
+                }
+            ]
+        },
+        {
+            "Name": "_amazonses.nationalappadvisorycouncil.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "b2QIfMoOSXWQN66f4TqsIUxfjnxqKx4dewzYxj2y8T8="
+                }
+            ]
+        },
+        {
+            "Name": "3hmig7zmsr75vbakp3sh463oos65pp34._domainkey.nationalappadvisorycouncil.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "3hmig7zmsr75vbakp3sh463oos65pp34.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "444uiofj66wlgba3hwztaurvqnnqqcti._domainkey.nationalappadvisorycouncil.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "444uiofj66wlgba3hwztaurvqnnqqcti.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "bbwj22yivooh6sqrqlmpssiqdehnykmf._domainkey.nationalappadvisorycouncil.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "bbwj22yivooh6sqrqlmpssiqdehnykmf.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector1._domainkey.nationalappadvisorycouncil.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector1-nationalappadvisorycouncil-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector2._domainkey.nationalappadvisorycouncil.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector2-nationalappadvisorycouncil-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "autodiscover.nationalappadvisorycouncil.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "www.nationalappadvisorycouncil.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "saas.ymaws.com"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-ps-productivity-service
+data:
+  key: ""
+  env: preview
+  app: app-ps-productivity-service
+  ecr: app-ps-productivity-service-ecr-repo
+  tenant-server-url: "app-ps-tenant-grpc-service:50052"
+  settings-server-url: "app-ps-settings-grpc-service:50053"

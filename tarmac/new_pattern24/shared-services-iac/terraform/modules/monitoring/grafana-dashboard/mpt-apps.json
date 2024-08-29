@@ -1,0 +1,596 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 74,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 33,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "smooth",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 8,
+              "pointSize": 16,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 21,
+          "x": 0,
+          "y": 0
+        },
+        "id": 10,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [
+              {
+                "id": "2",
+                "settings": {
+                  "interval": "auto",
+                  "min_doc_count": "0",
+                  "timeZone": "utc",
+                  "trimEdges": "0"
+                },
+                "type": "date_histogram"
+              }
+            ],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "metrics": [
+              {
+                "id": "1",
+                "type": "count"
+              }
+            ],
+            "query": "",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "All error logs count",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 12,
+          "w": 21,
+          "x": 0,
+          "y": 7
+        },
+        "id": 1,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:*",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "All MPT error logs",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 19
+        },
+        "id": 2,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-mpt-project-service\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-mpt-project-service ",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 27
+        },
+        "id": 3,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-incumbent-grpc-service\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-incumbent-grpc-service",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 35
+        },
+        "id": 4,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-incumbent-api-service\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-incumbent-api-service",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 43
+        },
+        "id": 5,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-mpt-ui\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-mpt-ui",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 51
+        },
+        "id": 6,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-organization-grpc-service\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-organization-grpc-service",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 59
+        },
+        "id": 7,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-survey-api-service\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-survey-api-service",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 67
+        },
+        "id": 8,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-survey-grpc-service\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-survey-grpc-service",
+        "type": "logs"
+      },
+      {
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "P691F91E9A7F33D8F"
+        },
+        "description": "Newer are first",
+        "gridPos": {
+          "h": 8,
+          "w": 21,
+          "x": 0,
+          "y": 75
+        },
+        "id": 9,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "targets": [
+          {
+            "alias": "",
+            "bucketAggs": [],
+            "datasource": {
+              "type": "elasticsearch",
+              "uid": "P691F91E9A7F33D8F"
+            },
+            "key": "Q-2323f1fa-78fb-4dca-a66d-a4ba8e0c5443-0",
+            "metrics": [
+              {
+                "id": "1",
+                "settings": {
+                  "limit": "500"
+                },
+                "type": "logs"
+              }
+            ],
+            "query": "kubernetes.container_name:\"app-user-grpc-service\"",
+            "refId": "A",
+            "timeField": "@timestamp"
+          }
+        ],
+        "title": "app-user-grpc-service",
+        "type": "logs"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "MPT Apps logs",
+    "uid": "f1bc9393-7a26-4bd2-b628-3c5a4273c4ea",
+    "version": 4,
+    "weekStart": ""
+  }

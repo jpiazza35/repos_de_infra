@@ -1,0 +1,92 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-auth-job
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: vault-auth
+      containers:
+      - name: vault-auth
+        image: hashicorp/vault
+        command: ["/bin/sh", "-c", "/scripts/vault-agent-config.sh"]  
+        args: []
+        env:
+        - name: VAULT_ADDR
+          value: "https://vault.cliniciannexus.com:8200"
+        - name: VAULT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: vault-token
+              key: token
+        - name: SA_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: vault-auth
+              key: token
+        volumeMounts:
+        - mountPath: /scripts
+          name: config
+        - mountPath: /etc/secrets
+          name: shared-data
+      restartPolicy: Never
+      volumes:
+      - configMap:
+          name: vault-agent-config
+          defaultMode: 0777
+        name: config
+      - emptyDir: {}
+        name: shared-data
+  backoffLimit: 4
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-agent-config
+data:
+  vault-agent-config.sh: |
+    #!/bin/sh
+    set -ex
+    apk add curl jq
+    CLUSTER_NAME=cluster-qa
+    SA=vault-auth
+    REGION=us-east-1
+
+    ## Install AWS CLI
+    apk add --no-cache aws-cli
+    apk add jq curl
+
+    K8S_HOST=$(aws eks describe-cluster --name $CLUSTER_NAME |jq -r .cluster.endpoint)
+
+    K8S_CACERT="$(cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt)"
+
+    SERVICEACCOUNT_TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+
+    K8S_ISSUER="$(curl -H "Authorization: Bearer `cat /var/run/secrets/kubernetes.io/serviceaccount/token`"  https://kubernetes.default/.well-known/openid-configuration -ks  | jq -r .issuer)"
+
+    vault auth enable -path=${CLUSTER_NAME} kubernetes || true
+
+    vault write auth/${CLUSTER_NAME}/config \
+        token_reviewer_jwt="${SERVICEACCOUNT_TOKEN}" \
+        kubernetes_host="${K8S_HOST}" \
+        kubernetes_ca_cert="${K8S_CACERT}" \
+        issuer="${K8S_ISSUER}"
+
+    ## Add policy that allows capabilities
+    vault policy write ${CLUSTER_NAME}-kv-rw - <<EOH
+    path "qa/*" {
+      capabilities = ["create", "read", "update", "delete", "list"]
+    }
+    EOH
+
+    ## Create role using policy
+    vault write auth/${CLUSTER_NAME}/role/${CLUSTER_NAME} \
+        bound_service_account_names=${SA} \
+        bound_service_account_namespaces=default \
+        policies=default,${CLUSTER_NAME}-kv-rw \
+        ttl=24h

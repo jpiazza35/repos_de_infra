@@ -1,0 +1,31 @@
+fullnameOverride: app-ps-settings-api-service-preview
+namespace:
+  name: ps-preview
+
+service:
+  port: 10002
+  targetPort: 10002
+  name: app-ps-settings-api-service-preview
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-ps-settings-api-service-ecr-repo'
+  tag: '5c3e9f2023'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+environment: preview
+
+envvars:
+  - name: "TENANT_SERVER_URL"
+    value: "app-ps-tenant-grpc-service-preview:50052"

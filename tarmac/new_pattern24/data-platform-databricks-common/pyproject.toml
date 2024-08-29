@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "cn_databricks"
+version = "0.1.49"
+description = "Utilities for working with Databricks. Common jobs can be executed by this wheel, or functions imported."
+authors = ["Dwight Whitlock <59847742+dwwhitlock@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "cn_databricks"}]
+
+
+[tool.poetry.scripts]
+batch_ingestion = "cn_databricks.scripts.batch_ingestion.__main__:main"
+deidentification = "cn_databricks.scripts.batch_deidentification.__main__:main"
+
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyspark = "^3.4.1"
+databricks-connect = "^13.2.0"
+ipython = "^8.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

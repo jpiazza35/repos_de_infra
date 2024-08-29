@@ -1,0 +1,78 @@
+name: Run PS E2E tests
+run-name: ${{ github.event.client_payload.project_name }} triggered PS E2E tests
+
+on:
+  repository_dispatch:
+    types: [trigger-e2e-tests]
+
+env:
+  GH_REGISTRY: ghcr.io
+  REPO_NAME: ${{ github.event.client_payload.repo_name }}
+  PROJECT_NAME: ${{ github.event.client_payload.project_name }}
+  IMAGE_TAG: ${{ github.event.client_payload.docker_image_tag }}
+  GH_OWNER: ${{ github.repository_owner }}
+  COMMIT_AUTHOR: ${{ github.event.client_payload.commit_author }}
+  GIT_TAG: ${{ github.event.client_payload.git_tag }}
+  K8S_NAMESPACE: apps
+  HELM_VERSION: '3.10.3'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # - name: Login to Github Registry
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ${{ env.GH_REGISTRY }}
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Start minikube
+      #   id: minikube
+      #   uses: medyagh/setup-minikube@master
+
+      # - name: Create apps namespace
+      #   run: |
+      #     kubectl create namespace ${{ env.K8S_NAMESPACE }}
+
+      # - uses: azure/setup-helm@v3
+      #   with:
+      #     version: ${{ env.HELM_VERSION }}
+      #   id: helm
+      
+      # - name: Pull, load and deploy PS services into minikube
+      #   run: |
+      #     bash ./minikube/minikube.sh
+      #     sleep 10
+
+      # - name: Check running k8s svcs and pods
+      #   run: |
+      #     kubectl get pods -n ${{ env.K8S_NAMESPACE }}
+      #     kubectl describe pods -n ${{ env.K8S_NAMESPACE }}
+
+      # - name: Run cypress tests
+      #   run: |
+      #     cd ps-qa-cypress-automation
+      #     npx cypress run
+
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+
+      - name: Trigger PS repo pipeline
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: ${{ env.GH_OWNER }}/${{ env.REPO_NAME }}
+          event-type: retrigger-ps-pipeline
+          client-payload: '{"docker_image_tag": "${{ env.IMAGE_TAG }}", "project_name": "${{ env.PROJECT_NAME }}", "commit_author": "${{ env.COMMIT_AUTHOR }}", "git_tag": "${{ env.GIT_TAG }}"}'

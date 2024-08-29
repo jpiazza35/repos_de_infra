@@ -1,0 +1,7 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: prometheus-kube-prometheus-alertmanager
+  namespace: monitoring
+spec:
+  externalUrl: https://monitoring.qa.cliniciannexus.com/alertmanager/

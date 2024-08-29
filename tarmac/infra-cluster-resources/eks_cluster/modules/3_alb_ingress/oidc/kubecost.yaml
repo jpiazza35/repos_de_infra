@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: ${ingress_kubecost_namespace}
+  name: kubecost-oidc
+data:
+  clientID: ${kubecost_oidc_client_id}
+  clientSecret: ${kubecost_oidc_client_secret}

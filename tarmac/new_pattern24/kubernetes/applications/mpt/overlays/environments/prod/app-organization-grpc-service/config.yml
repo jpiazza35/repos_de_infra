@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-organization-grpc-service
+data:
+  app: app-organization-grpc-service
+  ecr: app-organization-grpc-service-ecr-repo
+  env: prod
+  url: cliniciannexus
+  key: ""
+  acm: "arn:aws:acm:us-east-1:071766652168:certificate/ca119fb6-99bc-4f92-9754-20efa05cb39e"

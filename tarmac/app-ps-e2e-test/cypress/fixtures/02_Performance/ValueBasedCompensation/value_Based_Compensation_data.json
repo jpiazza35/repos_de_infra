@@ -1,0 +1,22 @@
+{
+    "ValBasedCompensationLabel": {
+        "ValBasedCompensationTitle": "Value Based Compensation",
+        "MeasureTypeDescLabel": "Measure Type Description",
+        "CompEligibleLabel": "Comp Eligible",
+        "CompEarnedLabel": "Comp Earned",
+        "OutComesLabel": "Outcomes",
+        "PatientExperience": "Patient Experience",
+        "Quality": "Quality",
+        "Total": "Total"
+    },
+    "ValBasedCompensationValue": {
+        "OutComesCompEligible": "$2,000.00",
+        "OutComesCompEarned": "$2,000.00",
+        "PatientExpCompEligible": "$2,000.00",
+        "PatientExpCompEarned": "$2,000.00",
+        "QualityCompEligible": "$4,000.00",
+        "QualityCompEarned": "$2,500.00",
+        "TotalCompEligible": "$8,000.00",
+        "TotalCompEarned": "$6,500.00"
+    }
+}

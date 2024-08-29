@@ -1,0 +1,94 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-iam-ext-dns
+  namespace: default
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      serviceAccountName: iam
+      containers:
+      - name: aws-cli
+        image: amazon/aws-cli
+        command: ["sh", "-c"]
+        args:
+        - |
+          echo "Extracting cluster OIDC endpoint from configmap"
+          CLUSTER_ID=$(grep -oE 'oidc\.eks\.us-east-1\.amazonaws\.com/id/[^/]+' /etc/config/cluster_oidc | sed 's|oidc\.eks\.us-east-1\.amazonaws\.com/id/||')
+          CLUSTER_NAME=$(cat /etc/config/cluster_name)
+          CLUSTER_OIDC=$(cat /etc/config/cluster_oidc)
+          AWS_ACCOUNT_ID=$(cat /etc/config/aws_account_id)
+          echo "Cluster ID: $CLUSTER_ID"
+          echo "Cluster Name: $CLUSTER_NAME"
+          echo "Cluster OIDC: $CLUSTER_OIDC"
+          echo "AWS Account: $AWS_ACCOUNT_ID"
+
+          echo "Creating IAM Policy..."
+          aws iam create-policy --policy-name ext-dns-policy --region us-east-1 --policy-document '{
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "route53:GetChange",
+                "Resource": "arn:aws:route53:::change/*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "route53:ChangeResourceRecordSets",
+                  "route53:ListResourceRecordSets"
+                ],
+                "Resource": "arn:aws:route53:::hostedzone/*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "route53:ListHostedZonesByName",
+                  "route53:ListHostedZones"
+                ],
+                "Resource": "*"
+              },
+              {
+                "Sid": "extdns",
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": "arn:aws:iam::298556582965:role/external-dns-role"
+              }
+            ]
+          }'
+
+          echo "Creating IAM Role..."
+          aws iam create-role --region us-east-1 --role-name external-dns-role --assume-role-policy-document '{
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "sts:AssumeRoleWithWebIdentity",
+                "Principal": {
+                  "Federated": "arn:aws:iam::'"$AWS_ACCOUNT_ID"':oidc-provider/'"$CLUSTER_OIDC"'"
+                },
+                "Condition": {
+                  "StringEquals": {
+                    "'"$CLUSTER_OIDC"':sub": "system:serviceaccount:external-dns:external-dns",
+                    "'"$CLUSTER_OIDC"':aud": "sts.amazonaws.com"
+                  }
+                }
+              }
+            ]
+          }'
+
+          echo "Attaching IAM Policy to IAM Role..."
+          aws iam attach-role-policy --role-name external-dns-role --policy-arn arn:aws:iam::$AWS_ACCOUNT_ID:policy/ext-dns-policy --region us-east-1
+
+
+        volumeMounts:
+          - name: config
+            mountPath: /etc/config
+      volumes:
+      - name: config
+        configMap:
+          name: cluster
+      restartPolicy: OnFailure

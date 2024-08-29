@@ -1,0 +1,15 @@
+*__pycache__*
+
+.idea
+.mypy_cache
+dist/
+
+
+.terraform
+.terraform.lock.hcl
+*.tfstate
+
+.envrc
+
+.DS_Store
+

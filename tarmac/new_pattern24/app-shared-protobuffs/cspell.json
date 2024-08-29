@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "protobuf",
+    "proto",
+    "protoc",
+    "protocolbuffers",
+    "buf",
+    "bufbuild",
+    "googleapis",
+    "protobuffs",
+    "Whitlock",
+    "protos",
+    "datagovernance",
+    "protovalidate"
+  ],
+  "flagWords": ["hte"],
+  "ignorePaths": ["cspell.json"]
+}

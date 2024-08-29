@@ -1,0 +1,43 @@
+[
+    {
+        "name": "${task_name}",
+        "image": "${image_uri}",
+        "cpu": "${cpu}",
+        "memory": "${memory}",
+        "portMappings": [
+            {
+                "containerPort": "${container_port}",
+                "hostPort": "${container_host_port}"
+            }
+        ],
+        "essential": "${essential}",
+        "command": "${command}",
+        "environment": "${environment_variables}",
+        "environmentFiles": [
+            "${environment_files}"
+        ],
+        "healthCheck": {
+            "command": "${health_check_command}",
+            "interval": "${health_check_interval}",
+            "timeout": "${health_check_timeout}",
+            "retries": "${health_check_retries}"
+        },
+        "mountPoints": [
+            "${mount_points}"
+        ],
+        "volumesFrom": [
+            "${volumes_from}"
+        ],
+        "dependsOn": "${depends_on}",
+        "workingDirectory": "${working_dir}",
+        "logConfiguration": {
+            "logDriver": "${log_driver}",
+            "options": {
+                "awslogs-create-group": "${awslogs_create_group}",
+                "awslogs-group": "${awslogs_group_path}",
+                "awslogs-region": "${region}",
+                "awslogs-stream-prefix": "${log_stream_prefix}"
+            }
+        }
+    }
+]

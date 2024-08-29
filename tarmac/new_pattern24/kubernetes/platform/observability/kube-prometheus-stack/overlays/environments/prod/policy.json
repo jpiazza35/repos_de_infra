@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AssumeInfraProdRole",
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+        
+      ],
+      "Resource": [
+        "arn:aws:iam::836442743669:role/eks-grafana-role",
+        "arn:aws:iam::417425771013:role/cluster-eks-msk-read-only"
+      ]
+    }
+  ]
+}

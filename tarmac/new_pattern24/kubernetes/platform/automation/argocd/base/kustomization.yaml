@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+resources:
+- appProjects/default.yaml
+- appProjects/platform.yaml
+- https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml
+
+patches:
+- path: configs/argocd-cm.yaml
+- path: configs/argocd-rbac-cm.yaml
+- path: configs/argocd-notifications-cm.yaml
+- path: patches/dex-patch.yaml
+- path: patches/applicationset-controller-patch.yaml
+- patch: |-
+    - op: add
+      path: /rules/0
+      value:
+          verbs:
+          - create
+          apiGroups:
+            - ''
+          resources:
+            - pods/exec
+  target: 
+    name: argocd-server
+    kind: ClusterRole
+  

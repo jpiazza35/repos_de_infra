@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+data:
+  policy.csv: |
+    g, clinician-nexus:devops, role:admin
+    p, role:readonly, exec, create, */*, allow
+    p, role:admin, exec, create, */*, allow
+  policy.default: role:readonly
+  scopes: '[groups]'

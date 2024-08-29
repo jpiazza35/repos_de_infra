@@ -1,0 +1,27 @@
+- source:
+    kind: ConfigMap
+    name: app-ps-settings-api-service
+    fieldPath: data.tenant-server-url
+  targets:
+
+  - select:
+      name: app-ps-settings-api-service
+      kind: Deployment
+    fieldPaths:
+      - spec.template.spec.containers.*.env.[name=TENANT_SERVER_URL].value
+    options:
+      create: false
+      index: 1
+
+- source:
+    kind: ConfigMap
+    name: app-ps-settings-api-service
+    fieldPath: data.env
+  targets:
+
+  - select:
+      kind: Deployment
+    fieldPaths:
+      - metadata.labels.environment
+    options:
+      create: true

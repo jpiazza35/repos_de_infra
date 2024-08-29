@@ -1,0 +1,25 @@
+version: "2"
+services:
+  tarmac_flask_db:
+    container_name: tarmac_flask_db 
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
+    ports:
+      - "13306:3306"
+    networks:
+      - tarmac_flask_docker_network
+  tarmac_flask:
+    container_name: tarmac_flask
+    build: .
+    ports:
+     - "8000:8000"
+    volumes:
+     - .:/app
+    networks:
+     - tarmac_flask_docker_network
+networks:
+  tarmac_flask_docker_network:
+    driver: bridge

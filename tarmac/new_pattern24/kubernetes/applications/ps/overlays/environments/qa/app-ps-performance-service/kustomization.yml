@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: ps
+resources:
+- ../../../../base/app-ps-performance-service
+- config.yml
+# - ingress.yml
+
+replacements:
+- path: replacements.yml
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=qa,Team=devops
+  target:
+    kind: Ingress
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/external-dns.alpha.kubernetes.io~1hostname
+      value: ps.qa.cliniciannexus.com
+  target:
+    kind: Ingress
+images:
+- name: app-ps-performance-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-ps-performance-service-ecr-repo
+  digest: sha256:dbb0bce021935ae69118aaf7d96380f9a202a36a2de1d8f0bd29c08b2919dd9f

@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: bigeye
+
+resources:
+- deployment.yaml
+- ces-prod-db-replica-external-secret.yaml
+- configmap.yaml

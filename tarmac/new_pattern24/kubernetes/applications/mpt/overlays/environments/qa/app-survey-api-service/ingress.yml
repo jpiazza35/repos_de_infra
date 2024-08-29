@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:071766652168:certificate/ca119fb6-99bc-4f92-9754-20efa05cb39e
+    alb.ingress.kubernetes.io/group.name: mpt
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7286}]'
+    alb.ingress.kubernetes.io/ssl-policy: REPLACE
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/target-type: ip
+  name: app-survey-api-swagger
+spec:
+  ingressClassName: alb
+  rules:
+  - host: api.cliniciannexus.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: app-survey-api-service
+            port:
+              name: https
+        path: /swagger
+        pathType: Prefix
+      - backend:
+          service:
+            name: app-survey-api-service
+            port:
+              name: https
+        path: /survey
+        pathType: Prefix

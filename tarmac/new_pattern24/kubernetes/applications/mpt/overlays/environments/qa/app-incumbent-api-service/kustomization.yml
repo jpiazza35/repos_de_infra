@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+resources:
+- resources
+- mpt-incumbent-role
+images:
+- name: app-incumbent-api-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-incumbent-api-service-ecr-repo
+  digest: sha256:a53ffb630b184f0e97b7792ad26030f1e01622cdab096ebfe1afd2a0331ffb42

@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+- includeCRDs: true
+  name: external-dns
+  namespace: external-dns
+  releaseName: external-dns
+  valuesMerge: replace
+  version: 1.13.1
+  repo: https://kubernetes-sigs.github.io/external-dns/
+  valuesFile: values.yaml
+
+resources:
+- preinit-job-iam.yml
+
+patches: 
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/serviceAccountName
+        value: external-dns
+      - op: replace
+        path: /spec/template/spec/serviceAccount
+        value: external-dns
+    target:
+      kind: Deployment
+      name: external-dns

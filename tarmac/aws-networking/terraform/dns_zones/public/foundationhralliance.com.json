@@ -1,0 +1,137 @@
+{
+    "ZoneDefinition": {
+        "Name": "foundationhralliance.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "foundationhralliance.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "35.173.82.140"
+                },
+                {
+                    "Value": "35.174.132.21"
+                },
+                {
+                    "Value": "35.169.50.49"
+                }
+            ]
+        },
+        {
+            "Name": "foundationhralliance.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 foundationhralliance-com.mail.protection.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "foundationhralliance.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms94572619"
+                },
+                {
+                    "Value": "v=spf1 include:spf.protection.outlook.com -all"
+                }
+            ]
+        },
+        {
+            "Name": "_amazonses.foundationhralliance.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "fJ0LhD7xoXmNVhMm+SIT+Pb3W5dDud4rGkcavWOeoyM="
+                }
+            ]
+        },
+        {
+            "Name": "_dmarc.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "foundationhralliance.com.hosted.dmarc-report.com"
+                }
+            ]
+        },
+        {
+            "Name": "kh4vurrdvkremmd6k7cqpxzpc4bzczi2._domainkey.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "kh4vurrdvkremmd6k7cqpxzpc4bzczi2.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "r3ahjgwcei2rnz5skgclsnwkl2ug2vvs._domainkey.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "r3ahjgwcei2rnz5skgclsnwkl2ug2vvs.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector1._domainkey.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector1-foundationhralliance-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector2._domainkey.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector2-foundationhralliance-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "vwgdabhzfvdsabix24ngio4q4ytjlvdt._domainkey.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "vwgdabhzfvdsabix24ngio4q4ytjlvdt.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "autodiscover.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "www.foundationhralliance.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "saas.ymaws.com"
+                }
+            ]
+        }
+    ]
+}

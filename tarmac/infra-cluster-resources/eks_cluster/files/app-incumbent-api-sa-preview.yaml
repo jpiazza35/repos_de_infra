@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-incumbent-api-sa
+  namespace: ${namespace}
+  annotations:
+    eks.amazonaws.com/role-arn: ${incumbent_api_sa_annotation}

@@ -1,0 +1,104 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mpt
+  annotations:
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/load-balancer-name: mpt
+    alb.ingress.kubernetes.io/group.name: mpt
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:063890802877:certificate/2391662d-2fa0-4878-b56b-8a8c25444613
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/actions.default: >
+      {"type":"fixed-response","fixedResponseConfig":{"contentType":"text/plain","statusCode":"404","messageBody":"404 Not Found"}
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/ssl-policy: REPLACE
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/tags: Environment=qa,Team=devops
+    alb.ingress.kubernetes.io/target-type: ip
+    external-dns.alpha.kubernetes.io/hostname: api.cliniciannexus.com
+    # argocd.argoproj.io/hook: PreSync
+spec:
+  ingressClassName: alb
+  rules:
+  - host: api.cliniciannexus.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: app-user-api-service
+            port:
+              name: https
+        path: /user
+        pathType: Prefix
+      - backend:
+          service:
+            name: app-mpt-project-service
+            port:
+              name: https
+        path: /mpt-project
+        pathType: Prefix
+      - backend:
+          service:
+            name: app-survey-api-service
+            port:
+              name: https
+        path: /survey
+        pathType: Prefix
+      - backend:
+          service:
+            name: app-incumbent-api-service
+            port:
+              name: https
+        path: /file
+        pathType: Prefix
+      - backend:
+          service:
+            name: app-incumbent-api-service
+            port:
+              name: https
+        path: /incumbent
+        pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:071766652168:certificate/ca119fb6-99bc-4f92-9754-20efa05cb39e
+    alb.ingress.kubernetes.io/group.name: mpt
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7350}]'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-3-2021-06
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/target-type: ip
+  name: app-mpt-project-swagger
+spec:
+  ingressClassName: alb
+  rules:
+  - host: api.cliniciannexus.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: app-mpt-project-service
+            port:
+              name: https
+        path: /swagger
+        pathType: Prefix
+      - backend:
+          service:
+            name: app-mpt-project-service
+            port:
+              name: https
+        path: /mpt-project
+        pathType: Prefix
+
+
+

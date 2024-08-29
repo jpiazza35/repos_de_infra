@@ -1,0 +1,106 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "RDSAdminAccess",
+            "Effect": "Allow",
+            "Action": "rds:*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "ReadOnlyServices",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:List*",
+                "ecs:Get*",
+                "ecs:Describe*",
+                "apigateway:GET*",
+                "elasticloadbalancing:List*",
+                "elasticloadbalancing:Describe*",
+                "ec2:Describe*",
+                "ec2:Search*",
+                "ec2:Get*",
+                "elasticache:Describe*",
+                "elasticache:List*",
+                "sns:List*",
+                "sns:Get*",
+                "sns:Check*",
+                "iam:Get*",
+                "iam:List*",
+                "route53:Get*",
+                "route53:List*",
+                "route53domains:Get*",
+                "route53domains:List*",
+                "route53domains:Check*",
+                "acm:List*",
+                "acm:Describe*",
+                "acm:Get*",
+                "s3:Get*",
+                "s3:List*",
+                "s3:Describe*",
+                "acm:List*",
+                "acm:Describe*",
+                "acm:Get*",
+                "sqs:List*",
+                "sqs:Get*",
+                "sqs:Receive*",
+                "ecr:Get*",
+                "ecr:List*",
+                "ecr:Describe*",
+                "ecr:BatchCheck*",
+                "ecr:BatchGet*",
+                "ebs:Get*",
+                "ebs:List*",
+                "codepipeline:Get*",
+                "codepipeline:List*",
+                "codebuild:Describe*",
+                "codebuild:Get*",
+                "codebuild:BatchGet*",
+                "codebuild:List*",
+                "waf:Get*",
+                "waf:List*",
+                "servicediscovery:List*",
+                "servicediscovery:Get*",
+                "servicediscovery:DiscoverInstances",
+                "dynamodb:BatchGet*",
+                "dynamodb:Get*",
+                "dynamodb:List*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:PartiQLSelect",
+                "dynamodb:ConditionCheckItem",
+                "lambda:Get*",
+                "lambda:List*",
+                "eks:List*",
+                "eks:Describe*",
+                "eks:AccessKubernetesApi",
+                "kms:Decrypt*",
+                "kms:GenerateDataKey*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyCloudtrailConfigSecrets",
+            "Effect": "Deny",
+            "Action": [
+                "cloudtrail:*",
+                "config:*",
+                "secretsmanager:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "DenyControlTowerS3",
+            "Effect": "Deny",
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObject*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::aws-controltower-logs*"
+            ]
+        }
+    ]
+}

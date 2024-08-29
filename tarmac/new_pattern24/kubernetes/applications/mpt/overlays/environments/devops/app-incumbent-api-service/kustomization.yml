@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: mpt
+resources:
+- ../../../../base/app-incumbent-api-service
+- ingress.yml
+- config.yml
+replacements:
+- path: replacements.yml
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=devops,Team=devops
+  target:
+    kind: Ingress
+images:
+- name: app-incumbent-api-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-incumbent-api-service-ecr-repo
+  newTag: 0.1.16

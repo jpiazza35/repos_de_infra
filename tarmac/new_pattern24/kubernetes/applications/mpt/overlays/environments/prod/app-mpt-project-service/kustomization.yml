@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: mpt
+resources:
+- ../../../../base/app-mpt-project-service
+- ingress.yml
+- config.yml
+replacements:
+- path: replacements.yml
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=prod,Team=devops
+  target:
+    kind: Ingress
+images:
+- name: app-mpt-project-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-mpt-project-service-ecr-repo
+  newTag: "9030716892"

@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: mpt
+resources:
+- ../../../../base/app-user-api-service
+- ingress.yml
+- config.yml
+replacements:
+- path: replacements.yml
+patches:
+- patch: |-
+    - op: add
+      path: "/spec/template/spec/containers/0/env/-"
+      value:
+        name: CN_DISABLE_ISSUER_VALIDATION
+        value: 'true'
+  target:
+    kind: Deployment
+    namespace: mpt
+    name: app-user-api-service
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=qa,Team=devops
+  target:
+    kind: Ingress
+images:
+- name: app-user-api-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-user-api-service-ecr-repo
+  digest: sha256:9c8cbc8395f08b28b0f699e28f371c25245f208eb77198a59de6a5c37d12e1b0

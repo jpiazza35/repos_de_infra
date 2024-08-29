@@ -1,0 +1,68 @@
+{
+     "mockData": {
+          "userId": 1004,
+          "tenant": 1,
+          "dashboardKey": 2,
+          "cardKey": 6,
+          "specialties": 2223,
+          "periodId": 1,
+          "yearMonth": 202201,
+          "compSummaryResponse": {
+               "cardSettings": {
+                    "title": "Compensation Summary",
+                    "infoIcon": ""
+               },
+               "detail": [
+                    {
+                         "categoryDescription": "Projected Work RVU Compensation",
+                         "categoryValue": 126679.79
+                    },
+                    {
+                         "categoryDescription": "Estimated Value Based Incentive",
+                         "categoryValue": 6500
+                    },
+                    {
+                         "categoryDescription": "Teaching",
+                         "categoryValue": 500
+                    }
+               ]
+          }
+     },
+     "realData": {
+          "userId": "AD162",
+          "tenant": 2,
+          "dashboardKey": 4,
+          "cardKey": 6,
+          "specialties": 1320,
+          "periodId": 1,
+          "yearMonth": 202207,
+          "compSummaryResponse": {
+               "cardSettings": {
+                    "title": "Compensation Summary",
+                    "infoIcon": ""
+               },
+               "detail": [
+                    {
+                         "categoryDescription": "Base Salary",
+                         "categoryValue": 285000
+                    },
+                    {
+                         "categoryDescription": "wRVU Compensation",
+                         "categoryValue": 0
+                    },
+                    {
+                         "categoryDescription": "Estimated Value Based Incentive",
+                         "categoryValue": 0
+                    },
+                    {
+                         "categoryDescription": "APP Supervisor Comp",
+                         "categoryValue": 0
+                    },
+                    {
+                         "categoryDescription": "Other Comp",
+                         "categoryValue": 15000
+                    }
+               ]
+          }
+     }
+}

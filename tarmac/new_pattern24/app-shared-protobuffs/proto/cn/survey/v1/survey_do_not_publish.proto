@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package cn.survey.v1;
+
+import "cn/anomalyprofiling/v1/anomaly_suggestions_framework.proto";
+import "cn/datagovernance/v1/data_governance_framework.proto";
+import "google/protobuf/timestamp.proto";
+
+message SurveyDoNotPublishSourceOriented {
+  // The survey data cleansing dashboard and stacking process should egress a file containing the fields defined
+  // in this message class. The grain of the file, and of the Source Oriented records, would be on
+  // survey_instance_id, organization_id, internal_tracking_id, column_display_name, and published_survey_name_for_dnp.
+  int32 survey_instance_id = 1 [
+    (cn.datagovernance.v1.display_name) = "Survey Instance ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+
+  int32 organization_id = 2 [
+    (cn.datagovernance.v1.display_name) = "Reported Organization ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  int32 internal_tracking_id = 3 [
+    (cn.datagovernance.v1.display_name) = "Unique Internal Tracking ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  string submission_type_code = 4 [
+    // select distinct s.code from p_source_oriented.repl_ces_public.surveys s;
+    // TODO Will source from a Submission Type reference table in MDM later
+    (cn.datagovernance.v1.display_name) = "Survey Submission Type Code (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  string tab_name = 5 [
+    // Name of the tab from the survey submission template.
+    (cn.datagovernance.v1.display_name) = "Tab Name (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  string column_display_name = 6 [
+    // Name of the column from the survey submission template.  Defaults to True.
+    (cn.datagovernance.v1.display_name) = "Column Name",
+    (cn.datagovernance.v1.is_required) = false
+  ];
+  string published_survey_name_for_dnp = 7 [
+    (cn.datagovernance.v1.display_name) = "Published Survey Name for DNP (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  bool do_not_publish = 8 [
+    // Used to reverse a DNP flag.
+    (cn.datagovernance.v1.display_name) = "Do Not Publish (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  cn.anomalyprofiling.v1.DnpReasonCode dnp_reason_code = 9 [
+    (cn.datagovernance.v1.display_name) = "Do Not Publish Reason Code (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  string user_id = 10 [
+    (cn.datagovernance.v1.display_name) = "User ID (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  google.protobuf.Timestamp dnp_timestamp = 12 [
+    (cn.datagovernance.v1.display_name) = "Do Not Publish Timestamp (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+
+  int64 job_id = 600;
+  int64 run_id = 601;
+  google.protobuf.Timestamp job_utc_ts = 602;
+}

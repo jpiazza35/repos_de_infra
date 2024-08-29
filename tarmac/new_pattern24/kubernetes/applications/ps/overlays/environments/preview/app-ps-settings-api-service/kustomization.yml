@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: ps-preview
+resources:
+- ../../../../base/app-ps-settings-api-service
+- config.yml
+replacements:
+- path: replacements.yml
+images:
+- name: app-ps-settings-api-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-ps-settings-api-service-ecr-repo
+  digest: sha256:1567d280dae701c263677697441f2c699b50bce19f4fe0a4a5563a63997b96e6

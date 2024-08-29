@@ -1,0 +1,151 @@
+name: Check Kubernetes YAMLs with kube-linter
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        description: 'Directory where Kubelinter will put results'
+        required: true
+        type: string
+        default: './results'
+      result_qa:
+        description: 'path to download artifacts with results for QA'
+        required: true
+        type: string
+        default: './results-qa'
+      result_dev:
+        description: 'path to download artifacts with results for QA'
+        required: true
+        type: string
+        default: './results-dev'
+      result_prod:
+        description: 'path to download artifacts with results for QA'
+        required: true
+        type: string
+        default: './results-prod'
+      config:
+        description: 'Path to config file'
+        required: false
+        type: string
+        
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: ['qa', 'dev', 'prod']
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create ${{ inputs.directory }} directory for SARIF report files
+        run: mkdir -p ${{ inputs.directory }}
+
+      - name: Scan with kube-linter
+        uses: stackrox/kube-linter-action@v1.0.4
+        with:
+          directory:  ${{ matrix.environment }}/mpt
+          config: ${{ inputs.config }}
+          format: sarif
+          output-file: ${{ inputs.directory }}/kube-linter-${{ matrix.environment }}.sarif
+        continue-on-error: true
+
+      - name: Install jq
+        run: sudo apt-get install jq
+      
+      - name: Add environment tag to results
+        run: |
+          jq --arg env "${{ matrix.environment }}" '
+          .runs[].results[] |= (.properties.tags = if .properties.tags then (.properties.tags | . + [$env]) else [$env] end)
+          ' ${{ inputs.directory }}/kube-linter-${{ matrix.environment }}.sarif > ${{ inputs.directory }}/kube-linter-${{ matrix.environment }}-tagged.sarif
+
+      - name: Count issues
+        id: count_issues
+        run: |
+          issue_count=$(cat ${{ inputs.directory }}/kube-linter-${{ matrix.environment }}-tagged.sarif | jq '.runs[].results | length')
+          echo "ISSUE_COUNT=$issue_count" >> $GITHUB_ENV
+          echo "::set-output name=issue_count::$issue_count"
+
+      - name: Comment PR number ${{ github.event.pull_request.number }} 
+        if: github.event_name == 'pull_request'
+        run: |
+            base_url="https://github.com/${{ github.repository }}/security/code-scanning"
+            branch=$(jq -r ".pull_request.head.ref" "$GITHUB_EVENT_PATH")
+            pr_number=${{ github.event.pull_request.number }} 
+            query="?query=is%3Aopen+pr%3A"
+            full_url="${base_url}${query}${pr_number}"
+            issue_count=${{ steps.count_issues.outputs.issue_count }}
+            comment="## Kube-linter results for ${{ matrix.environment }}  environment:
+        
+            - **Issues found:** *${{ env.ISSUE_COUNT }}*
+            [**View details in the security tab**]($full_url)"
+            echo "$comment" > comment_body.txt
+            gh pr comment ${{ github.event.pull_request.number }} --body-file comment_body.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_COUNT: ${{ steps.count_issues.outputs.issue_count }}
+
+      - name: Archive SARIF report files
+        uses: actions/upload-artifact@v2
+        with:
+          name: kube-linter-reports-${{ matrix.environment }}
+          path: ${{ inputs.directory }}/*-tagged.sarif
+      
+#       # Ensure the workflow eventually fails if files did not pass kube-linter checks.
+#     #   - name: Verify kube-linter-action succeeded
+#     #     shell: bash
+#     #     run: |
+#     #       echo "If this step fails, kube-linter found issues. Check the output of the scan step above."
+#     #       [[ "${{ steps.kube-linter-action-scan.outcome }}" == "success" ]]
+
+  combine_and_upload:
+    needs: scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Download SARIF report files from QA environment
+        uses: actions/download-artifact@v2
+        with:
+          name: kube-linter-reports-qa
+          path: ${{ inputs.result_qa }}
+  
+      - name: Download SARIF report files from Dev environment
+        uses: actions/download-artifact@v2
+        with:
+          name: kube-linter-reports-dev
+          path: ${{ inputs.result_dev }}
+  
+      - name: Download SARIF report files from Prod environment
+        uses: actions/download-artifact@v2
+        with:
+          name: kube-linter-reports-prod
+          path: ${{ inputs.result_prod }}
+
+      - name: Combine SARIF files
+        run: |
+          mkdir -p ${{ inputs.directory }}
+          first_file=true
+          for environment in 'qa' 'dev' 'prod'
+            do
+              file="${{ inputs.directory }}-${environment}/kube-linter-${environment}-tagged.sarif"
+              if jq -e .runs[].results < "$file" > /dev/null 2>&1; then
+                if [ "$first_file" = true ] ; then
+                  cp "$file" ${{ inputs.directory }}/kube-linter-combined.sarif
+                  first_file=false
+                else
+                  jq '.runs[0].results += input.runs[0].results' ${{ inputs.directory }}/kube-linter-combined.sarif "$file" > tmp && mv tmp ${{ inputs.directory }}/kube-linter-combined.sarif
+               fi
+              else
+               echo "The file $file does not have the expected structure."
+              fi
+          done
+
+          
+      - name: Upload SARIF file to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ inputs.directory }}/kube-linter-combined.sarif

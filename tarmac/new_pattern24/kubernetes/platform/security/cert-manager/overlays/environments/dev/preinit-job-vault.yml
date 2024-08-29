@@ -1,0 +1,150 @@
+# This job and config map are configured to deploy in the default namesapce because the eks-worker-node role is being used for IAM permissions.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: preinit-cert-manager
+  namespace: default
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+    argocd.argoproj.io/hook: PreSync
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    metadata:
+      name: preinit-cert-manager-pod
+    spec:
+      serviceAccountName: vault-auth
+      containers:
+        - name: vault-auth
+          image: hashicorp/vault
+          command: ["/bin/sh", "-c", "./scripts/vault-cert-manager-config.sh"]
+          args: []
+          env:
+            - name: VAULT_ADDR
+              value: "https://vault.cliniciannexus.com:8200"
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vault-token
+                  key: token
+          volumeMounts:
+            - mountPath: /scripts
+              name: config
+            - mountPath: /etc/secrets
+              name: shared-data
+            - mountPath: /etc/self
+              name: self-cm
+      restartPolicy: Never
+      volumes:
+        - configMap:
+            name: vault-cert-manager-config
+            defaultMode: 0777
+          name: config
+        - emptyDir: {}
+          name: shared-data
+        - configMap:
+            name: cluster
+            defaultMode: 0777
+          name: self-cm
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-cert-manager-config
+  namespace: default
+data:
+  vault-cert-manager-config.sh: |
+    #!/bin/sh
+    set -ex
+    apk add jq
+    apk add curl
+    CLUSTER_NAME=$(cat /etc/self/cluster_name)
+    ENV=$(cat /etc/self/environment)
+    SA=cert-manager
+    REGION=us-east-1
+
+    ## Create the pki for the cluster
+    vault secrets enable -path=$CLUSTER_NAME-pki -default-lease-ttl=63072000 -max-lease-ttl=315360000 pki || true
+
+    ## Vault PKI role configuration
+    vault write $CLUSTER_NAME-pki/roles/cliniciannexus-dot-com \
+      name="cliniciannexus-dot-com" \
+      ttl="31536000" \
+      max_ttl="315360000" \
+      allow_ip_sans=true \
+      key_type="rsa" \
+      key_bits=4096 \
+      allowed_domains=cliniciannexus.com \
+      allow_subdomains=true \
+      allow_bare_domains=true \
+      allow_wildcard_certificates=true \
+      allow_glob_domains=true
+
+      echo "Creating the cert-issuer policy and vault-cert-issuer role in Vault"
+      POLICY_FILE="cert-issuer-policy.hcl"
+      echo "
+      path \"${CLUSTER_NAME}-pki*\" {
+        capabilities = [\"read\", \"list\"]
+      }
+
+      path \"${CLUSTER_NAME}-pki/roles/cliniciannexus-dot-com\" {
+        capabilities = [\"create\", \"update\"]
+      }
+
+      path \"${CLUSTER_NAME}-pki/sign/cliniciannexus-dot-com\" {
+        capabilities = [\"create\", \"update\"]
+      }
+
+      path \"${CLUSTER_NAME}-pki/issue/cliniciannexus-dot-com\" {
+        capabilities = [\"create\"]
+      }" > "$POLICY_FILE"
+
+    vault policy write ${CLUSTER_NAME}-cert-issuer "$POLICY_FILE"
+
+    echo "Creating the vault-cert-issuer role in Vault"
+    vault write auth/${CLUSTER_NAME}/role/vault-cert-issuer \
+      bound_service_account_names="vault-cert-issuer,default" \
+      bound_service_account_namespaces="*" \
+      token_ttl="24h" \
+      token_policies="default,${CLUSTER_NAME}-cert-issuer"
+
+
+    ## Vault PKI root certificate configuration
+      vault write $CLUSTER_NAME-pki/root/generate/internal \
+        common_name="*.cliniciannexus.com" \
+        alt_names=["*.$ENV.cliniciannexus.com"] \
+        ttl="315360000" \
+        format="pem" \
+        private_key_format="der" \
+        key_type="rsa" \
+        key_bits=4096 \
+        exclude_cn_from_sans=true \
+        organization="Clinician Nexus" \
+        ou="devops"
+
+    ## Vault PKI URL configurations
+      vault write $CLUSTER_NAME-pki/config/urls \
+        issuing_certificates="https://vault.cliniciannexus.com:8200/v1/pki/ca" \
+        crl_distribution_points="https://vault.cliniciannexus.com:8200/v1/pki/crl"
+
+    ## Vault PKI CRL (Certificate Revocation List) configuration
+      vault write $CLUSTER_NAME-pki/config/crl \
+        expiry="72h" \
+        disable=false \
+        auto_rebuild=true \
+        enable_delta=true
+
+    echo '{
+    "enabled": true,
+    "tidy_cert_store": true,
+    "safety_buffer": 86400
+    }' > tidy.json
+
+
+    curl -sS --request POST \
+      --header "X-Vault-Token: $VAULT_TOKEN" \
+      --data @tidy.json \
+      --header "Content-Type: application/json" \
+      --url "https://vault.cliniciannexus.com:8200/v1/$CLUSTER_NAME-pki/config/auto-tidy"

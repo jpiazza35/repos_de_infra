@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-va2-sql01-bigeye-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-va2-sql01-bigeye-agent
+  template:
+    metadata:
+      labels:
+        app: aws-va2-sql01-bigeye-agent
+    spec:
+      initContainers:
+        - name: init-config
+          image: bhgedigital/envsubst
+          command:
+            - "/bin/sh"
+            - "-c"
+            - >
+              envsubst < /tmp/config-template/agent.yaml > /app/config/agent.yaml
+          envFrom:
+            - secretRef:
+                name: aws-va2-sql01-bigeye-secret
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/config
+            - name: agent-config-template
+              mountPath: /tmp/config-template
+      containers:
+        - name: aws-va2-sql01-bigeye-agent
+          image: docker.io/bigeyedata/agent
+          imagePullPolicy: Always
+          command:
+            - "/bin/sh"
+            - "-c"
+            - >
+              cp -r -L /tmp/mtls/* /app/config/ &&
+              docker-entrypoint.sh
+          envFrom:
+            - secretRef:
+                name: aws-va2-sql01-bigeye-secret
+          volumeMounts:
+            - mountPath: /app/config
+              name: app-config
+            - mountPath: /tmp/agent.yaml
+              name: agent-config
+              subPath: agent.yaml
+            - mountPath: /etc/secrets
+              name: bigeye-secret
+              readOnly: true
+            - mountPath: /tmp/mtls
+              name: tls-certs
+      imagePullSecrets:
+        - name: bigeye-docker-secret
+      volumes:
+        - name: app-config
+          emptyDir: {}
+        - name: agent-config-template
+          configMap:
+            name: aws-va2-sql01-bigeye-agent-config
+        - name: agent-config
+          configMap:
+            name: aws-va2-sql01-bigeye-agent-config
+        - name: bigeye-secret
+          secret:
+            secretName: aws-va2-sql01-bigeye-secret
+        - name: tls-certs
+          secret:
+            secretName: bigeye-mtls-certs

@@ -1,0 +1,30 @@
+{
+    "mockData": {
+        "valBasedCompensationLabel": {
+            "valBasedCompensationTitle": "Value Based Compensation",
+            "infoToolTip": "Value Based Compensation is paid following year-end review",
+            "measureTypeDescLabel": "Measure Type Description",
+            "compEligibleLabel": "Comp Eligible",
+            "compEarnedLabel": "Comp Earned",
+            "outComesLabel": "Outcomes",
+            "patientExperience": "Patient Experience",
+            "quality": "Quality",
+            "total": "Total",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    },
+    "realData": {
+        "valBasedCompensationLabel": {
+            "valBasedCompensationTitle": "Value Based Compensation",
+            "infoToolTip": "Value Based Compensation is paid following year-end review",
+            "measureTypeDescLabel": "Measure Type Description",
+            "compEligibleLabel": "Comp Eligible",
+            "compEarnedLabel": "Comp Earned",
+            "outComesLabel": "Outcomes",
+            "patientExperience": "Patient Experience",
+            "quality": "Quality",
+            "total": "Total",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    }
+}

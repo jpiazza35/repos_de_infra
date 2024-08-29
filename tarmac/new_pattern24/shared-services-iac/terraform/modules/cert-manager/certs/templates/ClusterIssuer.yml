@@ -1,0 +1,32 @@
+apiVersion: cert-manager.io/v1
+
+kind:   ClusterIssuer
+
+metadata:
+  name: {{ .Values.certs.name }}
+  namespace: {{ .Values.certs.namespace }}
+
+  labels:
+    environment: {{ .Values.certs.env }}
+    name: {{ .Values.certs.name }}
+    iac: {{ .Values.certs.iac }}
+
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: {{ .Values.certs.email }}
+    privateKeySecretRef:
+      name: {{ .Values.certs.name }}
+    solvers:
+    - http01:
+        ingress:
+          class : istio
+    - selector:
+        dnsZones:
+          - "cliniciannexus.com"
+      dns01:
+        route53:
+          region: us-east-1
+          hostedZoneID: Z03730012L2O8KNCL0XFP
+          role: arn:aws:iam::298556582965:role/dns-manager
+

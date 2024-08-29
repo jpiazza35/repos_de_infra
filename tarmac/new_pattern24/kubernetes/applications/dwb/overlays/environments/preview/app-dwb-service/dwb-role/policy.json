@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "s3access",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::prod-survey-template-extracts-467744931205/*",
+        "arn:aws:s3:::prod-survey-template-extracts-467744931205",
+        "arn:aws:s3:::preview-survey-template-extracts-654654541334/*",
+        "arn:aws:s3:::preview-survey-template-extracts-654654541334"
+      ]
+    },
+    {
+      "Sid": "kmsaccess",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "arn:aws:kms:us-east-1:467744931205:key/45b67bcd-0619-47eb-990e-17828e11ce94",
+        "arn:aws:kms:us-east-1:654654541334:key/4154e003-774c-47ad-b202-fd2e624ba8de"
+      ]
+    },
+    {
+      "Sid": "mskaccess",
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::975050241955:role/databricks_msk_assume_role",
+        "arn:aws:iam::417425771013:role/databricks_msk_assume_role"
+      ]
+    }
+  ]
+}

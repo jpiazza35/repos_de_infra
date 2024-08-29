@@ -1,0 +1,26 @@
+{
+    "ValBasedMeasuresLabel": {
+        "ValBasedMeasuresTitle": "Value Based Measures",
+        "BreastCancerScreening": "Breast Cancer Screening",
+        "QualityIndividual": "Quality | Individual",
+        "YTDPerformance": "YTD Performance",
+        "DepressionScreening": "Depression Screening",
+        "Hypertension": "Hypertension",
+        "WouldRecommendProvider": "Would Recommend Provider",
+        "PatientExperienceIndividual": "Patient Experience | Individual",
+        "A1COutcomesGroup": "Outcomes | Group",
+        "A1C": "A1C"
+    },
+    "ValBasedMeasuresValue": {
+        "BreastCancerScreeningYTDPerformanceVal": "77.10",
+        "DepressionScreeningYTDPerformanceVal": "94.20",
+        "HypertensionYTDPerformanceVal": "85.50",
+        "WouldRecommendProviderYTDPerformanceVal": "92.30",
+        "A1CYTDPerformanceVal": "77.00",
+        "BreastCancerScreeningProgressBarMarkVal": "76.90",
+        "DepressionScreeningProgressBarMarkVal": "93.50",
+        "HypertensionProgressBarMarkVal": "87.80",
+        "WouldRecommendProviderProgressBarMarkVal": "91.40",
+        "A1CProgressBarMarkVal": "77.00"
+    }
+}

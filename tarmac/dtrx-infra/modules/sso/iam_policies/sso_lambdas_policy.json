@@ -1,0 +1,56 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "CloudwatchAllow",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "SQSAllow",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:List*",
+                "sqs:Get*",
+                "sqs:Send*"
+            ],
+            "Resource": "arn:aws:sqs:${region}:${logging_aws_account_id}:core-alerts-queue"
+        },
+        {
+            "Sid": "CloudtrailAllow",
+            "Effect": "Allow",
+            "Action": [
+                "cloudtrail:Get*",
+                "cloudtrail:Describe*",
+                "cloudtrail:List*",
+                "cloudtrail:LookupEvents"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DynamoDBAllow",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:Scan",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Get*"
+            ],
+            "Resource": "arn:aws:dynamodb:${region}:${aws_account_id}:table/${dynamodb_table_name}"
+        },
+        {
+            "Sid": "KMSKeyAllow",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:GenerateDataKey*",
+                "kms:DescribeKey"
+            ],
+            "Resource": "arn:aws:kms:${region}:${logging_aws_account_id}:key/8f5257d8-7f0e-48c2-8ecb-02234fc1bfd7"
+        }
+    ]
+}

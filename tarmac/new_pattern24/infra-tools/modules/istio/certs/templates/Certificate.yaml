@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.certs.istio_gw_name }}
+  namespace: {{ .Values.certs.istio_namespace }}
+spec:
+  dnsNames:
+    - {{ .Values.certs.istio_dns_record }}
+  secretName: {{ .Values.certs.istio_cert_secret_name }}
+  issuerRef:
+    name: {{ .Values.certs.name }}
+    kind: ClusterIssuer

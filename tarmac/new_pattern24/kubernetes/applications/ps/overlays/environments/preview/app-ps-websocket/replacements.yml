@@ -1,0 +1,71 @@
+- source:
+    kind: ConfigMap
+    name: app-ps-websocket
+    fieldPath: data.url
+  targets:
+
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - spec.rules.*.host
+    options:
+      create: false
+
+  - select:
+      name: ps
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+    options:
+      create: false
+
+- source:
+    kind: ConfigMap
+    name: app-ps-websocket
+    fieldPath: data.env
+  targets:
+
+  - select:
+      kind: Deployment
+    fieldPaths:
+      - metadata.labels.environment
+    options:
+      create: true
+
+- source:
+    kind: ConfigMap
+    name: app-ps-websocket
+    fieldPath: data.acm
+  targets:
+
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[alb.ingress.kubernetes.io/certificate-arn]
+    options:
+      create: false
+
+- source: 
+    kind: ConfigMap
+    name: app-ps-websocket
+    fieldPath: data.wss_port
+  targets:
+  - select:
+      name: app-ps-websocket
+      kind: Deployment
+    fieldPaths:
+      - spec.template.spec.containers.0.env.[name=WEBSOCKET_HTTPS_PORT].value
+    options:
+      create: true
+- source: 
+    kind: ConfigMap
+    name: app-ps-websocket
+    fieldPath: data.ws_port
+  targets:
+  - select:
+      name: app-ps-websocket
+      kind: Deployment
+    fieldPaths:
+      - spec.template.spec.containers.0.env.[name=WEBSOCKET_HTTP_PORT].value
+    options:
+      create: true

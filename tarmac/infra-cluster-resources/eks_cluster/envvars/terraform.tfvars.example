@@ -1,0 +1,56 @@
+aws_region            = "us-east-1"
+cluster_version       = "1.25"
+min_size              = 3
+max_size              = 10
+des_size              = 3
+is_eks_api_public     = true
+is_eks_api_private    = true
+capacity_type         = "ON_DEMAND"
+ami_type              = "AL2_x86_64"
+disk_size             = 30
+ebs_csi_addon_version = "v1.17.0-eksbuild.1"
+vault_url = ""
+
+
+#replace me
+environment           = "dev"
+instance_types        = ["t3.large"]
+
+#auth map
+iam_roles = [
+  {
+    rolearn  = "ROLE-ARN"
+    rolename = "ROLE-NAME"
+    groups   = ["system:masters"]
+  }
+]
+
+## Vault Auth
+## Vault Management
+k8s_serviceaccount = "vault-auth"
+
+paths = [
+  "dev",
+  "qa",
+  "prod"
+]
+
+
+
+## Argo vars
+
+argocd_release_namespace                = ""
+argocd_release_name                     = "argo-cd"
+argocd_chart_repository                 = "https://argoproj.github.io/argo-helm"
+dependency_update                       = true
+argocd_chart_name                       = "argo-cd"
+argocd_chart_version                    = "5.24.0"
+set_cluster_enabled                     = true
+argocd_sso_integration_enabled          = false
+argocd_sso_integration_domain_name      = ""
+argocd_sso_integration_clientid         = ""
+argocd_sso_integration_tennantid        = ""
+argocd_sso_integration_client_secret    = ""
+argocd_sso_integration_group_id         = ""
+argocd_slack_notifications_enabled      = false
+argocd_slack_notifications_slack_secret = ""

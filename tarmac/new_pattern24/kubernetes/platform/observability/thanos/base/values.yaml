@@ -1,0 +1,60 @@
+serviceAccount:
+  create: false
+  name: ""
+  automountServiceAccountToken: true
+  annotations: {}
+
+# objstoreConfig:
+#   type: S3
+#   config:
+#     bucket: ${bucket}
+#     endpoint: s3.us-east-1.amazonaws.com
+
+existingObjstoreSecret: thanos-objstore-secret
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      prometheus-monitor: 'true'
+
+storegateway:
+  enabled: true
+  persistence:
+    size: 75Gi
+  podAnnotations:
+    iam.amazonaws.com/role: monitoring_aws_role
+  extraFlags:
+    - --min-time=-12w
+
+query:
+  stores:
+    - prometheus-kube-prometheus-operator.monitoring.svc:10250
+
+ruler:
+  enabled: true
+  podAnnotations:
+    iam.amazonaws.com/role: monitoring_aws_role
+  alertmanagers:
+    - "http://prometheus-kube-prometheus-alertmanager.monitoring.svc:9093"
+  existingConfigmap: prometheus-rules
+  clusterName: ""
+  persistence:
+    enabled: false
+
+compactor:
+  enabled: true
+  retentionResolutionRaw: 30d
+  retentionResolution5m: 183d
+  retentionResolution1h: 365d
+  persistence:
+    size: 50Gi
+    accessModes:
+      - ReadWriteOnce
+
+bucketweb:
+  enabled: true
+
+receive:
+  enabled: true

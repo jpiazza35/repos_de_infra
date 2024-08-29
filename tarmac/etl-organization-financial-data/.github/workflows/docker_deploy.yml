@@ -1,0 +1,21 @@
+name: 'Docker Deploy'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  aws-ecr-image-build-push:
+    uses: clinician-nexus/ci_tools/.github/workflows/aws-ecr-image-build-push.yml@main
+    with:
+      aws_account_id: "130145099123"
+      github_oidc_role_name: "data-platform-github-oidc-role"
+      aws_region: 'us-east-1'
+      image_name: etl-organization-financial-data-ecr-repo
+      build_file_path: './Dockerfile'

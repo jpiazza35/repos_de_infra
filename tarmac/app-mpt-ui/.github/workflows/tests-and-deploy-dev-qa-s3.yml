@@ -1,0 +1,177 @@
+# Build the MPT UI and push it into Dev and QA S3
+
+name: Build and publish the MPT-UI into Dev and QA S3
+run-name: ${{ github.actor }} build MPT-UI into Dev and QA S3
+
+# Run on push of every branch
+on:
+  push:
+#    paths:
+#      - './**'
+#
+#    tags:
+#      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  REPO_NAME: app-mpt-ui
+  PROJECT_NAME: app-mpt-ui
+  PROJECT_DIR: ./
+  MPT_E2E_TEST_REPO_NAME: app-mpt-e2e-test
+  #UNIT_TEST_DIR: ./Tests
+
+jobs:
+# # CD to Tests and run npm test
+#   test:
+#     name: Run unit tests
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         node-version: [ '18.13' ]
+#     permissions:
+#       contents: read
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Install Node ${{ matrix.node-version }}
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: ${{ matrix.node-version }}
+
+#       - name: Install Dependencies
+#         run: |
+#           cd ${{ env.UNIT_TEST_DIR }}
+#           npm i
+
+#       - name: Run unit tests
+#         run: |
+#           cd ${{ env.UNIT_TEST_DIR }}
+#           npm test
+
+# Run on push to main branch
+  deploy-dev:
+    name: Build and push the app code into dev S3 bucket
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    if: github.ref == 'refs/heads/main'
+    env:
+      ENVIRONMENT: dev
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_AM5_LICENSE_KEY: ${{ secrets.AM5_LICENSE_KEY }}
+      VITE_LAUNCH_DARKLY: ${{ secrets.VITE_LAUNCH_DARKLY }}
+      VITE_API_URL: ""  # leave empty if you want to use current domain which is mpt.dev.cliniciannexus.com
+      VITE_API_URL_PREFIX: "/api/"
+    strategy:
+      matrix:
+        node-version: ['18.13']
+    permissions:
+      contents: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute short versions of SHASUM and repository name
+        id: shorten
+        run: |
+          echo "sha=$(git rev-parse --short=10 HEAD)" >> $GITHUB_OUTPUT
+          echo "repo=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: Print shortend names for debugging
+        run: |
+          echo "Short SHA ${{ steps.shorten.outputs.sha }}"
+          echo "Short Repo ${{ steps.shorten.outputs.repo }}"
+          
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.D_EKS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: UI-dev-to-D-EKS-S3
+
+      - name: Update .env
+        run: |
+          cp .github/.env.j2 ${{ env.PROJECT_DIR }}
+          cp .github/update-env.py ${{ env.PROJECT_DIR }}
+          python3 update-env.py
+
+      - name: Build app and push to S3
+        run: |
+          npm i
+          npm run build -- --mode ${{ env.ENVIRONMENT }}
+          cp -rf assets/* dist/assets
+          aws s3 cp dist/ s3://${{ env.ENVIRONMENT }}-${{ env.PROJECT_NAME }}-${{ secrets.AWS_REGION }} --recursive --region ${{ secrets.AWS_REGION }}
+          
+  deploy-qa:
+    name: Build and push the app code into QA S3 bucket
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    if: github.ref == 'refs/heads/main'
+    env:
+      ENVIRONMENT: qa
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_AM5_LICENSE_KEY: ${{ secrets.AM5_LICENSE_KEY }}
+      VITE_LAUNCH_DARKLY: ${{ secrets.VITE_LAUNCH_DARKLY }}
+      VITE_API_URL: https://api.qa.cliniciannexus.com
+      VITE_API_URL_PREFIX: ""
+    strategy:
+      matrix:
+        node-version: ['18.13']
+    permissions:
+      contents: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+    needs: 
+      - deploy-dev
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.Q_EKS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: UI-Q-EKS-S3
+
+      - name: Update .env
+        run: |
+          cp .github/.env.j2 ${{ env.PROJECT_DIR }}
+          cp .github/update-env.py ${{ env.PROJECT_DIR }}
+          python3 update-env.py
+
+      - name: Build app and push to S3
+        run: |
+          npm i
+          npm run build -- --mode ${{ env.ENVIRONMENT }}
+          cp -rf assets/* dist/assets
+          aws s3 cp dist/ s3://${{ env.ENVIRONMENT }}-${{ env.PROJECT_NAME }}-${{ secrets.AWS_REGION }} --recursive --region ${{ secrets.AWS_REGION }}
+
+      - name: Get Github App Token
+        id: rw-installation-token
+        uses: tibdex/github-app-token@v2
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+  
+      - name: Trigger e2e-test GH repo pipeline
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: clinician-nexus/${{ env.MPT_E2E_TEST_REPO_NAME }}
+          event-type: trigger-e2e-tests
+          client-payload: '{"project_name": "${{ env.PROJECT_NAME }}", "repo_name": "${{ env.REPO_NAME }}", "commit_author": "${{ github.actor }}"}'
+  

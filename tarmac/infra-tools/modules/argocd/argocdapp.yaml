@@ -1,0 +1,206 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-mpt-ui
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-mpt-ui
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-user-grpc-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-user-grpc-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-organization-grpc-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-organization-grpc-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-mpt-project-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-mpt-project-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-user-api-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-user-api-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-survey-api-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-survey-api-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-survey-grpc-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-survey-grpc-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-incumbent-api-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-incumbent-api-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: devops-pipeline-alerts
+    notifications.argoproj.io/subscribe.app-sync-running.slack: devops-pipeline-alerts
+  name: app-incumbent-grpc-service
+  namespace: mpt-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: dev
+    path: app-incumbent-grpc-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mpt-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

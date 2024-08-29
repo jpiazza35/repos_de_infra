@@ -1,0 +1,81 @@
+# WEB UI deployment configuration
+web:
+  role: web
+  image:
+    repository: docker.io/kubernetesui/dashboard-web
+    tag: v1.0.0
+  containers:
+    ports:
+      - name: web
+        containerPort: 8000
+        protocol: TCP
+    # Additional container arguments
+    # Full list of arguments: https://github.com/kubernetes/dashboard/blob/master/docs/common/arguments.md
+    # args:
+    # - --system-banner="Welcome to the Kubernetes Dashboard"
+    args: []
+    # - --enable-insecure-login
+    # Additional container environment variables
+    # env:
+    # - name: SOME_VAR
+    #   value: 'some value'
+    env: []
+    # Additional volume mounts
+    # - mountPath: /kubeconfig
+    #   name: dashboard-kubeconfig
+    #   readOnly: true
+    volumeMounts:
+      # Create volume mount to store logs (required)
+      - mountPath: /tmp
+        name: tmp-volume
+    # TODO: Validate configuration
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+      limits:
+        cpu: 250m
+        memory: 400Mi
+  # Additional volumes
+  # - name: dashboard-kubeconfig
+  #   secret:
+  #     defaultMode: 420
+  #     secretName: dashboard-kubeconfig
+  volumes:
+    # Create on-disk volume to store exec logs (required)
+    - name: tmp-volume
+      emptyDir: {}
+  nodeSelector:
+    # TODO: check if it's really needed since we offer cross platform images for darwin/windows/linux
+    kubernetes.io/os: linux
+  # Labels & annotations shared between WEB UI related resources
+  labels: {}
+  annotations: {}
+
+## Metrics Server
+metrics-server:
+  enabled: false
+
+## Metrics Scraper
+metricsScraper:
+  enabled: false
+
+serviceMonitor:
+  enabled: true
+  ## Here labels can be added to the serviceMonitor
+  labels:
+    release: prometheus
+
+## required from v3.0.0/v7.0.0: https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard#breaking-change
+nginx:
+  enabled: false
+
+cert-manager:
+  enabled: false
+  
+app:
+  ingress:
+    enabled: false
+  scaling: 
+    replicas: 1
+

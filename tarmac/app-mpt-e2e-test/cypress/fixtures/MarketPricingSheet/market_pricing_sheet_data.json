@@ -1,0 +1,29 @@
+{
+    "orgErrorMessage": "To visualize Market Pricing Sheet, please select Organization, Project ID, Project Version.",
+    "projectIdErrorMessage": "To visualize Market Pricing Sheet, please select Project ID, Project Version.",
+    "projectVersionErrorMessage": "To visualize Market Pricing Sheet, please select Project Version.",
+    "filtersHeader": [
+        "Main Settings",
+        "Percentiles",
+        "Filters",
+        "Sort By"
+    ],
+    "mainSettingsOptions": [
+        "Organization Name",
+        "Report Date",
+        "Client Position Detail",
+        "Client Pay Detail",
+        "Job Match Detail",
+        "Market Segment Name"
+    ],
+    "marketPricingSheet": [
+        "MPT QA Automation_Parent",
+        "Market Pricing Sheet ID:",
+        "Status:",
+        "Report Date:"
+    ],
+    "currentPricingSheetRowCount":3,
+    "externalCurrentPricingSheet":"mpt_addexternaldata",
+    "noMarketDataMesssage":"No market data for the standard job matched",
+    "externalDataSave":"External data was successfully saved"
+}

@@ -1,0 +1,34 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "ECRFullVPCE",
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": [
+          "ecr:*"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:sourceVpce": [
+              "${prod_ecea_ecr_dkr_vpc_endpoint}",
+              "${prod_ecea_ecr_api_vpc_endpoint}"
+            ]
+          }
+        }
+      },
+      {
+        "Sid": "ECRFullOrgID",
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": [
+          "ecr:*"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:PrincipalOrgID": "${organization_id}"
+          }
+        }
+      }
+    ]
+  }

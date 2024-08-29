@@ -1,0 +1,4 @@
+[submodule "submodules/app-shared-protobuffs"]
+	path = submodules/app-shared-protobuffs
+	url = https://github.com/clinician-nexus/app-shared-protobuffs.git
+	branch = main

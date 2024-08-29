@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl-loop
+  namespace: default
+spec:
+  initContainers:
+    - name: copy
+      image: busybox:latest
+      command: ["/bin/sh", "-c", "cp /_tmp/script.sh /tmp/script.sh"]
+      volumeMounts:
+        - name: copy
+          mountPath: /tmp
+        - name: script
+          mountPath: /_tmp/script.sh
+          subPath: script.sh
+  containers:
+  - name: curl-loop
+    image: yauritux/busybox-curl:latest
+    command: ["/bin/sh", "-c"]
+    args: ["chmod +x /tmp/script.sh && cd /tmp && ./script.sh"]
+    imagePullPolicy: IfNotPresent
+    resources: {}
+    env:
+    - name: HTTP_ENDPOINT
+      value: "http://prod-hoth-api-service.default.svc.cluster.local:443/api"
+    - name: MAX_TIMEOUT
+      value: "1"
+    - name: USER # optional
+      value: ""
+    - name: PASSWORD # optional
+      value: ""
+    volumeMounts:
+    - name: copy
+      mountPath: /tmp
+  restartPolicy: Always
+  volumes:
+    - name: script
+      configMap:
+        name: script
+    - name: copy
+      emptyDir: {}

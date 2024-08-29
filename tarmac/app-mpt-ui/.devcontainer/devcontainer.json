@@ -1,0 +1,77 @@
+// approach used by k3d example codespace at:
+// https://github.com/cse-labs/kubernetes-in-codespaces
+{
+	"name": "app-mpt-ui",
+	"dockerFile": "Dockerfile",
+	// do not change these if you want Docker in Docker support
+	"runArgs": [
+		"--init",
+		"--privileged"
+	],
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+	],
+	"overrideCommand": false,
+	// some base images require a specific user name
+	"remoteUser": "vscode",
+	// minimum cpus required to run k3d in this codespace
+	"hostRequirements": {
+		"cpus": 4
+	},
+	// Install extensions
+	"extensions": [
+		"ms-dotnettools.csharp",
+		"ms-azuretools.vscode-docker",
+		"ms-azuretools.vscode-dapr",
+		"ms-kubernetes-tools.vscode-kubernetes-tools",
+		"davidanson.vscode-markdownlint",
+		"mutantdino.resourcemonitor",
+		"humao.rest-client",
+		"github.copilot",
+		"esbenp.prettier-vscode",
+		"josefpihrt-vscode.roslynator",
+		"svelte.svelte-vscode"
+	],
+	// Use 'onCreateCommand' to run commands as part of container creation.
+	"onCreateCommand": "bash .devcontainer/on-create.sh",
+	// // Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "/bin/bash -c .devcontainer/post-create.sh",
+	// // Use 'postStartCommand' to run commands after the container starts.
+	// "postStartCommand": "/bin/bash -c .devcontainer/post-start.sh"
+	"customizations": {
+		"codespaces": {
+			"repositories": {
+				"clinician-nexus/app-user-service": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-mpt-project-service": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-organization-service": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-survey-service": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-shared-protobuffs": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-mpt-sql-db": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-mpt-postgres-db": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-incumbent-service": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-incumbent-db": {
+					"permissions": "write-all"
+				},
+				"clinician-nexus/app-incumbent-staging-db": {
+				  	"permissions": "write-all"
+				}
+			}
+		}
+	}
+}

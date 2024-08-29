@@ -1,0 +1,70 @@
+# -- Extra environment variables for argocd-image-updater
+extraEnv: #[]
+  - name: AWS_REGION
+    value: "us-east-1"
+  - name: GIT_SSH_COMMAND
+    value: "ssh -o StrictHostKeyChecking=no"
+
+config:
+  # -- Username to use for Git commits
+  gitCommitUser: "argocdImageUpdater"
+
+  # -- E-Mail address to use for Git commits
+  gitCommitMail: "devops@cliniciannexus.com"
+
+  # -- ArgoCD Image Update log level
+  logLevel: "trace"
+
+  # -- ArgoCD Image Updater registries list configuration. More information [here](https://argocd-image-updater.readthedocs.io/en/stable/configuration/registries/)
+  registries: []
+    # - name: ECR
+    #   api_url: https://123456789.dkr.ecr.eu-west-1.amazonaws.com
+    #   prefix: 123456789.dkr.ecr.eu-west-1.amazonaws.com
+    #   ping: yes
+    #   insecure: no
+    #   credentials: ext:/scripts/ecr-login.sh
+    #   credsexpire: 10h
+
+authScripts:
+  # -- Whether to mount the defined scripts that can be used to authenticate with a registry, the scripts will be mounted at `/scripts`
+  enabled: true
+  # -- Map of key-value pairs where the key consists of the name of the script and the value the contents
+  scripts: #{}
+    ecr-login.sh: |
+      #!/bin/sh
+      aws ecr get-authorization-token --region $AWS_REGION --output text --query 'authorizationData[].authorizationToken' | base64 -d
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+    # eks.amazonaws.com/role-arn: arn:aws:iam::946884638317:role/cluster-dev-ZZaNzO-worker-node-eks-node-group
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "argocd-image-updater"
+
+# -- Pod security context settings for the deployment
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# -- Security context settings for the deployment
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# Metrics configuration
+metrics:
+  # -- Deploy metrics service
+  enabled: true
+  serviceMonitor:
+    # -- Enable a prometheus ServiceMonitor
+    enabled: true
+    # -- Prometheus ServiceMonitor interval
+    interval: 30s
+    selector: #{}
+      prometheus-monitor: "true"

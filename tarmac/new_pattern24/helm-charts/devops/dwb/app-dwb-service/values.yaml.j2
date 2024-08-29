@@ -1,0 +1,35 @@
+fullnameOverride: {{ project_name }}-{{ environment }}
+namespace:
+  name: ps
+
+service:
+  port: 10000
+  targetPort: 10000
+  name: {{ project_name }}-{{ environment }}
+  type: ClusterIP
+
+image:
+  repository: '{{ ss_tools_ecr_url }}/{{ project_name }}-ecr-repo'
+  tag: '{{ docker_image_tag }}'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+environment: {{ environment }}
+
+envvars:
+  - name: "APIBASEURL"
+    value: "/api/service"
+  - name: "KAFKA_BROKER"
+    value: ""
+  - name: "KAFKA_TOPIC"
+    value: "submission-statuses"

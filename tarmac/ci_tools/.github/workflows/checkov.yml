@@ -1,0 +1,74 @@
+name: Running Checkov tool for analysis 
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        description: 'Directory where checkov will put resulst'
+        required: true
+        type: string
+        default: './results'
+      skip_check:
+        description: 'list of skip findings that need to be skipped at org level'
+        required: false
+        type: string
+
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create ${{ inputs.directory }} directory for report files
+        run: mkdir -p ${{ inputs.directory }}
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Test with Checkov
+        id: checkov
+        continue-on-error: true
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform 
+          skip_check: '${{ inputs.skip_check }}'
+          soft_fail: false
+          output_format: 'junitxml, cli'
+          output_file_path: '${{ inputs.directory }}'
+
+      - name: Upload Checkov report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: checkov-report
+          path: ${{ inputs.directory }}/results_junitxml.xml   
+      
+  report:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+  
+      - name: Download Checkov report
+        uses: actions/download-artifact@v2
+        with:
+          name: checkov-report
+          path: ${{ inputs.directory }}
+
+      - name: Check if it is s file or dir 
+        run: |
+          ls -la ${{ inputs.directory }}
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: ${{ inputs.directory }}/results_junitxml.xml
+          comment_on_pr: true
+          comment_title: 'Below are the test, and how many errors were detected by Checkov'
+          json_file: true
+          compare_to_earlier_commit: true
+          check_run_annotations: 'all tests'
+        

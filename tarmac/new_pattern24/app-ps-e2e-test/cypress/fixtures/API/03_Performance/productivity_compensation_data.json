@@ -1,0 +1,232 @@
+{
+    "mockData": {
+        "userId": 1004,
+        "tenant": 1,
+        "dashboardKey": 2,
+        "cardKey": 10,
+        "specialties": 2223,
+        "periodId": 1,
+        "periodType": 1,
+        "yearMonth": 202201,
+        "productivityCompResponse": {
+            "cardSettings": {
+                "title": "Productivity Compensation",
+                "infoIcon": "Value Based Compensation is paid following year-end review"
+            },
+            "detail": [
+                {
+                    "ytdProdCompensation": 126679.79,
+                    "currentAvgRate": 44.25,
+                    "priorAvgRate": 44.73,
+                    "tierData": [
+                        {
+                            "label": "Tier 1",
+                            "value": 44.25,
+                            "wrvu": 0
+                        },
+                        {
+                            "label": "Tier 2",
+                            "value": 49.95,
+                            "wrvu": 3801
+                        },
+                        {
+                            "label": "Tier 3",
+                            "value": 43.5,
+                            "wrvu": 5701
+                        }
+                    ],
+                    "currentYearData": [
+                        {
+                            "date": "1/1/2023",
+                            "wrvu": 350.43,
+                            "compensation": 21578.26
+                        },
+                        {
+                            "date": "2/1/2023",
+                            "wrvu": 707.1,
+                            "compensation": 256369.26
+                        },
+                        {
+                            "date": "3/1/2023",
+                            "wrvu": 1082.75,
+                            "compensation": 48963.36
+                        },
+                        {
+                            "date": "4/1/2023",
+                            "wrvu": 1414.07,
+                            "compensation": 257485.32
+                        },
+                        {
+                            "date": "5/1/2023",
+                            "wrvu": 1779.86,
+                            "compensation": 48527.36
+                        },
+                        {
+                            "date": "6/1/2023",
+                            "wrvu": 2086.74,
+                            "compensation": 52942.36
+                        },
+                        {
+                            "date": "7/1/2023",
+                            "wrvu": 2481.37,
+                            "compensation": 25183.63
+                        },
+                        {
+                            "date": "8/1/2023",
+                            "wrvu": 2862.82,
+                            "compensation": 369585.36
+                        },
+                        {
+                            "date": "9/1/2023",
+                            "wrvu": 0,
+                            "compensation": 254878.36
+                        },
+                        {
+                            "date": "10/1/2023",
+                            "wrvu": 0,
+                            "compensation": 287469.25
+                        },
+                        {
+                            "date": "11/1/2023",
+                            "wrvu": 0,
+                            "compensation": 87452.36
+                        },
+                        {
+                            "date": "12/1/2023",
+                            "wrvu": 0,
+                            "compensation": 418269.3
+                        }
+                    ],
+                    "priorYearData": [
+                        {
+                            "date": "1/1/2022",
+                            "wrvu": 386.98,
+                            "compensation": 142587.36
+                        },
+                        {
+                            "date": "2/1/2022",
+                            "wrvu": 658.78,
+                            "compensation": 96325.36
+                        },
+                        {
+                            "date": "3/1/2022",
+                            "wrvu": 1029.42,
+                            "compensation": 21578.26
+                        },
+                        {
+                            "date": "4/1/2022",
+                            "wrvu": 1419.83,
+                            "compensation": 21598.36
+                        },
+                        {
+                            "date": "5/1/2022",
+                            "wrvu": 1770.9,
+                            "compensation": 25836.3
+                        },
+                        {
+                            "date": "6/1/2022",
+                            "wrvu": 2068.55,
+                            "compensation": 21578.26
+                        },
+                        {
+                            "date": "7/1/2022",
+                            "wrvu": 2403.4,
+                            "compensation": 854725.3
+                        },
+                        {
+                            "date": "8/1/2022",
+                            "wrvu": 2822.76,
+                            "compensation": 96857.36
+                        },
+                        {
+                            "date": "9/1/2022",
+                            "wrvu": 3031.16,
+                            "compensation": 257485.38
+                        },
+                        {
+                            "date": "10/1/2022",
+                            "wrvu": 3448.52,
+                            "compensation": 21578.26
+                        },
+                        {
+                            "date": "11/1/2022",
+                            "wrvu": 3787.8,
+                            "compensation": 21545.98
+                        },
+                        {
+                            "date": "12/1/2022",
+                            "wrvu": 4171.02,
+                            "compensation": 21578.58
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "realData": {
+        "userId": "BS216",
+        "tenant": 2,
+        "dashboardKey": 4,
+        "cardKey": 10,
+        "specialties": 1320,
+        "periodId": 1,
+        "periodType": 2,
+        "yearMonth": 202306,
+        "productivityCompResponse": {
+            "cardSettings": {
+                "title": "Productivity Compensation",
+                "infoIcon": ""
+            },
+            "detail": {
+                "ytdProdCompensation": 0,
+                "currentAvgRate": 0,
+                "priorAvgRate": 0,
+                "tierData": [
+                    {
+                        "label": "Tier1",
+                        "value": 0,
+                        "wrvu": 0
+                    },
+                    {
+                        "label": "Tier2",
+                        "value": 47.5,
+                        "wrvu": 5985
+                    }
+                ],
+                "currentYearData": [
+                    {
+                        "date": "07/01/2022",
+                        "wrvu": 417.9,
+                        "compensation": 0
+                    },
+                    {
+                        "date": "08/01/2022",
+                        "wrvu": 918.23,
+                        "compensation": 0
+                    },
+                    {
+                        "date": "09/01/2022",
+                        "wrvu": 1521.07,
+                        "compensation": 0
+                    },
+                    {
+                        "date": "10/01/2022",
+                        "wrvu": 1850.44,
+                        "compensation": 0
+                    },
+                    {
+                        "date": "11/01/2022",
+                        "wrvu": 2379.47,
+                        "compensation": 0
+                    },
+                    {
+                        "date": "12/01/2022",
+                        "wrvu": 3079.2,
+                        "compensation": 0
+                    }
+                ],
+                "priorYearData": []
+            }
+        }
+    }
+}

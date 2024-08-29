@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-incumbent-grpc-service
+data:
+  app: app-incumbent-grpc-service
+  ecr: app-incumbent-grpc-service-ecr-repo
+  env: devops
+  url: devops.cliniciannexus
+  key: ""
+  acm: "arn:aws:acm:us-east-1:964608896914:certificate/8f4b2498-b7f7-4d04-8659-fa3a229ca283"

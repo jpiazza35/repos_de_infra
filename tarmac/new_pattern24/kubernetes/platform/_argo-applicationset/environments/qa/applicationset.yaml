@@ -1,0 +1,76 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-applicationset-qa
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - app: reloader
+        path: platform/automation/reloader/overlays/environments/qa
+        namespace: reloader
+      - app: kiali
+        path: platform/networking/kiali/overlays/environments/qa
+        namespace: istio-system
+      - app: metrics-server
+        path: platform/observability/metrics-server/overlays/environments/qa
+        namespace: metrics-server
+      - app: kubernetes-dashboard
+        path: platform/observability/kubernetes-dashboard/overlays/environments/qa
+        namespace: kubernetes-dashboard
+      - app: kubecost
+        path: platform/finops/kubecost/overlays/environments/qa
+        namespace: kubecost
+      - app: kube-prometheus-stack
+        path: platform/observability/kube-prometheus-stack/overlays/environments/qa
+        namespace: monitoring
+      - app: external-dns
+        path: platform/networking/external-dns/overlays/environments/qa
+        namespace: external-dns
+      - app: argocd
+        path: platform/automation/argocd/overlays/environments/qa
+        namespace: argocd
+      - app: grafana-operator
+        path: platform/observability/grafana_operator/overlays/environments/qa
+        namespace: grafana-operator
+      - app: grafana-agent
+        path: platform/observability/grafana_agent/overlays/environments/qa
+        namespace: monitoring
+      - app: external-secrets
+        path: platform/security/external-secrets-controller/overlays/environments/qa
+        namespace: default
+      - app: loki
+        path: platform/observability/loki/overlays/environments/qa
+        namespace: monitoring
+      - app: thanos
+        path: platform/observability/thanos/overlays/environments/qa
+        namespace: monitoring
+      - app: influxdb
+        path: platform/observability/influxdb/overlays/environments/qa
+        namespace: monitoring
+      - app: argocd-image-updater
+        path: platform/automation/argocd-image-updater/overlays/environments/qa
+        namespace: argocd
+      - app: cert-manager
+        path: platform/security/cert-manager/overlays/environments/qa
+        namespace: cert-manager
+  template:
+    metadata:
+      name: '{{app}}'
+    spec:
+      project: platform
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        repoURL: https://github.com/clinician-nexus/Kubernetes
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'

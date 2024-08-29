@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/load-balancer-name: jaeger
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/tags: Environment=dev,Team=devops
+    alb.ingress.kubernetes.io/target-type: ip
+    cert-manager.io/cluster-issuer: letsencrypt-dev
+    external-dns.alpha.kubernetes.io/hostname: jaeger.dev.cliniciannexus.com
+  labels:
+  name: jaeger-query
+spec:
+  ingressClassName: alb
+  rules:
+  - host: jaeger.dev.cliniciannexus.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: jaeger-query
+            port:
+              number: 80
+        path: /oauth2
+        pathType: Prefix
+  tls:
+  - hosts:
+    - jaeger.dev.cliniciannexus.com
+    secretName: jaeger-query-tls

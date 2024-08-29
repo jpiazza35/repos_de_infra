@@ -1,0 +1,47 @@
+name: Repo Semver Bump
+
+permissions: write-all
+
+on:
+  pull_request:
+    branches:
+      - main
+      
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: '0'
+
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+          
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+        
+      - name: Display SemVer
+        run: |
+          echo "SemVer: $GITVERSION_SEMVER" && echo "$version" && echo "$major.$minor.$patch"
+          
+      - name: Create git tag
+        run: |
+          git tag $GITVERSION_SEMVER
+          
+      - name: Push git tag
+        run: git push origin $GITVERSION_SEMVER
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}

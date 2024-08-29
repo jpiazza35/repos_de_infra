@@ -1,0 +1,71 @@
+# https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml
+global:
+  # zone: cluster.local (use only if your DNS server doesn't live in the same zone as kubecost)
+  prometheus:
+    enabled: false # If false, Prometheus will not be installed -- Warning: Before changing this setting, please read to understand this setting https://docs.kubecost.com/install-and-configure/install/custom-prom
+    fqdn: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090/prometheus #example address of a prometheus to connect to. Include protocol (http:// or https://) Ignored if enabled: true
+    insecureSkipVerify : true # If true, kubecost will not check the TLS cert of prometheus
+    # queryServiceBasicAuthSecretName: dbsecret # kubectl create secret generic dbsecret -n kubecost --from-file=USERNAME --from-file=PASSWORD
+    # queryServiceBearerTokenSecretName: mcdbsecret  # kubectl create secret generic mcdbsecret -n kubecost --from-file=TOKEN
+
+  grafana:
+    enabled: false # If false, Grafana will not be installed
+    domainName: prometheus-grafana.monitoring.svc #example grafana domain Ignored if enabled: true
+    scheme: "http" # http or https, for the domain name above.
+    proxy: true # If true, the kubecost frontend will route to your grafana through its service endpoint
+    # fqdn: cost-analyzer-grafana.default.svc
+
+service:
+  port: 9091 # Changing ports as we have our Prometheus running on 9090
+  targetPort: 9091
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: prometheus
+  networkCosts:
+    enabled: true
+    additionalLabels:
+      release: prometheus
+prometheusRule:
+  enabled: true
+  additionalLabels:
+    release: prometheus
+
+prometheus:
+  # node-export must be disabled if there is an existing daemonset: https://guide.kubecost.com/hc/en-us/articles/4407601830679-Troubleshoot-Install#a-name-node-exporter-a-issue-failedscheduling-kubecost-prometheus-node-exporter
+  nodeExporter:
+    enabled: false
+  # kubecost emits pre-2.0 KSM metrics, KSM is enabled by default here for backwards compatibity, but can be disabled to save resources without concern to kubecost metrics
+  kubeStateMetrics:
+    enabled: false
+  kube-state-metrics:
+    disabled: false
+
+## Module for measuring network costs
+## Ref: https://github.com/kubecost/docs/blob/main/network-allocation.md
+networkCosts:
+  enabled: true
+  podSecurityPolicy:
+    enabled: false
+  imagePullPolicy: Always
+  updateStrategy:
+    type: RollingUpdate
+  # For existing Prometheus Installs, annotates the Service which generates Endpoints for each of the network-costs pods.
+  # The Service is annotated with prometheus.io/scrape: "true" to automatically get picked up by the prometheus config.
+  # NOTE: Setting this option to true and leaving the above extraScrapeConfig "job_name: kubecost-networking" configured will cause the
+  # NOTE: pods to be scraped twice.
+  prometheusScrape: false
+  # Traffic Logging will enable logging the top 5 destinations for each source
+  # every 30 minutes.
+  trafficLogging: true
+
+# Define persistence volume for cost-analyzer, more information at https://github.com/kubecost/docs/blob/main/storage.md
+persistentVolume:
+  size: 32Gi
+  dbSize: 32.0Gi
+  enabled: true # Note that setting this to false means configurations will be wiped out on pod restart.
+  storageClass: "${storage_class}"
+  # existingClaim: kubecost-cost-analyzer # a claim in the same namespace as kubecost
+  labels: {}
+  annotations: {}

@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: ps
+resources:
+- ../../../../base/app-ps-productivity-service
+- config.yml
+replacements:
+- path: replacements.yml
+images:
+- name: app-ps-productivity-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-ps-productivity-service-ecr-repo
+  digest: sha256:a7f7a90d3b3863d5d59609f42228bef52f8408ef72a8cc89a2cf03c586fb3b44

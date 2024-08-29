@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package cn.survey.v1;
+
+import "cn/survey/v1/survey_messages.proto";
+
+service Survey {
+  rpc ListBenchmarkDataType(ListBenchmarkDataTypeRequest) returns (BenchmarkDataTypeListResponse);
+  rpc ListSourceGroup(Empty) returns (SourceGroupListResponse);
+  rpc ListSurveyCutFilterOptions(SurveyCutFilterOptionsRequest) returns (SurveyCutFilterOptionsListResponse);
+  rpc ListSurveyCuts(SurveyCutsRequest) returns (SurveyCutListResponse);
+  rpc ListSurveyCutsData(SurveyCutsDataRequest) returns (SurveyCutsDataListResponse);
+  rpc ListPercentiles(ListPercentilesRequest) returns (ListPercentilesResponse);
+  rpc ListAllPercentilesByStandardJobCode(ListPercentilesRequest) returns (ListPercentilesResponse);
+  rpc ListSurveyCutsDataWithPercentiles(ListPercentilesRequest) returns (SurveyCutsDataListResponse);
+}

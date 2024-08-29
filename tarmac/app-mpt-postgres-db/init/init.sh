@@ -1,0 +1,1 @@
+pg_restore -U postgres -d Market_Pricing_DB /seed/seed.tar

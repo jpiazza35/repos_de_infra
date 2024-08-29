@@ -1,0 +1,134 @@
+{
+    "ZoneDefinition": {
+        "Name": "dev.cliniciannexus.com",
+        "Parent": "cliniciannexus.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "_0e7c2d93c098f0ac1305760b25ffa7f6.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_2b29a7c7ab2401d942f50b63b50515ad.tctzzymbbs.acm-validations.aws"
+                }
+            ]
+        },
+        {
+            "Name": "_8f51fb31984201439ae29a156150a832.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "_90bc4cfc6a30045d04c485cfeaa1e793.xyscsmcmgv.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_b97cdc4ea9ea320e1247a715a0da5f3a.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_81a006f4c1489dfe58608d7153a9d4ec.dnzkjbsjxj.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_c8c000dad6cf019b5f968f798f0c09a8.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_67915cb8cda3fa709c58322deaad74c3.hsmgrxbjqd.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_hnblihd1yzkgryy6vlie.dev.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "vpce:41HTQ7GkmGRzzVhPfKkO"
+                }
+            ]
+        },
+        {
+            "Name": "_hsaucpv5eakhvhm91xlk.dev.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "vpce:9QabxK4ekmB9eQldjZ7Y"
+                }
+            ]
+        },
+        {
+            "Name": "api.dev.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms48461315"
+                }
+            ]
+        },
+        {
+            "Name": "auth.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cn-b2c-dev-gwa5gwd7e3fkfcap.z01.azurefd.net"
+                }
+            ]
+        },
+        {
+            "Name": "_dnsauth.auth.dev.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "pfrttbb4nsq0rzqdstc0nxvh2skh5snl"
+                }
+            ]
+        },
+        {
+            "Name": "_45894012f6e4499409ffef18a013d167.cn-us-east-1-nonprod-ws01.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_3eedf3870f123e7a8d4eef7a43583298.dnzkjbsjxj.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "mac-build-cluster.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "SetIdentifier": "chi-dc-mac01",
+            "Weight": 100,
+            "TTL": 30,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-mac01.sca.local"
+                }
+            ],
+            "HealthCheckId": "3b467cdf-5608-4e01-9e7d-f52584cb3204"
+        },
+        {
+            "Name": "mac-build-cluster.dev.cliniciannexus.com.",
+            "Type": "CNAME",
+            "SetIdentifier": "chi-dc-mac02",
+            "Weight": 100,
+            "TTL": 30,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-mac02.sca.local"
+                }
+            ],
+            "HealthCheckId": "c1abb3a7-17cd-4682-85d8-1a61e334cb95"
+        }
+    ]
+}

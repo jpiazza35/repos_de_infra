@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-bm-service
+  labels:
+    app.kubernetes.io/instance: app-bm-service
+    app.kubernetes.io/name: app-bm-service
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-bm-service
+      app.kubernetes.io/name: app-bm-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: app-bm-service
+        app.kubernetes.io/name: app-bm-service
+    spec:
+      containers:
+        - name: app-bm-service
+          image: app-bm-service
+          ports:
+            - name: https
+              containerPort: 10000
+              protocol: TCP
+          env:
+            - name: AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  key: bm-cn-auth0-audience
+                  name: bm-external-secret
+
+            - name: AUTH0_CLIENTID
+              valueFrom:
+                secretKeyRef:
+                  key: bm-cn-auth0-clientid
+                  name: bm-external-secret
+
+            - name: LAUNCH_DARKLY_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: bm-cn-launch-darkly-key
+                  name: bm-external-secret
+
+            - name: CONNECTION_STRING_BM_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: bm-cn-connection-string-bm-database
+                  name: bm-external-secret
+
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  key: bm-cn-auth0-domain
+                  name: bm-external-secret

@@ -1,0 +1,103 @@
+name: Authenticate, Build and Push Container Image to AWS ECR
+
+on:
+  workflow_call:
+    inputs:
+      aws_account_id:
+        required: true
+        type: string
+      aws_region:
+        required: true
+        type: string
+        default: 'us-east-1'
+      image_name:
+        description: 'image name to be built and pushed'
+        required: true
+        type: string
+      image_tag:
+        description: 'image tag'
+        default: "latest"
+        required: true
+        type: string
+      build_args:
+        description: 'args passed to docker build'
+        type: string
+      build_file_path:
+        description: 'path to a directory containing a Dockerfile, or a specific Dockerfile compatible file'
+        default: './Dockerfile'
+        type: string
+      build_context:
+        description: 'path to a directory containing a Dockerfile, or a specific Dockerfile compatible file'
+        default: '.'
+        type: string
+      repo_name:
+        description: 'Repository to clone'
+        default: ${{ github.repository }}
+        type: string
+        required: false
+    secrets:
+      github_oidc_role_arn:
+        required: true
+      build_args:
+        required: false
+        description: "Build args"
+    outputs:
+      registry:
+        description: "The first output string"
+        value: ${{ jobs.aws-auth-ecr-setup-and-build-push.outputs.registry }}
+      image_tag:
+        description: "The image_tag output string"
+        value: ${{ jobs.aws-auth-ecr-setup-and-build-push.outputs.image_tag }}
+        
+jobs:
+  aws-auth-ecr-setup-and-build-push:
+    runs-on: ubuntu-latest
+    outputs:
+      registry: ${{ steps.login-ecr.outputs.registry }}
+      image_tag: ${{ steps.sha_short.outputs.SHORT_SHA }}
+      
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.github_oidc_role_arn }}
+          aws-region: ${{ inputs.aws_region }}
+          role-session-name: ${{ inputs.aws_account_id }}Config
+          mask-aws-account-id: 'false'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'true'
+          
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ inputs.repo_name }}
+          
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Set short sha
+        id: sha_short
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        with:
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          context: .
+          push: true
+          file: ${{ inputs.build_file_path }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ inputs.image_name }}:${{ steps.sha_short.outputs.SHORT_SHA }}
+            ${{ env.REGISTRY }}/${{ inputs.image_name }}:${{ inputs.image_tag }}
+            ${{ env.REGISTRY }}/${{ inputs.image_name }}:latest
+          build-args: |
+            ${{ secrets.build_args }}
+            
+

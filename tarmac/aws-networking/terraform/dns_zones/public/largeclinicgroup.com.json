@@ -1,0 +1,127 @@
+{
+    "ZoneDefinition": {
+        "Name": "largeclinicgroup.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "largeclinicgroup.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "35.173.82.140"
+                },
+                {
+                    "Value": "35.174.132.21"
+                },
+                {
+                    "Value": "35.169.50.49"
+                }
+            ]
+        },
+        {
+            "Name": "largeclinicgroup.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 largeclinicgroup-com.mail.protection.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "largeclinicgroup.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms46159110"
+                },
+                {
+                    "Value": "v=spf1 include:spf.protection.outlook.com -all"
+                }
+            ]
+        },
+        {
+            "Name": "_amazonses.largeclinicgroup.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "r2ybLpPMzUz6OjzGziWyjYfhQ0zRJdXIvGQCKajH8bg="
+                }
+            ]
+        },
+        {
+            "Name": "3o5i264rw2nirdrmhspwverokujsnsaw._domainkey.largeclinicgroup.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "3o5i264rw2nirdrmhspwverokujsnsaw.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "nd7ehagzijllnva34zca3zw64jige7dd._domainkey.largeclinicgroup.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "nd7ehagzijllnva34zca3zw64jige7dd.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector1._domainkey.largeclinicgroup.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector1-largeclinicgroup-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector2._domainkey.largeclinicgroup.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector2-largeclinicgroup-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "zrsr5khwdi2fhbh4pujcajaf7rk2cimd._domainkey.largeclinicgroup.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "zrsr5khwdi2fhbh4pujcajaf7rk2cimd.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "autodiscover.largeclinicgroup.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "www.largeclinicgroup.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "saas.ymaws.com"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,54 @@
+{
+    "mockData": {
+        "performanceFiltersLabel": {
+            "performanceLabel": "Performance",
+            "specialityButton": "Specialty",
+            "specialityLabel": "Specialty",
+            "familyMedicineLabel": "Family Medicine",
+            "applySpecialtyButton": "Apply",
+            "cancelSpecialtyButton": "Cancel",
+            "periodTypeButton": "Period Type",
+            "periodTypeLabel": "Period Type",
+            "mainLabel": "Main",
+            "shadowLabel": "Shadow",
+            "contractLabel": "Contract",
+            "applyPeriodTypeButton": "Apply",
+            "cancelPeriodTypeButton": "Cancel",
+            "periodButton": "Period",
+            "periodLabel": "Period",
+            "yearMonthLabel": "Year, Month",
+            "yearCalenderButton": "Calendar Year 2023",
+            "calendarYear2022Label": 2022,
+            "calendarYear2023Label": 2023,
+            "periodMonthButton": "August 2023",
+            "periodQuarterButton": "Quarter",
+            "applyPeriodButton": "Apply",
+            "cancelPeriodButton": "Cancel",
+            "setCurrentFilterDefault": "Set current filters as default"
+        }
+    },
+    "realData": {
+        "performanceFiltersLabel": {
+            "performanceLabel": "Performance",
+            "specialityButton": "Specialty",
+            "specialityLabel": "Specialty",
+            "pediatricsGenralLabel": "Pediatrics - General",
+            "applySpecialtyButton": "Apply",
+            "cancelSpecialtyButton": "Cancel",
+            "periodTypeButton": "Period Type",
+            "periodTypeLabel": "Period Type",
+            "mainCompLabel": "Main Comp",
+            "applyPeriodTypeButton": "Apply",
+            "cancelPeriodTypeButton": "Cancel",
+            "periodButton": "Period",
+            "periodLabel": "Period",
+            "yearMonthLabel": "Year, Month",
+            "FY2023Button": "FY2023",
+            "FY2023Label": "FY2023",
+            "FY2024Label": "FY2024",
+            "periodMonthButton": "June 2023",
+            "applyPeriodButton": "Apply",
+            "cancelPeriodButton": "Cancel"
+        }
+    }
+}

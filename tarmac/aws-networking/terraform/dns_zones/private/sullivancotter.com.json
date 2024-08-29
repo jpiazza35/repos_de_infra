@@ -1,0 +1,176 @@
+{
+    "ZoneDefinition": {
+        "Name": "sullivancotter.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "hcowsyrzaosnyu3exulm2p3hbux2l3zc._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "hcowsyrzaosnyu3exulm2p3hbux2l3zc.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "ihsnj3k4szddre6pqho76sambuj7tczl._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "ihsnj3k4szddre6pqho76sambuj7tczl.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "lw5ro6wi77zpsn5cwp3gsiiga5xzl5yn._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "lw5ro6wi77zpsn5cwp3gsiiga5xzl5yn.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "s1._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "s1.domainkey.u7775079.wl080.sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "s2._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "s2.domainkey.u7775079.wl080.sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "alx01.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.201.11.50"
+                }
+            ]
+        },
+        {
+            "Name": "aws-idp.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z2FDTNDATAQYW2",
+                "DNSName": "dim03dfbj1e8z.cloudfront.net.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "aws-ses.sullivancotter.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 feedback-smtp.us-east-1.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "aws-ses.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=spf1 include:amazonses.com ~all"
+                }
+            ]
+        },
+        {
+            "Name": "ces-prod-db-replica.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-prod-replica.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-prod-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-prod.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-qa-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-qa.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-sandbox-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-sandbox.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-stage-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-stage.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "pki.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.36"
+                }
+            ]
+        },
+        {
+            "Name": "sgmail.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "u7775079.wl080.sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "sts.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z26RNL4JYFTOTI",
+                "DNSName": "aws-va-nlb02-private-0dbf7f3ead25571e.elb.us-east-1.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        }
+    ]
+}

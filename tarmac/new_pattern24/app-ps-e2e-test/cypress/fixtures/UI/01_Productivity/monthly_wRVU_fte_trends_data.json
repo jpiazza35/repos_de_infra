@@ -1,0 +1,35 @@
+{
+    "cardTitle": "Monthly wRVU per FTE Trends",
+    "valueLabels": [
+        "Current Year wRVU/FTE",
+        "Prior Year wRVU/FTE"
+    ],    
+    "exportDataPDF": "Export Data to PDF",
+    "mockData": {
+        "survey": "SC - National - 2023",
+        "ranges": [
+            "P90",
+            "P75",
+            "P50",
+            "P25"
+        ]
+    },
+    "fy_realData": {
+        "survey": "SC Blend",
+        "ranges": [
+            "P90",
+            "P75",
+            "P50",
+            "P25"
+        ]
+    },
+    "cy_realData": {
+        "survey": "SC Blend",
+        "ranges": [
+            "P90",
+            "P75",
+            "P50",
+            "P25"
+        ]
+    }
+}

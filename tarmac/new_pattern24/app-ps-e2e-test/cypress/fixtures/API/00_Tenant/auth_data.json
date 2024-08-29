@@ -1,0 +1,9 @@
+{
+  "invalidTokenMessage": "Invalid token.",
+  "noTokenMessage": "Invalid token.",
+  "expiredTokenMessage": "Invalid token.",
+  "missingParameterMessage": "Missing required parameters",
+  "authToken": "",
+  "invalidToken": "",
+  "expiredToken": ""
+}

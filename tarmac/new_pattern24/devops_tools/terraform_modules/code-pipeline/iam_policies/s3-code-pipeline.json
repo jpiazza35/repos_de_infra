@@ -1,0 +1,84 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "S3AllowVPCEndpoint",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "${aws_account_id}"
+            },
+            "Action": "s3:*",
+            "Resource": "${s3_code_pipeline}/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalOrgID": "${aws_organization_id}"
+                },
+                "StringLike": {
+                    "aws:sourceVpce": "${s3_vpc_endpoint_id}"
+                }
+            }
+        },
+        {
+            "Sid": "S3AllowGetPut",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::${shared_services}:root"
+                },
+            "Action": [
+                    "s3:Get*",
+                    "s3:Put*"
+                ],
+            "Resource": "${s3_code_pipeline}/*"
+        },
+        {
+            "Sid": "S3AllowList",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::${shared_services}:root"
+                    },
+            "Action": "s3:ListBucket",
+            "Resource": "${s3_code_pipeline}"
+        },
+        {
+            "Sid": "S3DenyElse",
+            "Effect": "Deny",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": "s3:*",
+            "Resource": "${s3_code_pipeline}/*",
+            "Condition": {
+                "StringNotLike": {
+                    "aws:sourceVpce": "${s3_vpc_endpoint_id}"
+                },
+                "StringNotEquals": {
+                    "aws:PrincipalOrgID": "${aws_organization_id}"
+                }
+            }
+        },
+        {
+            "Sid": "DenyUnEncryptedObjectUploads",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:PutObject",
+            "Resource": "${s3_code_pipeline}/*",
+            "Condition": {
+                    "StringNotEquals": {
+                        "s3:x-amz-server-side-encryption": "aws:kms"
+                    }
+            }
+        },
+        {
+            "Sid": "DenyInsecureConnections",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": "${s3_code_pipeline}/*",
+            "Condition": {
+                "Bool": {
+                        "aws:SecureTransport": "false"
+                    }
+                }
+        }
+    ]
+}

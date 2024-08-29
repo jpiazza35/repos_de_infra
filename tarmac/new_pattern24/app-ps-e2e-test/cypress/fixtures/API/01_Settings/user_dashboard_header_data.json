@@ -1,0 +1,60 @@
+{
+    "mockData": {
+        "tenant": "1",
+        "periodId": "5",
+        "categoryType": [
+            "productivity",
+            "performance"
+        ],
+        "produtivityDashboardHeaderResponse": {
+            "name": "Sharp Lancaster, MD",
+            "header": "Productivity as of August 31, 2023",
+            "subHeader": "Productivity Period: January 2023 - December 2023"
+        },
+        "performanceDashboardHeaderResponse": {
+            "name": "Sharp Lancaster, MD",
+            "header": "Performance as of August 31, 2023",
+            "subHeader": "Compensation Period: January 2023 - December 2023"
+        }
+    },
+    "fy_realData": {
+        "userId": "BS216",
+        "tenant": 2,
+        "periodId": 2,
+        "productivityPeriodId": "2",
+        "performancePeriodId": "1",
+        "categoryType": [
+            "productivity",
+            "performance"
+        ],
+        "produtivityDashboardHeaderResponse": {
+            "name": "Kirstein Lopez, PHY",
+            "header": "Productivity as of September 30, 2023",
+            "subHeader": "FY2024: July 2023 - June 2024"
+        },
+        "performanceDashboardHeaderResponse": {
+            "name": "Kirstein Lopez, PHY",
+            "header": "Performance as of June 30, 2023",
+            "subHeader": "FY2023: July 2022 - June 2023"
+        }
+    },
+    "cy_realData": {
+        "userId": "RA41",
+        "tenant": "1",
+        "periodId": "2",
+        "categoryType": [
+            "productivity",
+            "performance"
+        ],
+        "produtivityDashboardHeaderResponse": {
+            "name": "Arickx Venkata ravi  sankarun, MD",
+            "header": "Productivity as of September 30, 2023",
+            "subHeader": "Calendar Year 2023: January 2023 - December 2023"
+        },
+        "performanceDashboardHeaderResponse": {
+            "name": "Arickx Venkata ravi  sankarun, MD",
+            "header": "Performance as of September 30, 2023",
+            "subHeader": "Calendar Year 2023: January 2023 - December 2023"
+        }
+    }
+}

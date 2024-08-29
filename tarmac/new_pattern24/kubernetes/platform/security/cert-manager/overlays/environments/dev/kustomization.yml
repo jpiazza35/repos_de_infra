@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+labels:
+- includeSelectors: true
+  pairs:
+    environment: dev
+
+resources:
+- ../../../base
+- preinit-job-vault.yml
+- crds
+
+patches:
+  - patch: |
+      - op: replace
+        path: /metadata/annotations/eks.amazonaws.com~1role-arn
+        value: arn:aws:iam::946884638317:role/cert-manager-role
+    target:
+      kind: ServiceAccount
+      name: cert-manager
+      version: v1

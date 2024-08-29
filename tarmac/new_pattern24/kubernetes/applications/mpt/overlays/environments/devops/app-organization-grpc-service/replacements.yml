@@ -1,0 +1,25 @@
+- source:
+    kind: ConfigMap
+    name: app-organization-grpc-service
+    fieldPath: data.env
+  targets:
+
+  - select:
+      kind: Deployment
+    fieldPaths:
+      - metadata.labels.environment
+    options:
+      create: true
+
+- source:
+    kind: ConfigMap
+    name: app-organization-grpc-service
+    fieldPath: data.acm
+  targets:
+
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[alb.ingress.kubernetes.io/certificate-arn]
+    options:
+      create: false

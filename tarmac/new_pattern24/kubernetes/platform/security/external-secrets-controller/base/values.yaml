@@ -1,0 +1,23 @@
+# Default values for external secrets.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+replicaCount: 3
+
+leaderElect: true
+
+crds:
+  # -- If true, create CRDs for Cluster External Secret.
+  createClusterExternalSecret: true
+  # -- If true, create CRDs for Cluster Secret Store.
+  createClusterSecretStore: true
+  # -- If true, create CRDs for Push Secret.
+  createPushSecret: true
+  annotations: {}
+  conversion:
+    enabled: true
+
+serviceaccount:
+  create: false
+  name: vault-auth

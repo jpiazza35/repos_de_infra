@@ -1,0 +1,22 @@
+{
+    "FTEAllocationAPIUrl": "http://localhost:10000/fte-allocation",
+    "FTEAllocationLabel": {
+        "Clinical": "Clinical",
+        "Administrative": "Administrative",
+        "Teaching": "Teaching",
+        "FTEAllocationTitle": "FTE Allocation",
+        "YTDAvg": "YTD Avg",
+        "CurrentMonth": "Current Month",
+        "TotalFTE": "Total FTE"
+    },
+    "FTEAllocationValue": {
+        "ClinicalYTDAvg": 0.52,
+        "ClinicalCurMonth": 0.5,
+        "AdministrativeYTDAvg": 0.36,
+        "AdministrativeCurMonth": 0.35,
+        "TeachingYTDAvg": 0.12,
+        "TeachingCurMonth": 0.15,
+        "TotalFTEYTDAvg": 1.00,
+        "TotalFTECurMonth": 1.00
+    }
+}

@@ -1,0 +1,12 @@
+- op: add
+  path: /spec/template/spec/volumes
+  value:
+    - name: config
+      configMap:
+        name: incident-bot-config
+
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts
+  value:
+    - name: config
+      mountPath: /config/incident-bot

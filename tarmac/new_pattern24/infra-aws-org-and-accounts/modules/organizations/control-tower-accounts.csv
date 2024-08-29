@@ -1,0 +1,2 @@
+account_name,account_owner_email,sso_user_first_name,sso_user_last_name,sso_user_email,org_unit,provisioned_product_name
+Individuals_ANedanoski,AWS-Individuals_ANedanoski-Root@cliniciannexus.com,Antonio,Nedanoski,antonio@tarmac.io,${dev_accounts_org_unit},Individuals-ANedanoski

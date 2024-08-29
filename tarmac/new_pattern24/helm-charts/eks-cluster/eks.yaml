@@ -1,0 +1,26 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: mpt2-eks-alb-ingress-cluster
+  region: us-east-1
+  version: '1.25'
+
+vpc:
+  subnets:
+    private:
+      us-east-1b: { id: subnet-0a9ee62798d49a0c8 }
+      us-east-1f: { id: subnet-09b754b17345d12d6 }
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: aws-load-balancer-controller
+        namespace: kube-system
+      attachPolicyARNs:
+        - arn:aws:iam::209629152050:policy/AWSLoadBalancerControllerIAMPolicy
+managedNodeGroups:
+  - name: main-ng
+    instanceType: m6i.large
+    desiredCapacity: 2
+    privateNetworking: true

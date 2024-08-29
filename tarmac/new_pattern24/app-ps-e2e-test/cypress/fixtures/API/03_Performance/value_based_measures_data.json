@@ -1,0 +1,92 @@
+{
+    "mockData": {
+        "userId": 1004,
+        "tenant": 1,
+        "dashboardKey": 2,
+        "cardKey": 13,
+        "specialties": 2223,
+        "periodId": 1,
+        "yearMonth": 202201,
+        "valueBasedMeasuresResponse": {
+            "cardSettings": {
+                "title": "Value Based Measures",
+                "infoIcon": "Quality Capped at 4%"
+            },
+            "detail": [
+                {
+                    "measureGroupDescription1": "Quality | Individual",
+                    "measureTypeName1": "Breast Cancer Screening",
+                    "participantGroupName1": "YTD Performance",
+                    "ytdRatioDisplay1": 77.1,
+                    "ytdTargetDisplay1": 76.9
+                },
+                {
+                    "measureGroupDescription2": "Quality | Individual",
+                    "measureTypeName2": "Depression Screening",
+                    "participantGroupName2": "YTD Performance",
+                    "ytdRatioDisplay2": 94.2,
+                    "ytdTargetDisplay2": 93.5
+                },
+                {
+                    "measureGroupDescription3": "Quality | Individual",
+                    "measureTypeName3": "Hypertension",
+                    "participantGroupName3": "YTD Performance",
+                    "ytdRatioDisplay3": 85.5,
+                    "ytdTargetDisplay3": 87.8
+                },
+                {
+                    "measureGroupDescription4": "Patient Experience | Individual",
+                    "measureTypeName4": "Would Recommend Provider",
+                    "participantGroupName4": "YTD Performance",
+                    "ytdRatioDisplay4": 92.3,
+                    "ytdTargetDisplay4": 91.4
+                },
+                {
+                    "measureGroupDescription5": "Patient Experience | Individual",
+                    "measureTypeName5": "A1C",
+                    "participantGroupName5": "YTD Performance",
+                    "ytdRatioDisplay5": 77,
+                    "ytdTargetDisplay5": 75
+                }
+            ]
+        }
+    },
+    "realData": {
+        "userId": "BS216",
+        "tenant": 2,
+        "dashboardKey": 4,
+        "cardKey": 13,
+        "specialties": 1320,
+        "periodId": 2,
+        "yearMonth": 202307,
+        "valueBasedMeasuresResponse": {
+            "cardSettings": {
+                "title": "Value Based Measures",
+                "infoIcon": "Quality Capped at 4%"
+            },
+            "detail": [
+                {
+                    "measureGroupDescription": "STI Screening",
+                    "measureTypeName": "Quality",
+                    "participantGroupName": "",
+                    "ytdRatioDisplay": 81.1,
+                    "ytdTargetDisplay": 50
+                },
+                {
+                    "measureGroupDescription": "Teamwork",
+                    "measureTypeName": "Quality",
+                    "participantGroupName": "",
+                    "ytdRatioDisplay": 0,
+                    "ytdTargetDisplay": 3
+                },
+                {
+                    "measureGroupDescription": "Well Visit Completion",
+                    "measureTypeName": "Quality",
+                    "participantGroupName": "",
+                    "ytdRatioDisplay": 82,
+                    "ytdTargetDisplay": 77.5
+                }
+            ]
+        }
+    }
+}

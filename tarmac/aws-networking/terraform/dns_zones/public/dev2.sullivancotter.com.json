@@ -1,0 +1,48 @@
+{
+    "ZoneDefinition": {
+        "Name": "dev2.sullivancotter.com",
+        "Parent": "sullivancotter.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "dev2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "dev2.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "0pxrmmldx6k0b1j7rn2skcjbz7kr8m4c"
+                }
+            ]
+        },
+        {
+            "Name": "*.dev2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "tab.dev2.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-tab-dev02.sca.local"
+                }
+            ]
+        }
+    ]
+}

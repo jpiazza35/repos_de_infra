@@ -1,0 +1,2396 @@
+﻿[
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 71.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 96.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 70.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 70.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 17,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 84.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 93.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 14,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 79.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 74.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 71.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 84.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 17,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 83.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 89.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 89.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 108.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 71.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 66.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 93.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 74.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 93.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 77.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 84.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 78.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 85.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 71.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 94.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 15,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 76.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 62.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 78.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 91.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 14,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 73.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 93.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 65.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 17,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 80.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 81.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 14,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 79.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 72.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 83.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 70.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 73.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 81.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 91.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 44.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 52.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 60.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 79.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 15,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 85.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 76.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 84.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 96.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 73.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 85.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 67.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 66.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 73.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 74.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 80.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 80.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 17,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 74.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 85.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 89.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 12,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 74.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 14,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 94.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 80.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 90.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 64.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 80.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 92.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 77.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 84.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 96.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 15,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 76.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 96.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 72.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 84.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 92.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 64.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 77.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 93.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 77.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 17,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 17,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 90.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 12,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 54.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 94.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 69.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 83.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 93.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 71.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 85.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 70.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 77.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 3,
+    "cut_group_key": 12,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 0.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 0.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 15,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 96.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "72200",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 9,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 37,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 68.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 83.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 17,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 73.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 81.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 73.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": 103.0
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 73.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 81.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 100.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 71.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 80.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 98.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 118.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 71.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 85.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 100.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 98.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 78.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 80.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 67.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 79.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": null
+      },
+      {
+        "percentile": 50,
+        "market_value": null
+      },
+      {
+        "percentile": 90,
+        "market_value": null
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 82.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 95.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 53.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 89.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 100.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 76.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 93.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 102.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 79.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 88.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 68.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 70.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 85.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 68.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 79.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 93.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 100.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 10,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 83.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 93.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 105.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 70.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 99.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 3,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 89.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 97.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 105.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 69.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 86.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 103.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 11,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 70.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 87.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 96.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 1,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 67.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 75.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 94.0
+      }
+    ]
+  },
+  {
+    "industry_sector_key": null,
+    "organization_type_key": 52,
+    "cut_group_key": 2,
+    "cut_sub_group_key": null,
+    "standard_job_code": "3030",
+    "market_value_by_percentile": [
+      {
+        "percentile": 10,
+        "market_value": 69.0
+      },
+      {
+        "percentile": 50,
+        "market_value": 83.0
+      },
+      {
+        "percentile": 90,
+        "market_value": 97.0
+      }
+    ]
+  }
+]

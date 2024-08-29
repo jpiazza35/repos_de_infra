@@ -1,0 +1,34 @@
+name: Publish a container image
+
+on:
+  workflow_call:
+    inputs:
+      image_id_file:
+        description: 'name of the file to store the container image name'
+        default: ci-image-id.txt
+        type: string
+    outputs:
+      ci-image-id:
+        description: the image tag that we are working with
+        value: ${{ steps.image-id.outputs.image-id }}
+
+jobs:
+  publish-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: commit version
+      shell: bash
+      run: |
+          git config --local user.email "${GITHUB_EMAIL}"
+          git config --local user.name "${{ github.actor }}"
+          git fetch origin
+          git checkout main
+          cat ${{ inputs.image_id_file }} > version-${{ inputs.image_id_file }}.txt
+          git add version-${{ inputs.image_id_file }}.txt || (echo "nothing to add"; exit 0) && \
+          git commit -m "new ci-image-id version- github action" || (echo "nothing to commit"; exit 0) && \
+          git push origin main
+
+    - name: image-id
+      shell: bash
+      run: echo "::set-output name=image-id::$(cat ${{ inputs.image_id_file }})"

@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: grafana-operator
+
+helmGlobals:
+  chartHome: charts
+
+## https://github.com/grafana/helm-charts/tree/main/charts/agent-operator
+helmCharts:
+- name: grafana-agent-operator
+  namespace: grafana-operator
+  includeCRDs: true
+  valuesFile: values.yml
+  valuesMerge: replace
+  releaseName: agent-operator
+  version: v0.3.15
+  repo: https://grafana.github.io/helm-charts
+
+patches:
+  - patch: |-
+      - op: add
+        path: /metadata/annotations/argocd.argoproj.io~1compare-options
+        value: IgnoreExtraneous
+    target:
+      kind: CustomResourceDefinition
+      name: podlogs.monitoring.grafana.com
+  - patch: |-
+      - op: add
+        path: /metadata/annotations/argocd.argoproj.io~1compare-options
+        value: IgnoreExtraneous
+    target:
+      kind: CustomResourceDefinition
+      name: podmonitors.monitoring.grafana.com
+  - patch: |-
+      - op: add
+        path: /metadata/annotations/argocd.argoproj.io~1compare-options
+        value: IgnoreExtraneous
+    target:
+      kind: CustomResourceDefinition
+      name: probes.monitoring.grafana.com
+  - patch: |-
+      - op: add
+        path: /metadata/annotations/argocd.argoproj.io~1compare-options
+        value: IgnoreExtraneous
+    target:
+      kind: CustomResourceDefinition
+      name: servicemonitors.monitoring.grafana.com

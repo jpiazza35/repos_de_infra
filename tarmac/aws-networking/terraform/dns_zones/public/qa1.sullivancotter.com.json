@@ -1,0 +1,57 @@
+{
+    "ZoneDefinition": {
+        "Name": "qa1.sullivancotter.com",
+        "Parent": "sullivancotter.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "qa1.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "*.qa1.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "_a39ebb2c6e8af0af110a2d919633de2e.qa1.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_88900cbaac521b1136eabd1f6da5f172.zrvsvrxrgs.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_d22c8aad979dd23aa688340b298140a3.qa1.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "EBFAA7F57BBA28DB2FA00017BC410897.E6661C77053F80320FB1348ACCD4DD9B.62aa908e2c8ca.comodoca.com"
+                }
+            ]
+        },
+        {
+            "Name": "obi.qa1.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.internal-aws-va2-alb02-private-1148750107.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": true
+            }
+        }
+    ]
+}

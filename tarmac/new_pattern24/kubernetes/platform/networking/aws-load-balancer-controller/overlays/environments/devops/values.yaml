@@ -1,0 +1,10 @@
+clusterName: cluster-devops-mGETPE
+hostNetwork: "true"
+region: us-east-1
+replicaCount: 3
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::964608896914:role/cluster-devops-mGETPE-eks-alb-controller
+  create: "true"
+  name: aws-load-balancer-controller
+vpcId: vpc-01662e9a9a47f1265

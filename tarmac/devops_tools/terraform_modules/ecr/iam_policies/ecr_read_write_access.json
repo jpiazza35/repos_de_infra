@@ -1,0 +1,45 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "ReadonlyAccess",
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:DescribeImageScanFindings",
+          "ecr:DescribeImages",
+          "ecr:DescribeRepositories",
+          "ecr:GetAuthorizationToken",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetLifecyclePolicy",
+          "ecr:GetLifecyclePolicyPreview",
+          "ecr:GetRepositoryPolicy",
+          "ecr:ListImages",
+          "ecr:ListTagsForResource"
+        ],
+        "Condition": {
+          "StringLike": {
+            "aws:PrincipalOrgID": "Your-Org-ID"
+          }
+        }
+      },
+      {
+        "Sid": "WriteAccess",
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": [
+          "ecr:CompleteLayerUpload",
+          "ecr:InitiateLayerUpload",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart"
+        ],
+        "Condition": {
+          "StringLike": {
+            "aws:PrincipalOrgID": "Your-Org-ID"
+          }
+        }
+      }
+    ]
+  }

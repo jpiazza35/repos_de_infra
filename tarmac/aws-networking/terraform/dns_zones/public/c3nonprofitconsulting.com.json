@@ -1,0 +1,134 @@
+{
+    "ZoneDefinition": {
+        "Name": "c3nonprofitconsulting.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "c3nonprofitconsulting.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "104.154.180.169"
+                }
+            ]
+        },
+        {
+            "Name": "c3nonprofitconsulting.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 c3nonprofitconsulting-com.mail.protection.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "c3nonprofitconsulting.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms93097405"
+                },
+                {
+                    "Value": "v=spf1 include:spf.protection.outlook.com -all"
+                },
+                {
+                    "Value": "google-site-verification=-nMBtKilXNXI0eLhR4_TsZMKFH_sxGM0NhrGhEmLa5Y"
+                }
+            ]
+        },
+        {
+            "Name": "_dmarc.c3nonprofitconsulting.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=DMARC1;p=none;fo=1;rua=mailto:ea9a5794@mxtoolbox.dmarc-report.com;ruf=mailto:ea9a5794@forensics.dmarc-report.com;adkim=r;aspf=r"
+                }
+            ]
+        },
+        {
+            "Name": "hs1-20796010._domainkey.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "c3nonprofitconsulting-com.hs18a.dkim.hubspotemail.net"
+                }
+            ]
+        },
+        {
+            "Name": "hs2-20796010._domainkey.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "c3nonprofitconsulting-com.hs18b.dkim.hubspotemail.net"
+                }
+            ]
+        },
+        {
+            "Name": "selector1._domainkey.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector1-c3nonprofitconsulting-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector2._domainkey.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector2-c3nonprofitconsulting-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "autodiscover.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "email.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "20796010.group10.sites.hubspot.net"
+                }
+            ]
+        },
+        {
+            "Name": "info.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "20796010.group10.sites.hubspot.net"
+                }
+            ]
+        },
+        {
+            "Name": "www.c3nonprofitconsulting.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "c3nonprofitconsulting.com"
+                }
+            ]
+        }
+    ]
+}

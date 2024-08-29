@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package cn.datagovernance.v1;
+
+import "google/protobuf/descriptor.proto";
+
+enum InvalidSubmissionReason {
+  INVALID_SUBMISSION_REASON_UNSPECIFIED = 0;
+  INVALID_SUBMISSION_REASON_MISMATCHED_ORG = 1;
+  INVALID_SUBMISSION_REASON_DUPLICATE_SUBMISSION = 2;
+}
+
+extend google.protobuf.FieldOptions {
+  string display_name = 1000;
+  bool is_required = 1001;
+  bool is_key_field = 1002;
+  int32 precision = 1003;
+  int32 scale = 1004;
+  string format_date = 1005;
+}
+
+/* SystemOfGovernance
+ *
+ * We would like each submission to be governed. Especially as it relates to
+ * the organization's name and ID. The historical system of governance was
+ * CES. At the time of writing, we have a plan to implement Reltio as a master
+ * data management (MDM) solution. CES stores org IDs as integers. Reltio uses
+ * a string as an Entity ID (an example is "l9s62GN").
+ *
+ * Designating which system is "governing" a submission will help downstream
+ * people and processes interpret the events properly.
+ */
+enum SystemOfGovernance {
+  SYSTEM_OF_GOVERNANCE_UNSPECIFIED = 0;
+  SYSTEM_OF_GOVERNANCE_CES = 1;
+  SYSTEM_OF_GOVERNANCE_RELTIO = 2;
+}
+
+// A reference to a schema that has been registered in the schema registry
+message RegisteredSchema {
+  string module = 1;
+  string id = 2;
+  string version = 3;
+}
+
+message SubmissionRequiredUploadObjectMetadata {
+  // This metadata is always written to the object metadata in S3 and is always added to the submission_details on any
+  // table in the lake.
+  string file_registration_uuid = 1;
+  string submitter_organization_name = 2; // which organization is submitting this file
+  string submitter_organization_id = 3;
+  string submitter_email = 4; // which person is submitting this file (can be internal to cn/sc)
+  string submission_system = 5; // which system is submitting this file
+  string submission_identifier = 6; // Source system unique id that is tracking the submission/file. Not useful without context of the source system. I.e., survey_instance_id is a submission_identifier of CES survey submissions.
+  //  oneof additional_object_metadata {
+  // TODO: when we have additional metadata that is requrired for a future use case we should use that.
+  //  }
+}
+
+message FileSubmissionDetail {
+  // name of organization which is submitting this file
+  string submitter_organization_name = 1;
+  // id of organization which is submitting this file
+  string submitter_organization_id = 2;
+  // which person is submitting this file (can be internal to cn/sc)
+  string submitter_email = 3;
+  // which system is submitting this file
+  string submission_system = 4; // which system is submitting this file
+  // instance ID of the submission
+  string submission_identifier = 5 [(cn.datagovernance.v1.is_key_field) = true];
+  // year of the submission ** partition of tables.
+  int32 submission_year = 6;
+  // File that this record is sourced from. Primary key of the bytes file table
+  S3Object source_s3_object = 7;
+  // file registration uuid
+  string file_registration_uuid = 8;
+  // CES or MDM (Reltio)
+  SystemOfGovernance system_of_governance = 9;
+}
+
+message S3Object {
+  string bucket = 1;
+  string key = 2;
+}

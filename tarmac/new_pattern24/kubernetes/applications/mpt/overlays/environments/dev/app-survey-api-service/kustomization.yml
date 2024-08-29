@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: mpt
+resources:
+- ../../../../base/app-survey-api-service
+- ingress.yml
+- config.yml
+replacements:
+- path: replacements.yml
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=dev,Team=devops
+  target:
+    kind: Ingress
+images:
+- name: app-survey-api-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-survey-api-service-ecr-repo
+  digest: sha256:a91c19ee15d435ecd434593e8a5ddbf17bb1b35b32b43264c077d7d4457e9790

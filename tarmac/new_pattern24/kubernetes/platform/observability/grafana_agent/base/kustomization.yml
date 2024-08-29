@@ -1,0 +1,62 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: monitoring
+
+helmCharts:
+- name: grafana-agent
+  namespace: monitoring
+  includeCRDs: true
+  valuesFile: values.yml
+  valuesMerge: replace
+  releaseName: grafana-agent
+  version: v0.29.0
+  repo: https://grafana.github.io/helm-charts
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/versions/0/name
+        value: v1alpha1
+    target:
+      kind: CustomResourceDefinition
+      name: podlogs.monitoring.grafana.com
+
+  - patch: |-
+      apiVersion: apps/v1
+      kind: DaemonSet
+      metadata:
+        name: grafana-agent
+      spec:
+        template:
+          spec:
+            containers:
+            - name: grafana-agent
+              args:
+                - run
+                - /etc/agent/config.river
+                - --server.http.listen-addr=0.0.0.0:12345
+                - --server.http.ui-path-prefix=/
+                - --disable-reporting
+                - --cluster.enabled=true
+                - --cluster.name=grafana-agent-cluster-eks
+                - --cluster.join-addresses=grafana-agent-cluster
+                - --storage.path=/var/lib/grafana-agent-flow
+      # - op: remove
+      #   path: /spec/template/spec/containers/0/args/-
+      #   value: --storage.path=/tmp/agent
+      # - op: add
+      #   path: /spec/template/spec/containers/0/args/-
+      #   value: --storage.path=/var/lib/grafana-agent
+    target:
+      kind: DaemonSet
+      version: v1
+      group: apps
+      name: grafana-agent
+  - patch: |-
+      - op: add
+        path: /metadata/annotations/argocd.argoproj.io~1compare-options
+        value: IgnoreExtraneous
+    target:
+      kind: CustomResourceDefinition
+      name: podlogs.monitoring.grafana.com

@@ -1,0 +1,64 @@
+pilot:
+  configMap: true
+
+global:
+  prometheusEnabled: true
+  mtls:
+    enabled: true
+  istioNamespace: ${ns}
+  
+meshConfig:
+  enablePrometheusMerge: true
+  enableTracing: true
+  rootNamespace: ${ns}
+
+  # The trust domain corresponds to the trust root of a system
+  # Refer to https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain
+  trustDomain: "cluster.local"
+
+  defaultConfig:
+    proxyMetadata: {}
+    tracing:
+      sampling: 100
+      zipkin:
+        address: jaeger-operator-jaeger-collector.${ns}:9411
+    #      tlsSettings:
+    #        mode: DISABLE # DISABLE, SIMPLE, MUTUAL, ISTIO_MUTUAL
+    #        clientCertificate: # example: /etc/istio/tracer/cert-chain.pem
+    #        privateKey:        # example: /etc/istio/tracer/key.pem
+    #        caCertificates:    # example: /etc/istio/tracer/root-cert.pem
+    #        sni:               # example: tracer.somedomain
+    #        subjectAltNames: []
+    # - tracer.somedomain
+
+sidecarInjectorWebhook:
+  enabled: true
+  rewriteAppHTTPProbe: true
+
+gateways:
+  istio-ingressgateway:
+    autoscaleEnabled: false
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+    ports:
+    ## You can add custom gateway ports in user values overrides, but it must include those ports since helm replaces.
+    # Note that AWS ELB will by default perform health checks on the first port
+    # on this list. Setting this to the health check port will ensure that health
+    # checks always work. https://github.com/istio/istio/issues/12503
+    - port: 443
+      targetPort: 8443
+      name: https
+      protocol: TCP
+    - port: 15021
+      targetPort: 15021
+      name: status-port
+      protocol: TCP
+    - port: 80
+      targetPort: 8080
+      name: http
+      protocol: TCP
+    
+  sds:
+    enabled: true

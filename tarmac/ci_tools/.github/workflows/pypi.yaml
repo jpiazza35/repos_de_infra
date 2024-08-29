@@ -1,0 +1,80 @@
+name: Build, publish or unpublish PyPI package
+run-name: ${{ github.actor }} - Manage PyPI package
+
+on:
+  workflow_call:
+    inputs:
+      publish:
+        required: false
+        description: 'Set to true to publish the package'
+        type: boolean
+      search:
+        required: false
+        description: 'Set to true to perform NuGet search'
+        type: boolean
+      unpublish:
+        required: false
+        description: 'Set to true to unpublish the package'
+        type: boolean
+      package-name:
+        required: false
+        description: 'Name of the PyPI package'
+        type: string
+      package-version:
+        required: false
+        description: 'Version of the PyPI package'
+        type: string
+      python-version:
+        required: false
+        description: 'Version of Python to use'
+        type: string
+        default: '3.9'
+
+    secrets:
+      NEXUS_USERNAME:
+        required: true
+      NEXUS_PASSWORD:
+        required: true
+
+jobs:
+  pypi-package-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python-version }} # Replace with your desired Python version
+
+      - name: Set up Twine environment variables
+        if: inputs.publish == true || inputs.unpublish == true
+        run: |
+          echo "TWINE_REPOSITORY_URL=https://sonatype.cliniciannexus.com/repository/cn_pypi/" >> $GITHUB_ENV
+          echo "TWINE_USERNAME=${{ secrets.NEXUS_PASSWORD }}" >> $GITHUB_ENV
+          echo "TWINE_PASSWORD=${{ secrets.NEXUS_USERNAME }}" >> $GITHUB_ENV
+
+      - name: Build package
+        if: inputs.publish == true
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+
+      - name: Publish to PyPI
+        if: inputs.publish == true
+        run: |
+          python -m pip install --upgrade twine
+          twine upload dist/*
+
+      - name: Search PyPI package
+        if: inputs.search == true
+        run: |
+          curl -X 'GET' -u ${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }} 'https://sonatype.cliniciannexus.com/service/rest/v1/search/assets?pypi.description=${{ github.event.inputs.package-name }}&repository=cn_pypi'
+
+      - name: Unpublish PyPI package
+        if: inputs.unpublish == true
+        run: |
+          python -m pip install --upgrade twine
+          twine yank ${{ github.event.inputs.package-name }} -v ${{ github.event.inputs.package-version }}

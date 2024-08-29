@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+- includeCRDs: true
+  name: kiali-operator
+  namespace: istio-system
+  releaseName: kiali-operator
+  valuesMerge: replace
+  version: 1.76.0
+  repo: https://kiali.org/helm-charts

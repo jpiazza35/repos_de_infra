@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: k8s-ingress
+    alb.ingress.kubernetes.io/group.name: k8s-ingress
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-3-2021-06
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/subnets: subnet-07edd69f86b2e8122, subnet-0dfb6bb65bc4f01ab,
+      subnet-0292e0a6884e77d02
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:071766652168:certificate/ca119fb6-99bc-4f92-9754-20efa05cb39e
+    external-dns.alpha.kubernetes.io/hostname: argocd.cliniciannexus.com
+spec:
+  ingressClassName: alb
+  rules:
+  - host: argocd.cliniciannexus.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: argocd-server
+            port:
+              name: https
+        path: /
+        pathType: Prefix

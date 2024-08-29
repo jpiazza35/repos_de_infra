@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  policy.csv: |
+    p, role:org-admin, applications, *, */*, allow
+    p, role:org-admin, clusters, get, *, allow
+    p, role:org-admin, repositories, get, *, allow
+    p, role:org-admin, repositories, create, *, allow
+    p, role:org-admin, repositories, update, *, allow
+    p, role:org-admin, repositories, delete, *, allow
+    g, "${argocd_sso_integration_group_id}", role:org-admin
+  policy.default: ""
+  scopes: '[groups]'
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: ${argocd_release_name}
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: argocd-rbac-cm
+    app.kubernetes.io/part-of: argocd
+    helm.sh/chart: argo-cd-${argocd_chart_version}
+  name: argocd-rbac-cm
+  namespace: ${argocd_release_namespace}

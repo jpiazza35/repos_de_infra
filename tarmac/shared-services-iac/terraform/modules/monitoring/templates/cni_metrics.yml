@@ -1,0 +1,20 @@
+### Kube CNI Metrics Pod Monitor for Prometheus Operators
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: aws-cni-metrics
+  namespace: ${cni_metrics_namespace}
+  labels:
+    release: ${prometheus_release_name}
+spec:
+  jobLabel: k8s-app
+  selector:
+    matchLabels:
+      k8s-app: aws-node
+  namespaceSelector:
+    matchNames:
+      - ${cni_metrics_namespace}
+  podMetricsEndpoints:
+    - interval: 30s
+      path: /metrics
+      port: metrics

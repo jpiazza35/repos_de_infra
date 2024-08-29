@@ -1,0 +1,22 @@
+{
+    "SettlementLabel": {
+        "SettlementTitle": "Settlement",
+        "CompensationEarnedTitle": "Compensation Earned",
+        "CompensationPaidTitle": "Compensation Paid",
+        "CumulativeDifferenceTitle": "Cumulative Difference",
+        "SettlementAdjustmentTiltle": "Settlement Adjustment",
+        "FinalSettlementTiltle": "Final Settlement",
+        "YTDCompEarned": "YTD Comp Earned",
+        "YTDCompPaid": "YTD Comp Paid",
+        "YTDCumulativeDiff": "YTD Cumulative Diff",
+        "SettlementAdj": "Settlement Adj",
+        "FinalSettlement": "Final Settlement"
+    },
+    "SettlementValue": {
+        "YTDCompEarned": "$126,679.79",
+        "YTDCompPaid": "$124,480.00",
+        "YTDCumulativeDiff": "$2,199.79",
+        "SettlementAdj": "$0.00",
+        "FinalSettlement": "$2,199.79"
+    }
+}

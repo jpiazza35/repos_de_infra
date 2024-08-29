@@ -1,0 +1,45 @@
+name: DDW collector Build and deploy to ECR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - terraform/datadotworld/Dockerfile/**
+      - .github/workflows/ddw_agent_docker.yml
+
+env:
+  AWS_REGION : ${{ secrets.AWS_REGION }}
+  ECR_URL : ${{ secrets.P_DATA_PLATFORM_ECR_URL }}
+  ASSUME_ROLE : ${{ secrets.P_DATA_PLATFORM_ASSUME_ROLE }}
+  CROSS_ACCOUNT_S3_ACCESS_KEY : ${{ secrets.CROSS_ACCOUNT_S3_ACCESS_KEY }}
+  CROSS_ACCOUNT_S3_SECRET_KEY : ${{ secrets.CROSS_ACCOUNT_S3_SECRET_KEY }}
+  IMAGE_TAG : "2.183"
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ env.ASSUME_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      run: |
+        docker build -t $ECR_URL:$IMAGE_TAG --build-arg CROSS_ACCOUNT_S3_ACCESS_KEY=$CROSS_ACCOUNT_S3_ACCESS_KEY --build-arg CROSS_ACCOUNT_S3_SECRET_KEY=$CROSS_ACCOUNT_S3_SECRET_KEY --build-arg IMAGE_TAG=$IMAGE_TAG ./terraform/datadotworld/Dockerfile/
+        docker tag $ECR_URL:$IMAGE_TAG $ECR_URL:latest
+        docker push $ECR_URL:$IMAGE_TAG
+        docker push $ECR_URL:latest

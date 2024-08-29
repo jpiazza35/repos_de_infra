@@ -1,0 +1,27 @@
+name: 'CI Tools'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - run: pip install -r requirements.txt
+
+      - run: pytest src
+
+      - run: black src
+      
+  docker-build:
+    uses: clinician-nexus/ci_tools/.github/workflows/docker-build.yml@main
+    with:
+      build_file_path: './Dockerfile'
+
+      

@@ -1,0 +1,27 @@
+{
+    "ZoneDefinition": {
+        "Name": "test3.sullivancotter.com",
+        "Parent": "sullivancotter.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "*.test3.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.internal-aws-va2-alb02-private-1148750107.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "_6b49b53b1cbd68c222cb46a4ecb1abbc.test3.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_1d660f977242148bdd3455915293685a.mzlfeqexyx.acm-validations.aws."
+                }
+            ]
+        }
+    ]
+}

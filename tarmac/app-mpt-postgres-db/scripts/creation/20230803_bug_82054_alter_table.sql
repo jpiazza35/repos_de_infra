@@ -1,0 +1,5 @@
+ALTER TABLE market_pricing_sheet_cut_external_data
+DROP CONSTRAINT IF EXISTS market_pricing_sheet_cut_external_data_pkey;
+
+ALTER TABLE market_pricing_sheet_cut_external_data
+ADD PRIMARY KEY (cut_external_data_key);

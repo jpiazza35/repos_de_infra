@@ -1,0 +1,86 @@
+{
+    "Version": "2008-10-17",
+    "Id": "__default_policy_ID",
+    "Statement": [
+      {
+        "Sid": "__default_statement_ID",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "*"
+        },
+        "Action": [
+          "SNS:GetTopicAttributes",
+          "SNS:SetTopicAttributes",
+          "SNS:AddPermission",
+          "SNS:RemovePermission",
+          "SNS:DeleteTopic",
+          "SNS:Subscribe",
+          "SNS:ListSubscriptionsByTopic",
+          "SNS:Publish",
+          "SNS:Receive"
+        ],
+        "Resource": "arn:aws:sns:${region}:${aws_account_id}:${sns_topic_name}",
+        "Condition": {
+          "StringEquals": {
+            "AWS:SourceOwner": "${aws_account_id}"
+          }
+        }
+      },
+      {
+        "Sid": "AllowS3",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "s3.amazonaws.com"
+        },
+        "Action": [
+          "SNS:GetTopicAttributes",
+          "SNS:SetTopicAttributes",
+          "SNS:Publish"
+        ],
+        "Resource": "arn:aws:sns:${region}:${aws_account_id}:${sns_topic_name}",
+        "Condition": {
+          "StringEquals": {
+            "aws:SourceAccount": "${aws_account_id}"
+          }
+        }
+      },
+      {
+        "Sid": "AWSSNSLogging",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": [
+            "arn:aws:iam::${logging_aws_account_id}:root"
+          ]
+        },
+        "Action": "sns:Subscribe",
+        "Resource": "arn:aws:sns:${region}:${aws_account_id}:${sns_topic_name}"
+      },
+      {
+        "Sid": "AllowEventBridge",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "events.amazonaws.com"
+        },
+        "Action": [
+          "sns:Publish"
+        ],
+        "Resource": "arn:aws:sns:${region}:${aws_account_id}:${sns_topic_name}"
+      },
+      {
+        "Sid": "SNSCrossAccount",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": [
+            "arn:aws:iam::${proxy_dev_aws_account_id}:root",
+            "arn:aws:iam::${proxy_test_aws_account_id}:root",
+            "arn:aws:iam::${proxy_prod_aws_account_id}:root",
+            "arn:aws:iam::${master_aws_account_id}:root"
+          ]
+        },
+        "Action": [
+          "sns:Publish"
+        ],
+        "Resource": "arn:aws:sns:${region}:${aws_account_id}:${sns_topic_name}"        
+      }
+    ]
+  }

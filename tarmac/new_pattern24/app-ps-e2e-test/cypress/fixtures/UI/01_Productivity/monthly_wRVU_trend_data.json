@@ -1,0 +1,14 @@
+{
+    "cardTitle": "Monthly wRVU Trend",
+    "headerLabels": [
+        "YTD",
+        "Annualized"
+    ],
+    "rowLabels": [
+        "Current Year",
+        "Prior Year",
+        "Incr",
+        "%Inc"
+    ],
+    "exportDataPDF": "Export Data to PDF"    
+}

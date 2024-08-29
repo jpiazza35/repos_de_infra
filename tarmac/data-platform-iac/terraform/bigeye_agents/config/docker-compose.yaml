@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+
+  bigeye-agent:
+    # defines the image being used (ie what would normally be done with docker pull <image>
+    image: "docker.io/bigeyedata/agent:latest"
+    # This tells docker to restart if the container fails, the OS is restarted etc
+    restart: always
+
+    # This is how we will pass configuration files into the container, by mounting a directory.
+    # The path for the source directory can be changed as desired, but the path on the docker
+    # container that is being mounted must remain /app/config
+    volumes:
+      - "${PWD}/config:/app/config"
+
+# The below can be uncommented when using environment variables for data source credentials instead of plain text.
+# https://docs.bigeye.com/docs/agent-connection#using-environment-variables-for-source-credentials
+    environment:
+      - bigeye_source_identifier
+      - bigeye_source_type
+      - bigeye_source_host
+      - bigeye_source_port
+      - bigeye_source_username
+      - bigeye_source_password
+      - bigeye_source_databaseName
+      - BIGEYE_COMPANY_UUID

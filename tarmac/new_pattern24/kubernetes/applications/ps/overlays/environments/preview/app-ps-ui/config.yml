@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-ps-ui
+data:
+  key: ""
+  env: preview
+  url: preview.cliniciannexus
+  app: app-ps-ui
+  ecr: app-ps-ui-ecr-repo
+  acm: "arn:aws:acm:us-east-1:071766652168:certificate/ca119fb6-99bc-4f92-9754-20efa05cb39e"

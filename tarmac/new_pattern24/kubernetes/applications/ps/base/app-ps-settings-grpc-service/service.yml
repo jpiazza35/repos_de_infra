@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-ps-settings-grpc-service
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: grpc
+    port: 50053
+    protocol: TCP
+    targetPort: 50053
+  selector:
+    app.kubernetes.io/instance: app-settings-grpc-service
+    app.kubernetes.io/name: app-ps-settings-grpc-service
+  sessionAffinity: None
+  type: ClusterIP

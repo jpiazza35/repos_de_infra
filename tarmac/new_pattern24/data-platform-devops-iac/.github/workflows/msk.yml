@@ -1,0 +1,264 @@
+name: 'Kafka MSK TF Workflow'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+    - 'terraform/kafka/**'
+    - '.github/workflows/msk.yml'
+  push:
+    branches:
+      - main
+    paths:
+    - 'terraform/kafka/**'
+    - '.github/workflows/msk.yml'
+
+env:
+  AWS_REGION: us-east-1
+  SLACK_CHANNEL_ID: "#data-platform-git"
+  ORG: clinician-nexus
+
+jobs:
+  terraform-plan:
+    name: 'Terraform Plan'
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - tf_workspace: dev
+            aws_account_number: 130145099123
+            account_profile_prefix: D
+          - tf_workspace: prod
+            aws_account_number: 417425771013
+            account_profile_prefix: P
+          - tf_workspace: stage
+            aws_account_number: 975050241955
+            account_profile_prefix: S
+    runs-on: ubuntu-latest
+    env: 
+      TF_WORKSPACE: ${{ matrix.environment.tf_workspace }}
+    defaults:
+      run:
+        working-directory: terraform/kafka
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: tibdex/github-app-token@v2
+      id: get_installation_token
+      with:
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_retrieval_mode: id
+        installation_retrieval_payload: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: git config --global url."https://git:${{ steps.get_installation_token.outputs.token }}@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+
+    - name: Configure AWS credentials from DATA_PLATFORM account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::${{ matrix.environment.aws_account_number }}:role/data-platform-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: ${{ matrix.environment.account_profile_prefix }}DPConfig
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+
+    - name: Terraform Init
+      run: |
+        terraform init
+    
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
+    # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
+    - name: Terraform Plan
+      id: tf-plan
+      run: |
+        export exitcode=0
+        terraform plan -var-file tfvars/${{ env.TF_WORKSPACE }}.tfvars -detailed-exitcode -no-color -out ${{ matrix.environment.tf_workspace }}_tfplan || export exitcode=$?
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+        
+        if [ $exitcode -eq 1 ]; then
+          echo Terraform Plan Failed!
+          exit 1
+        else 
+          exit 0
+        fi
+    
+    # Save plan to artifacts  
+    - name: Publish Terraform Plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.environment.tf_workspace }}_tfplan
+        path: ${{ github.workspace }}/terraform/kafka/${{ matrix.environment.tf_workspace }}_tfplan
+        
+    - name: Create String Output
+      id: tf-plan-string
+      run: |
+        TERRAFORM_PLAN=$(terraform show -no-color ${{ matrix.environment.tf_workspace }}_tfplan)
+        
+        delimiter="$(openssl rand -hex 8)"
+        echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+        echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+        echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo '```terraform' >> $GITHUB_OUTPUT
+        echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+        echo '```' >> $GITHUB_OUTPUT
+        echo "</details>" >> $GITHUB_OUTPUT
+        echo "${delimiter}" >> $GITHUB_OUTPUT
+        
+    - name: Publish Terraform Plan to Task Summary
+      env:
+        SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+      run: |
+        echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+      
+    - name: Push Terraform Output to PR
+      if: github.ref != 'refs/heads/main'
+      uses: actions/github-script@v6
+      env:
+        SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = `${process.env.SUMMARY}`;
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+            })
+
+    - name: Slack Notify
+      uses: rtCamp/action-slack-notify@v2
+      if: failure()
+      env:
+        SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: ':cry: Kafka MSK Cluster Terraform Plan Step :small_red_triangle_down:'
+        SLACK_TITLE: D_DATA_PLATFORM Github Action - kafka msk cluster
+        SLACK_USERNAME: DataPlatform
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  terraform-apply:
+    name: 'Terraform Apply'
+    if: github.ref == 'refs/heads/main'
+    needs: terraform-plan
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - tf_workspace: dev
+            aws_account_number: 130145099123
+            account_profile_prefix: d
+            approval: dev_devops
+          - tf_workspace: prod
+            aws_account_number: 417425771013
+            account_profile_prefix: p
+            approval: prod_devops
+          - tf_workspace: stage
+            aws_account_number: 975050241955
+            account_profile_prefix: s
+            approval: staging_devops
+    environment:
+      name: ${{ matrix.environment.approval }}
+    runs-on: ubuntu-latest
+    env:
+      TF_WORKSPACE: ${{ matrix.environment.tf_workspace }}
+    defaults:
+      run:
+        working-directory: terraform/kafka
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: tibdex/github-app-token@v2
+      id: get_installation_token
+      with:
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_retrieval_mode: id
+        installation_retrieval_payload: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: |
+        git config --global url."https://oauth2:${{ steps.get_installation_token.outputs.token }}@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+      
+    - name: Configure AWS credentials from DATA_PLATFORM account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::${{ matrix.environment.aws_account_number }}:role/data-platform-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: ${{ matrix.environment.account_profile_prefix }}DPConfig
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+
+    - name: Terraform Init
+      run: |
+        terraform init
+    
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ matrix.environment.tf_workspace }}_tfplan
+        path: ${{ github.workspace }}/terraform/kafka
+        
+    - name: Terraform Apply
+      run: |
+        terraform apply -auto-approve ${{ matrix.environment.tf_workspace }}_tfplan
+
+    - uses: geekyeggo/delete-artifact@v2
+      with:
+        name: ${{ matrix.environment.tf_workspace }}_tfplan
+        failOnError: false
+
+    - name: Slack Notify - Success
+      uses: rtCamp/action-slack-notify@v2
+      if: success()
+      env:
+        SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: ':cry: Kafka MSK Cluster Terraform Apply Step :small_red_triangle_down:'
+        SLACK_TITLE:  ${{ matrix.environment.account_profile_prefix }}_DATA_PLATFORM Github Action - kafka msk cluster
+        SLACK_USERNAME: DataPlatform
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Slack Notify
+      uses: rtCamp/action-slack-notify@v2
+      if: failure()
+      env:
+        SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: ':cry: Kafka MSK Cluster Terraform Apply Step :small_red_triangle_down:'
+        SLACK_TITLE: ${{ matrix.environment.account_profile_prefix }}_DATA_PLATFORM Github Action - kafka msk cluster
+        SLACK_USERNAME: DataPlatform
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -1,0 +1,10 @@
+general:
+  branches:
+    only:
+     - staging
+deployment:
+  staging:
+    branch: staging
+    commands:
+      - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+      - git push git@heroku.com:tarmac-flask-stg.git $CIRCLE_SHA1:master -f

@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: k8s-dashboard
+    alb.ingress.kubernetes.io/group.name: k8s-dashboard
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:063890802877:certificate/2391662d-2fa0-4878-b56b-8a8c25444613
+    alb.ingress.kubernetes.io/tags: Environment=qa,Team=devops
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-3-2021-06
+spec:
+  ingressClassName: alb
+  rules:
+    - host: k8s.qa.cliniciannexus.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kubernetes-dashboard
+                port:
+                  name: http

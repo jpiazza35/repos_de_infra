@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package cn.anomalyprofiling.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum AnomalySource {
+  ANOMALY_SOURCE_SOME_VALUE_UNSPECIFIED = 0;
+  ANOMALY_SOURCE_RULE_BASED_CHECK = 1;
+}
+
+enum DnpReasonCode {
+  DNP_REASON_CODE_SOME_VALUE_UNSPECIFIED = 0;
+  DNP_REASON_CODE_FTE_THRESHOLD = 1;
+  DNP_REASON_CODE_CFTE_THRESHOLD = 2;
+  DNP_REASON_CODE_OUTLIER = 3;
+  DNP_REASON_CODE_DUPLICATE = 4;
+  DNP_REASON_CODE_INVALID_SPECIALTY_CODE = 5;
+  DNP_REASON_CODE_INVALID_PROVIDER = 6;
+  DNP_REASON_CODE_OTHER = 7;
+  DNP_REASON_CODE_INVALID_RECORD_SOFT_DELETE = 8;
+}
+
+message DnpReason {
+  DnpReasonCode do_not_publish_reason_code = 1; // reason code listed for why this is suggested dnp.
+  string notes = 2; // Free form notes
+  string reviewer_user_id = 3; // User that provided the input if not rule based.
+  int64 dnp_rules_job_id = 4; // job id of task that identified the dnp.  Not populated for user input.
+  int64 dnp_rules_run_id = 5; // run id of the task that identified the dnp. Not populated for user input.
+  google.protobuf.Timestamp flag_ts = 6; // ts of when the DNP was suggested.
+  string approver_user_id = 7; // User that provided the input.
+  google.protobuf.Timestamp approval_ts = 8;
+}
+
+message SuggestedAnomalousValue {
+  // Suggested anomalous values would persist unless the data was inaccurate or erronous.  User would review, then
+  // either flag the record as verified accurate or fix the data then the suggested anomalous value would be removed from
+  // Anomaly Profile.  During review, user can also suggest that the value not be published in downstream workflows.
+  string column_name = 1; // column name
+  string value = 2;
+  AnomalySource anomaly_source = 3; // source of the suggested anomaly.
+  repeated DnpReason suggested_dnp_reasons = 4; // User input suggesting reasons why dnp.
+  bool is_verified_accurate = 5; // User input that tracks whether the suggested anomalous value is accurate/not anomalous.
+  string notes = 6; // user notes about the suggested anomalous value.
+
+  //Audit to track when the anomaly was suggested and what job suggested it.
+  int64 job_id = 7;
+  int64 run_id = 8;
+  google.protobuf.Timestamp job_utc_ts = 9;
+}
+
+message DnpFlag {
+  string column_display_name = 1; // column display name
+  string published_survey_name_for_dnp = 2; // survey name for the survey that the user selected to publish the dnp.
+  repeated DnpReason dnp_reasons = 3; // User input suggesting reasons why dnp.
+}
+
+message AnomalyProfile {
+  // Record level profile.  Array of anomalies is curated.  Values that are no longer anomalous are removed from the array.
+  // Values that
+  repeated SuggestedAnomalousValue suggested_anomalous_values = 1; // an array of suggested anomalous values.
+  repeated DnpFlag dnp_flags = 2; // an array of dnp flags.
+}

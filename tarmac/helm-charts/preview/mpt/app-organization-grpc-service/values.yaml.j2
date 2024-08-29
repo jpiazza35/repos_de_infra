@@ -1,0 +1,31 @@
+fullnameOverride: {{ project_name }}-{{ environment }}
+namespace:
+  name: {{ product }}-{{ environment }}
+  
+service:
+  port: 7004
+  targetPort: 7004
+  name: {{ project_name }}-{{ environment }}
+  type: ClusterIP
+
+image:
+  repository: '{{ ss_tools_ecr_url }}/{{ project_name }}-ecr-repo'
+  tag: '{{ docker_image_tag }}'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+securityContext:
+  runAsUser: 1000  # UID user
+  runAsNonRoot: true
+
+ingress:
+  enabled: false
+
+environment: {{ environment }}

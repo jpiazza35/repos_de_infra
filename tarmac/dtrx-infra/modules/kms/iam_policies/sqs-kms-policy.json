@@ -1,0 +1,56 @@
+{
+    "Version": "2012-10-17",
+    "Id": "example-ID",
+    "Statement": [
+      {
+        "Sid": "AllowS3",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "s3.amazonaws.com"
+        },
+        "Action": [
+          "kms:GenerateDataKey",
+          "kms:Decrypt"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "AllowSNS",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "sns.amazonaws.com"
+        },
+        "Action": [
+          "kms:GenerateDataKey",
+          "kms:Decrypt"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "Enable IAM User Permissions",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "arn:aws:iam::${aws_account_id}:root"
+        },
+        "Action": "kms:*",
+        "Resource": "*"
+      },
+      {
+          "Sid": "Allow use of the key",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": [
+                "arn:aws:iam::${proxy_prod_aws_account_id}:root",
+                "arn:aws:iam::${proxy_dev_aws_account_id}:root",
+                "arn:aws:iam::${proxy_dev_aws_account_id}:root"
+              ]
+          },
+          "Action": [
+              "kms:Decrypt",
+              "kms:GenerateDataKey*",
+              "kms:DescribeKey"
+          ],
+          "Resource": "*"
+      }
+    ]
+  }

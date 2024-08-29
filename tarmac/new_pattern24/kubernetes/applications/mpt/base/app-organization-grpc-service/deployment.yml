@@ -1,0 +1,59 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: app-organization-grpc-service
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: app-organization-grpc-service
+    app.kubernetes.io/name: app-organization-grpc-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-organization-grpc-service
+      app.kubernetes.io/name: app-organization-grpc-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: app-organization-grpc-service
+        app.kubernetes.io/name: app-organization-grpc-service
+    spec:
+      containers:
+        - name: app-organization-grpc-service
+          image: app-organization-grpc-service
+          ports:
+            - name: grpc
+              containerPort: 7004
+              protocol: TCP
+          env:
+            - name: CN_SWAGGER__ISENABLED
+              value: 'true'
+            - name: CN_CONNECTIONSTRINGS__MARKETPRICINGCONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: mpt-external-secret
+                  key: mpt-cn-awsconfiguration-marketpricingconnection
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: 1000
+            runAsNonRoot: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

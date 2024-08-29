@@ -1,0 +1,112 @@
+{
+    "mockData": {
+        "tenant": 1,
+        "dashboardKey": 1,
+        "cardKey": 2,
+        "specialties": 1110,
+        "periodId": 5,
+        "yearMonth": 202308,
+        "benchmarkResponse": {
+            "cardSettings": {
+                "title": "Benchmark",
+                "infoIcon": ""
+            },
+            "detail": [
+                {
+                    "value": 2843.63,
+                    "label": "YTD wRVUs",
+                    "image": "YtdWrvus"
+                },
+                {
+                    "value": 0.7,
+                    "label": "Benchmark FTE",
+                    "image": "BenchmarkFte"
+                },
+                {
+                    "value": 4062.34,
+                    "label": "wRVUs/FTE",
+                    "image": "WrvusFte"
+                },
+                {
+                    "value": 82,
+                    "label": "YTD Benchmark %ile",
+                    "image": "YtdBenchmark"
+                }
+            ]
+        }
+    },
+    "fy_realData": {
+        "userId": "BS216",
+        "tenant": 2,
+        "dashboardKey": 3,
+        "cardKey": 2,
+        "specialties": 1320,
+        "periodId": 2,
+        "yearMonth": 202309,
+        "benchmarkResponse": {
+            "cardSettings": {
+                "title": "Benchmark",
+                "infoIcon": ""
+            },
+            "detail": [
+                {
+                    "value": 1441.79,
+                    "label": "YTD wRVUs",
+                    "image": "YtdWrvus"
+                },
+                {
+                    "value": 0.9,
+                    "label": "Benchmark FTE",
+                    "image": "BenchmarkFte"
+                },
+                {
+                    "value": 1601.988888,
+                    "label": "wRVUs/FTE",
+                    "image": "WrvusFte"
+                },
+                {
+                    "value": 65,
+                    "label": "YTD Benchmark %ile",
+                    "image": "YtdBenchmark"
+                }
+            ]
+        }
+    },
+    "cy_realData": {
+        "userId": "RA41",
+        "tenant": 1,
+        "dashboardKey": 1,
+        "cardKey": 2,
+        "specialties": 1110,
+        "periodId": 2,
+        "yearMonth": 202309,
+        "benchmarkResponse": {
+            "cardSettings": {
+                "title": "Benchmark",
+                "infoIcon": ""
+            },
+            "detail": [
+                {
+                    "value": 2915.783013,
+                    "label": "YTD wRVUs",
+                    "image": "YtdWrvus"
+                },
+                {
+                    "value": 1,
+                    "label": "Benchmark FTE",
+                    "image": "BenchmarkFte"
+                },
+                {
+                    "value": 2898.306506,
+                    "label": "wRVUs/FTE",
+                    "image": "WrvusFte"
+                },
+                {
+                    "value": 20,
+                    "label": "YTD Benchmark %ile",
+                    "image": "YtdBenchmark"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "PayCategoryLabel": {
+        "InfoIcon": "",
+        "Base": "Base",
+        "ValueBase": "Value Base",
+        "Productivity": "Productivity",
+        "Other": "Other"
+    },
+    "PayCategoryValue": {
+        "Amount": 2920,
+        "Total": 11012.43,
+        "Percentage": 26.5154,
+        "Name": "Other Pay",
+        "Amount1": 8092.43,
+        "Total1": 11012.43,
+        "Percentage1": 73.4845,
+        "Name1": "Provider Draw",
+        "Base": 88,
+        "ValueBase": 6,
+        "Productivity": 11,
+        "Other": 1
+    }
+}

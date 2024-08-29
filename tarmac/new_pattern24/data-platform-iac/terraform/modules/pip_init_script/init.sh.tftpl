@@ -1,0 +1,16 @@
+#!/bin/bash
+# Writing to the global pip configuration file
+cat <<EOF | sudo tee -a /etc/pip.conf >/dev/null
+[global]
+index-url = https://${NEXUS_USER}:${NEXUS_PASSWORD}@${NEXUS_URL}
+trusted-host = ${NEXUS_BASE_URL}
+extra-index-url =
+    https://pypi.org/simple/
+    https://${BSR_USER}:${BSR_PASSWORD}@${BSR_URL}
+EOF
+
+# Setting permissions for the pip.conf file
+sudo chmod 644 /etc/pip.conf
+sudo chown root:root /etc/pip.conf
+
+echo "Configuration for pip has been updated."

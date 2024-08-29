@@ -1,0 +1,18 @@
+{
+    "ZoneDefinition": {
+        "Name": "g.cliniciannexus.com",
+        "Parent": "cliniciannexus.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "g.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "google-site-verification=ZZrTev0p-hCqwnJRTeqDbqfGouOqCIvt8oKudlJf1xc"
+                }
+            ]
+        }
+    ]
+}

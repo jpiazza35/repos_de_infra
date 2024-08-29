@@ -1,0 +1,27 @@
+fullnameOverride: app-ps-comp-summary-prod
+namespace:
+  name: ps
+
+service:
+  port: 443
+  targetPort: 443
+  name: app-ps-comp-summary-prod
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-ps-comp-summary-ecr-repo'
+  tag: '3a1cc76609'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+environment: prod

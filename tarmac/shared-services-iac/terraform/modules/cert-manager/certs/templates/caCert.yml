@@ -1,0 +1,20 @@
+---
+## Create Self Signed cert. We will use a key/pair to encrypt traffic from ALB to Istio Gateway.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: root-ca
+spec:
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  commonName: "*.{{ .Values.certs.env }}.cliniciannexus.com"
+  secretName: root-certs
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 4096
+  dnsNames:
+    - "{{ .Values.certs.env }}.cliniciannexus.com"
+  issuerRef:
+    name: vault-cert-issuer
+    kind: ClusterIssuer

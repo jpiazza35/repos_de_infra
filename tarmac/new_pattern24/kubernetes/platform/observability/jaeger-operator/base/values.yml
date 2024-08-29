@@ -1,0 +1,13 @@
+certs:
+  issuer:
+    create: true
+    name: ""
+  certificate:
+    create: true
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  pspEnabled: false
+  # Ensure jaeger-operator operates on things (e.g. CRs) in cluster-wide scope.
+  clusterRole: true

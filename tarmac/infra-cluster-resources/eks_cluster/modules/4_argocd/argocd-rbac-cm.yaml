@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: ${argocd_release_namespace}
+data:
+  policy.csv: |
+    g, ${argocd_org_name}:devops, role:admin
+  policy.default: role:readonly

@@ -1,0 +1,44 @@
+{
+    "categories": [
+        "Productivity",
+        "Performance"
+    ],
+    "productivitycardHeaders": [
+        "Monthly wRVU per FTE Trends",
+        "Benchmark",
+        "Monthly wRVU Trend",
+        "Monthly wRVU by Service Group",
+        "Patient Detail - wRVU Heat Map"
+    ],
+    "performancecardHeaders": [
+        "Compensation Summary",
+        "FTE Allocation",
+        "Settlement",
+        "Earning Codes",
+        "Productivity Compensation",
+        "Circuit Breaker for Value Based",
+        "Value Based Compensation",
+        "Value Based Measures"
+    ],
+    "mockData": {
+        "name": "Sharp Lancaster, MD",
+        "productivityHeader": "Productivity as of August 31, 2023",
+        "productivitySubHeader": "Productivity Period: January 2023 - December 2023",
+        "performanceHeader": "Performance as of August 31, 2023",
+        "performanceSubHeader": "Compensation Period: January 2023 - December 2023"
+    },
+    "fy_realData": {
+        "name": "Kirstein Lopez, PHY",
+        "productivityHeader": "Productivity as of September 30, 2023",
+        "productivitySubHeader": "FY2024: July 2023 - June 2024",
+        "performanceHeader": "Performance as of June 30, 2023",
+        "performanceSubHeader": "FY2023: July 2022 - June 2023"
+    },
+    "cy_realData": {
+        "name": "Arickx Venkata ravi  sankarun, MD",
+        "productivityHeader": "Productivity as of September 30, 2023",
+        "productivitySubHeader": "Calendar Year 2023: January 2023 - December 2023",
+        "performanceHeader": "Performance as of September 30, 2023",
+        "performanceSubHeader": "Calendar Year 2023: January 2023 - December 2023"
+    }
+}

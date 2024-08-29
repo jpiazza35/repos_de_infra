@@ -1,0 +1,36 @@
+# https://docs.bigeye.com/docs/agent-connection
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: databricks-preview-bigeye-agent-config
+data:
+  agent.yaml: |
+    # Company Information
+    companyUuid: ${COMPANY_UUID}
+
+    # Data Sources
+    sources:
+      - identifier: 'databricks-preview'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName:
+
+    # Workflow Configuration
+    workflowUrl: app-workflows.bigeye.com
+
+    # Mutual TLS Configuration
+    mutualTlsEnabled: true
+    mtlsCertLocation: /app/config/mtls.pem
+    mtlsKeyLocation: /app/config/mtls.key
+
+    # Encryption Keys
+    publicEncryptionKeyDir: /app/config
+    privateEncryptionKeyPath: /app/config/private.pem
+
+    # Logging Options
+    logQueries: false  # Not recommended for production
+    healthLoggerEnabled: true

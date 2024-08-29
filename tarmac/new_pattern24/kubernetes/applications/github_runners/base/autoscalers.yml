@@ -1,0 +1,50 @@
+---
+## E2E HPA
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: e2e-runner-autoscaler
+spec:
+  githubAPICredentialsFrom:
+    secretRef: 
+      name: arc-github-app-secret
+  scaleTargetRef:
+    kind: RunnerSet
+    name: e2e-k8s-runners
+  scaleUpTriggers:
+    - githubEvent:
+        workflowJob: {}
+      duration: "2m"
+  minReplicas: 5
+  maxReplicas: 20
+  metrics: 
+  - type: PercentageRunnersBusy
+    scaleUpThreshold: '0.75'    # The percentage of busy runners at which the number of desired runners are re-evaluated to scale up
+    scaleDownThreshold: '0.3'   # The percentage of busy runners at which the number of desired runners are re-evaluated to scale down
+    scaleUpAdjustment: 2        # The scale up runner count added to desired count
+    scaleDownAdjustment: 1      # The scale down runner count subtracted from the desired count
+---
+## Shared Services HPA
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: k8s-runner-autoscaler
+spec:
+  githubAPICredentialsFrom:
+    secretRef: 
+      name: arc-github-app-secret
+  scaleTargetRef:
+    kind: RunnerSet
+    name: k8s-runners
+  scaleUpTriggers:
+    - githubEvent:
+        workflowJob: {}
+      duration: "2m"
+  minReplicas: 5
+  maxReplicas: 20
+  metrics: 
+  - type: PercentageRunnersBusy
+    scaleUpThreshold: '0.75'    # The percentage of busy runners at which the number of desired runners are re-evaluated to scale up
+    scaleDownThreshold: '0.3'   # The percentage of busy runners at which the number of desired runners are re-evaluated to scale down
+    scaleUpAdjustment: 2        # The scale up runner count added to desired count
+    scaleDownAdjustment: 1      # The scale down runner count subtracted from the desired count

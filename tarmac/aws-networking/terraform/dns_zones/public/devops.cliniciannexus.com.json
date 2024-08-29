@@ -1,0 +1,7 @@
+{
+    "ZoneDefinition": {
+        "Name": "devops.cliniciannexus.com",
+        "Parent": "cliniciannexus.com"
+    },
+    "ResourceRecordSets": []
+}

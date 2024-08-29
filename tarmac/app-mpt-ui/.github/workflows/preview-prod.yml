@@ -1,0 +1,337 @@
+# Prod pipeline triggered if the app-mpt-e2e-test gh actions passes successfully (E2E tests are successful)
+
+name: Prod MPT-UI pipeline
+run-name: ${{ github.actor }} build MPT-UI
+
+on:
+  repository_dispatch:
+    types: [retrigger-mpt-pipeline]
+
+env:
+  REPO_NAME: app-mpt-ui
+  PROJECT_NAME: ${{ github.event.client_payload.project_name }}
+  PROJECT_DIR: ./
+  PRODUCT: mpt
+  GH_REGISTRY: ghcr.io
+  SS_TOOLS_ECR: app-mpt-ui-ecr-repo
+  HELM_REPO_NAME: helm-charts
+  COMMIT_AUTHOR: ${{ github.event.client_payload.commit_author }}
+  IMAGE_TAG: ${{ github.event.client_payload.docker_image_tag }}
+  #GIT_TAG: ${{ github.event.client_payload.git_tag }}
+  DESCRIPTION: UI service for Market Pricing Tool
+  BUILD_PLATFORMS: linux/amd64 #, linux/arm64
+  #UNIT_TEST_DIR: ./Tests
+
+jobs:
+  ## Retag image and deploy it to preview helm-charts ##
+  deploy-preview:
+    name: Retag, push and deploy to Preview
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    env:
+      ENVIRONMENT: preview
+      VITE_AB2C_TENANT_ID: ${{ secrets.VITE_AB2C_TENANT_ID }}
+      VITE_AB2C_CLIENT_ID: ${{ secrets.VITE_AB2C_CLIENT_ID }}
+      VITE_AB2C_REDIRECT_URI: ${{ secrets.VITE_AB2C_REDIRECT_URI_PREVIEW }}
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.PROD_VITE_AUTH0_CLIENT_ID }}
+      VITE_AM5_LICENSE_KEY: ${{ secrets.AM5_LICENSE_KEY }}
+      VITE_LAUNCH_DARKLY: ${{ secrets.PROD_VITE_LAUNCH_DARKLY }}      
+      VITE_API_URL: ""  # leave empty if you want to use current domain which is mpt.preview.cliniciannexus.com
+      VITE_API_URL_PREFIX: "/api/"
+    strategy:
+      matrix:
+        node-version: ['18.13']
+    permissions:
+      contents: write
+      packages: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+    outputs:
+      IMAGE_TAG: ${{ steps.trim-tag.outputs.IMAGE_TAG }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # QEMU can be used to build multi-architecture images. We can revisit this at a later date.
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Remove -dev suffix from IMAGE_TAG coming from dev pipeline
+        id: trim-tag
+        run: |
+          echo "IMAGE_TAG=$(echo "${{ env.IMAGE_TAG }}" | cut -d '-' -f 1)" >> $GITHUB_OUTPUT
+
+      - name: Compute short versions of SHASUM and repository name
+        id: shorten
+        run: |
+          echo "repo=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: Print shortend names for debugging
+        run: |
+          echo "Short SHA ${{ steps.trim-tag.outputs.IMAGE_TAG }}"
+          echo "Short Repo ${{ steps.shorten.outputs.repo }}"
+
+      - name: Calculate RFC 3339 date
+        id: date
+        run: |
+          echo "date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
+
+      - name: Print calculated date
+        run: |
+          echo "Calculated date ${{ steps.date.outputs.date }}"
+
+      # If someone pushed a tag, we should add that to the container image.
+      # This takes a little bit of work to sort out.
+      - name: Calculate tag
+        id: tag
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Print calculated tag
+        run: |
+          echo "Calculated tag ${{ steps.tag.outputs.tag }}"
+
+      - name: Login to Github Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GH_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: UI-QA-to-SS-TOOLS-ECR
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Update .env.preview
+        run: |
+          cp .github/.env.preview.j2 ${{ env.PROJECT_DIR }}
+          cp .github/update-env.py ${{ env.PROJECT_DIR }}
+          python3 update-env.py
+
+      - name: Build using buildx and push
+        id: build-push
+        uses: docker/build-push-action@v5
+        with:
+          tags: |
+            ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest
+            ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}:${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}:latest
+          context: .
+          file: ${{ env.PROJECT_DIR }}/Dockerfile
+          build-args: ENV=${{ env.ENVIRONMENT }}
+          platforms: ${{ env.BUILD_PLATFORMS }}
+          outputs: type=docker
+          cache-from: type=registry,ref=${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest
+          cache-to: type=registry,ref=${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest,mode=max
+          labels: |
+            org.opencontainers.image.title=${{ env.PROJECT_NAME }}
+            org.opencontainers.image.description=${{ env.DESCRIPTION }}
+            org.opencontainers.image.licenses=COMMERCIAL
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.version=${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            org.opencontainers.image.base.name=node:${{ matrix.node-version }}
+
+      - name: Push images to registries
+        run: |
+          docker push -a ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}
+          docker push -a ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}
+
+      - name: Set needed outputs for helm GH repo pipeline
+        id: helm
+        run: |
+          echo "docker_image_tag=${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "project_name=${{ env.PROJECT_NAME }}" >> $GITHUB_OUTPUT
+          echo "environment=${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "product=${{ env.PRODUCT }}" >> $GITHUB_OUTPUT
+
+      - name: Get Github App Token
+        id: rw-installation-token
+        uses: tibdex/github-app-token@v2
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+      
+      - name: Trigger preview helm GH pipeline and pass docker-tag sha
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: clinician-nexus/${{ env.HELM_REPO_NAME }}
+          event-type: trigger-preview-pipeline
+          client-payload: '{"docker_image_tag": "${{ steps.helm.outputs.docker_image_tag }}", "project_name": "${{ steps.helm.outputs.project_name }}", "environment": "${{ steps.helm.outputs.environment }}", "product": "${{ steps.helm.outputs.product }}"}'
+
+## Retag image and trigger prod helm-charts pipeline (open a PR for prod deploy) ##
+  deploy-prod:
+    name: Retag, push and deploy to prod
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    env:
+      ENVIRONMENT: prod
+      VITE_AB2C_TENANT_ID: ${{ secrets.VITE_AB2C_TENANT_ID }}
+      VITE_AB2C_CLIENT_ID: ${{ secrets.VITE_AB2C_CLIENT_ID }}
+      VITE_AB2C_REDIRECT_URI: ${{ secrets.VITE_AB2C_REDIRECT_URI }}
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.PROD_VITE_AUTH0_CLIENT_ID }}
+      VITE_AM5_LICENSE_KEY: ${{ secrets.AM5_LICENSE_KEY }}
+      VITE_LAUNCH_DARKLY: ${{ secrets.PROD_VITE_LAUNCH_DARKLY }}   
+      VITE_API_URL: ""  # leave empty if you want to use current domain which is mpt.cliniciannexus.com
+      VITE_API_URL_PREFIX: "/api/"
+    strategy:
+      matrix:
+        node-version: ['18.13']
+    permissions:
+      contents: write
+      packages: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+    outputs:
+      IMAGE_TAG: ${{ steps.trim-tag.outputs.IMAGE_TAG }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # QEMU can be used to build multi-architecture images. We can revisit this at a later date.
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Remove -dev suffix from IMAGE_TAG coming from dev pipeline
+        id: trim-tag
+        run: |
+          echo "IMAGE_TAG=$(echo "${{ env.IMAGE_TAG }}" | cut -d '-' -f 1)" >> $GITHUB_OUTPUT
+      
+      - name: Compute short versions of SHASUM and repository name
+        id: shorten
+        run: |
+          echo "repo=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: Print shortend names for debugging
+        run: |
+          echo "Short SHA ${{ steps.trim-tag.outputs.IMAGE_TAG }}"
+          echo "Short Repo ${{ steps.shorten.outputs.repo }}"
+
+      - name: Calculate RFC 3339 date
+        id: date
+        run: |
+          echo "date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
+
+      - name: Print calculated date
+        run: |
+          echo "Calculated date ${{ steps.date.outputs.date }}"
+
+      # If someone pushed a tag, we should add that to the container image.
+      # This takes a little bit of work to sort out.
+      - name: Calculate tag
+        id: tag
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Print calculated tag
+        run: |
+          echo "Calculated tag ${{ steps.tag.outputs.tag }}"
+
+      - name: Login to Github Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GH_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: UI-prod-to-SS-TOOLS-ECR
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Update .env.production
+        run: |
+          cp .github/.env.production.j2 ${{ env.PROJECT_DIR }}
+          cp .github/update-env.py ${{ env.PROJECT_DIR }}
+          python3 update-env.py
+
+      - name: Build using buildx and push
+        id: build-push
+        uses: docker/build-push-action@v5
+        with:
+          tags: |
+            ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest
+            ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}:${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}:latest
+          context: .
+          file: ${{ env.PROJECT_DIR }}/Dockerfile
+          platforms: ${{ env.BUILD_PLATFORMS }}
+          outputs: type=docker
+          cache-from: type=registry,ref=${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest
+          cache-to: type=registry,ref=${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest,mode=max
+          labels: |
+            org.opencontainers.image.title=${{ env.PROJECT_NAME }}
+            org.opencontainers.image.description=${{ env.DESCRIPTION }}
+            org.opencontainers.image.licenses=COMMERCIAL
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.version=${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            org.opencontainers.image.base.name=node:${{ matrix.node-version }}
+
+      - name: Push images to registries
+        run: |
+          docker push -a ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}
+          docker push -a ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}
+
+      - name: Set needed outputs for helm GH repo pipeline
+        id: helm
+        run: |
+          echo "docker_image_tag=${{ steps.trim-tag.outputs.IMAGE_TAG }}-${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "project_name=${{ env.PROJECT_NAME }}" >> $GITHUB_OUTPUT
+          echo "environment=${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "product=${{ env.PRODUCT }}" >> $GITHUB_OUTPUT
+          echo "commit_url=${{ github.server_url }}/${{ github.repository_owner }}/${{ env.REPO_NAME }}/commit/${{ github.sha }}" >> $GITHUB_OUTPUT
+      
+      - name: Get Github App Token
+        id: rw-installation-token
+        uses: tibdex/github-app-token@v2
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+      
+      - name: Trigger production helm GH pipeline and pass docker-tag sha
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: clinician-nexus/${{ env.HELM_REPO_NAME }}
+          event-type: trigger-prod-pipeline
+          client-payload: '{"docker_image_tag": "${{ steps.helm.outputs.docker_image_tag }}", "project_name": "${{ steps.helm.outputs.project_name }}", "environment": "${{ steps.helm.outputs.environment }}", "product": "${{ steps.helm.outputs.product }}", "commit_url": "${{ steps.helm.outputs.commit_url }}", "commit_author": "${{ env.COMMIT_AUTHOR }}"}'

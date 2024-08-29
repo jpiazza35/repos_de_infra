@@ -1,0 +1,140 @@
+# Build the MPT UI and push it into Preview and Prod S3
+
+name: Build and publish the MPT-UI into Preview and Prod S3
+run-name: ${{ github.actor }} build MPT-UI into Preview and Prod S3
+
+on:
+  repository_dispatch:
+    types: [retrigger-mpt-pipeline]
+
+env:
+  PROJECT_NAME: app-mpt-ui
+  PROJECT_DIR: ./
+  #UNIT_TEST_DIR: ./Tests
+
+jobs:
+# # CD to Tests and run npm test
+#   test:
+#     name: Run unit tests
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         node-version: [ '18.13' ]
+#     permissions:
+#       contents: read
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Install Node ${{ matrix.node-version }}
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: ${{ matrix.node-version }}
+
+#       - name: Install Dependencies
+#         run: |
+#           cd ${{ env.UNIT_TEST_DIR }}
+#           npm i
+
+#       - name: Run unit tests
+#         run: |
+#           cd ${{ env.UNIT_TEST_DIR }}
+#           npm test
+
+# Run on push to main branch
+  deploy-preview:
+    name: Build and push the app code into preview S3 bucket
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    if: github.ref == 'refs/heads/main'
+    env:
+      ENVIRONMENT: preview
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_AM5_LICENSE_KEY: ${{ secrets.AM5_LICENSE_KEY }}
+      VITE_LAUNCH_DARKLY: ${{ secrets.VITE_LAUNCH_DARKLY }}
+      VITE_API_URL: ""  # leave empty if you want to use current domain which is mpt.preview.cliniciannexus.com
+      VITE_API_URL_PREFIX: "/api/"
+    strategy:
+      matrix:
+        node-version: ['18.13']
+    permissions:
+      contents: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+            
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.P_EKS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: UI-P-EKS-S3
+
+      - name: Update .env.preview
+        run: |
+          cp .github/.env.preview.j2 ${{ env.PROJECT_DIR }}
+          cp .github/update-env.py ${{ env.PROJECT_DIR }}
+          python3 update-env.py
+
+      - name: Build app and push to S3
+        run: |
+          npm i
+          npm run build -- --mode ${{ env.ENVIRONMENT }}
+          cp -rf assets/* dist/assets
+          aws s3 cp dist/ s3://${{ env.ENVIRONMENT }}-${{ env.PROJECT_NAME }}-${{ secrets.AWS_REGION }} --recursive --region ${{ secrets.AWS_REGION }}
+        
+  deploy-prod:
+    name: Build and push the app code into prod S3 bucket
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    if: github.ref == 'refs/heads/main'
+    env:
+      ENVIRONMENT: prod
+      VITE_AUTH0_CLIENT_ID: ${{ secrets.VITE_AUTH0_CLIENT_ID }}
+      VITE_AM5_LICENSE_KEY: ${{ secrets.AM5_LICENSE_KEY }}
+      VITE_LAUNCH_DARKLY: ${{ secrets.VITE_LAUNCH_DARKLY }}
+      VITE_API_URL: ""  # leave empty if you want to use current domain which is mpt.cliniciannexus.com
+      VITE_API_URL_PREFIX: "/api/"
+    strategy:
+      matrix:
+        node-version: ['18.13']
+    permissions:
+      contents: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+              
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.P_EKS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: UI-P-EKS-S3
+
+      - name: Update .env.production
+        run: |
+          cp .github/.env.production.j2 ${{ env.PROJECT_DIR }}
+          cp .github/update-env.py ${{ env.PROJECT_DIR }}
+          python3 update-env.py
+
+      - name: Build app and push to S3
+        run: |
+          npm i
+          npm run build
+          cp -rf assets/* dist/assets
+          aws s3 cp dist/ s3://${{ env.ENVIRONMENT }}-${{ env.PROJECT_NAME }}-${{ secrets.AWS_REGION }} --recursive --region ${{ secrets.AWS_REGION }}

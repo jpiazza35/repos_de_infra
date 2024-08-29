@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dwb
+
+resources:
+- ../../../../../base/app-dwb-service
+- ingress.yml
+- config.yml
+- serviceaccount.yml
+
+replacements:
+  - path: replacements.yml
+
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=qa,Team=devops
+  target:
+    kind: Ingress
+
+images:
+- name: app-dwb-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-dwb-service-ecr-repo
+  digest: sha256:97089af45ae345c9fa9203da368c8357f38509e4ab6e40d8a1830bf6f7653b0c

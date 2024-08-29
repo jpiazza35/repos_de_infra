@@ -1,0 +1,82 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: app-survey-grpc-service
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: app-survey-grpc-service
+    app.kubernetes.io/name: app-survey-grpc-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-survey-grpc-service
+      app.kubernetes.io/name: app-survey-grpc-service
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: app-survey-grpc-service
+        app.kubernetes.io/name: app-survey-grpc-service
+    spec:
+      containers:
+        - name: app-survey-grpc-service
+          image: app-survey-grpc-service
+          ports:
+            - name: grpc
+              containerPort: 7052
+              protocol: TCP
+          env:
+            - name: CN_SWAGGER__ISENABLED
+              value: 'true'
+            - name: CN_OLDSURVEYDATA__ISENABLED
+              value: 'true'
+            - name: CN_CONNECTIONSTRINGS__BENCHMARKCONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: mpt-external-secret
+                  key: mpt-cn-awsconfiguration-benchmarkconnection
+            - name: CN_CONNECTIONSTRINGS__SURVEYDATABRICKS
+              valueFrom:
+                secretKeyRef:
+                  name: mpt-external-secret
+                  key: mpt-cn-connectionstrings-surveydatabricks
+            - name: CN_SURVEYDATABRICKS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: mpt-external-secret
+                  key: mpt-cn-surveydatabricks-token
+            - name: CN_SURVEYDATABRICKS_CATALOG
+              valueFrom:
+                secretKeyRef:
+                  name: mpt-external-secret
+                  key: mpt-cn-surveydatabricks-catalog
+            - name: CN_SURVEYDATABRICKS_MDMCATALOG
+              valueFrom:
+                secretKeyRef:
+                  name: mpt-external-secret
+                  key: mpt-cn-surveydatabricks-mdmcatalog
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: 1000
+            runAsNonRoot: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

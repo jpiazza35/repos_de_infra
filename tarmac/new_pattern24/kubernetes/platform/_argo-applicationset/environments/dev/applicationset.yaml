@@ -1,0 +1,94 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-applicationset-dev
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - app: reloader
+        path: platform/automation/reloader/overlays/environments/dev
+        namespace: reloader
+      - app: kiali
+        path: platform/networking/kiali/overlays/environments/dev
+        namespace: istio-system
+      - app: metrics-server
+        path: platform/observability/metrics-server/overlays/environments/dev
+        namespace: metrics-server
+      - app: kubernetes-dashboard
+        path: platform/observability/kubernetes-dashboard/overlays/environments/dev
+        namespace: kubernetes-dashboard
+      - app: kubecost
+        path: platform/finops/kubecost/overlays/environments/dev
+        namespace: kubecost
+      - app: argocd
+        path: platform/automation/argocd/overlays/environments/dev
+        namespace: argocd
+      # - app: grafana-operator
+      #   path: platform/observability/grafana_operator/overlays/environments/dev
+      #   namespace: grafana-operator
+      - app: grafana-agent
+        path: platform/observability/grafana_agent/overlays/environments/dev
+        namespace: monitoring
+      - app: external-secrets
+        path: platform/security/external-secrets-controller/overlays/environments/dev
+        namespace: default
+      # - app: elasticsearch
+      #   path: platform/observability/elasticsearch/overlays/environments/dev
+      #   namespace: monitoring
+      # - app: elasticsearch-operator
+      #   path: platform/observability/elasticsearch-operator/overlays/environments/dev
+      #   namespace: monitoring
+      - app: external-dns
+        path: platform/networking/external-dns/overlays/environments/dev
+        namespace: external-dns
+      - app: loki
+        path: platform/observability/loki/overlays/environments/dev
+        namespace: monitoring
+      - app: influxdb
+        path: platform/observability/influxdb/overlays/environments/dev
+        namespace: monitoring
+      - app: telegraf
+        path: platform/observability/telegraf/overlays/environments/dev
+        namespace: monitoring
+      - app: thanos
+        path: platform/observability/thanos/overlays/environments/dev
+        namespace: monitoring
+      - app: kube-prometheus-stack
+        path: platform/observability/kube-prometheus-stack/overlays/environments/dev
+        namespace: monitoring
+      - app: tempo
+        path: platform/observability/tempo/overlays/environments/dev
+        namespace: monitoring
+      - app: otel-collector
+        path: platform/observability/otel-collector/overlays/environments/dev
+        namespace: monitoring
+      - app: otel-operator
+        path: platform/observability/otel-operator/overlays/environments/dev
+        namespace: otel-operator
+      - app: argocd-image-updater
+        path: platform/automation/argocd-image-updater/overlays/environments/dev
+        namespace: argocd
+      - app: mimir
+        path: platform/observability/mimir/overlays/environments/dev
+        namespace: argocd
+  template:
+    metadata:
+      name: '{{app}}'
+    spec:
+      project: platform
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        repoURL: https://github.com/clinician-nexus/Kubernetes
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'

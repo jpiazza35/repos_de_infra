@@ -1,0 +1,47 @@
+fullnameOverride: app-incumbent-api-service-dev
+namespace:
+  name: mpt
+  
+service:
+  port: 8001
+  targetPort: 8001
+  name: app-incumbent-api-service-dev
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-incumbent-api-service-ecr-repo'
+  tag: '48cfecbe11'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+serviceAccountName:
+  create: false
+  name: app-incumbent-api-sa
+  automountServiceAccountToken: true
+
+envvars:
+  - name: "CN_AWSCONFIGURATION__AWSBUCKETNAME"
+    value: "dev-mpt-etl-source-data-472485266432"
+  - name: "CN_USERSERVERURL"
+    value: "https://mpt.dev.cliniciannexus.com:7051"
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+
+##we set limit of memory in the pods to 256Mi
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "256Mi"
+
+environment: dev

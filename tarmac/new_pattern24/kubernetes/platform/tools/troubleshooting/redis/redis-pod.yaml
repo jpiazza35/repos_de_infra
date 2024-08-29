@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-pod
+  namespace: default
+spec:
+  containers:
+  - name: redis-pod
+    image: redis
+    command: ["tail", "-f", "/dev/null"]
+    imagePullPolicy: IfNotPresent
+    resources: {}
+  restartPolicy: Always
+

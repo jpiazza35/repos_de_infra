@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: monitoring
+
+helmCharts:
+- includeCRDs: true
+  name: loki
+  namespace: monitoring
+  releaseName: loki
+  valuesMerge: replace
+  version: 5.38.0
+  repo: https://grafana.github.io/helm-charts
+  valuesFile: values.yml
+
+# resources: 
+# - https://raw.githubusercontent.com/grafana/agent/main/production/operator/crds/monitoring.grafana.com_grafanaagents.yaml
+
+# - https://raw.githubusercontent.com/grafana/agent/main/production/operator/crds/monitoring.grafana.com_podlogs.yaml
+
+patches: 
+  - patch: |-
+      - op: replace
+        path: /spec/relabelings/0/action
+        value: replace
+    target:
+      kind: PodLogs
+      name: loki
+      
+  - patch: |-
+      - op: replace
+        path: /spec/relabelings/5/action
+        value: replace
+    target:
+      kind: PodLogs
+      name: loki

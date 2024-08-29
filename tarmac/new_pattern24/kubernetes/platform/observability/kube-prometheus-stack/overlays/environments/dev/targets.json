@@ -1,0 +1,22 @@
+[
+    {
+      "labels": {
+        "job": "jmx"
+      },
+      "targets": [
+        "b-1.msk.gn9oo1.c21.kafka.us-east-1.amazonaws.com:11001",
+        "b-2.msk.gn9oo1.c21.kafka.us-east-1.amazonaws.com:11001",
+        "b-3.msk.gn9oo1.c21.kafka.us-east-1.amazonaws.com:11001"
+      ]
+    },
+    {
+      "labels": {
+        "job": "node"
+      },
+      "targets": [
+        "b-1.msk.gn9oo1.c21.kafka.us-east-1.amazonaws.com:11002",
+        "b-2.msk.gn9oo1.c21.kafka.us-east-1.amazonaws.com:11002",
+        "b-3.msk.gn9oo1.c21.kafka.us-east-1.amazonaws.com:11002"
+      ]
+    }
+  ]

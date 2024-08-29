@@ -1,0 +1,34 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "S3AllowVPCEndpoint",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "${aws_account_id}"
+            },
+            "Action": "s3:*",
+            "Resource": "${truststore_bucket_arn}/*",
+            "Condition": {
+                "StringLike": {
+                    "aws:sourceVpce": "${s3_vpc_endpoint_id}"
+                },
+                "StringEquals": {
+                    "aws:PrincipalOrgID": "${aws_organization_id}"
+                }
+            }
+        },
+        {
+            "Sid": "DenyInsecureConnections",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": "${truststore_bucket_arn}/*",
+            "Condition": {
+                "Bool": {
+                        "aws:SecureTransport": "false"
+                    }
+                }
+        }
+    ]
+}

@@ -1,0 +1,106 @@
+[
+    {
+      "id": 29,
+      "name": "Base Pay Hourly Rate",
+      "agingFactor": 3,
+      "defaultDataType": null,
+      "orderDataType": 42,
+      "dataTypeKey": 29
+    },
+    {
+      "id": 44,
+      "name": "Pay Range Maximum",
+      "agingFactor": 2,
+      "defaultDataType": null,
+      "orderDataType": 44,
+      "dataTypeKey": 44
+    },
+    {
+      "id": 45,
+      "name": "Pay Range Minimum",
+      "agingFactor": 2,
+      "defaultDataType": null,
+      "orderDataType": 45,
+      "dataTypeKey": 45
+    },
+    {
+      "id": 78,
+      "name": "Pay Range Midpoint",
+      "agingFactor": 2,
+      "defaultDataType": null,
+      "orderDataType": 66,
+      "dataTypeKey": 78
+    },
+    {
+      "id": 79,
+      "name": "Annualized Pay Range Minimum",
+      "agingFactor": 2,
+      "defaultDataType": null,
+      "orderDataType": 67,
+      "dataTypeKey": 79
+    },
+    {
+      "id": 80,
+      "name": "Annualized Pay Range Midpoint",
+      "agingFactor": 2,
+      "defaultDataType": null,
+      "orderDataType": 68,
+      "dataTypeKey": 80
+    },
+    {
+      "id": 81,
+      "name": "Annualized Pay Range Maximum",
+      "agingFactor": 2,
+      "defaultDataType": null,
+      "orderDataType": 69,
+      "dataTypeKey": 81
+    },
+    {
+      "id": 82,
+      "name": "Actual Annual Incentive",
+      "agingFactor": 0,
+      "defaultDataType": null,
+      "orderDataType": 70,
+      "dataTypeKey": 82
+    },
+    {
+      "id": 83,
+      "name": "Annual Incentive Receiving",
+      "agingFactor": 0,
+      "defaultDataType": null,
+      "orderDataType": 71,
+      "dataTypeKey": 83
+    },
+    {
+      "id": 84,
+      "name": "Target Annual Incentive",
+      "agingFactor": 0,
+      "defaultDataType": null,
+      "orderDataType": 72,
+      "dataTypeKey": 84
+    },
+    {
+      "id": 85,
+      "name": "Annual Incentive Threshold Opportunity",
+      "agingFactor": 0,
+      "defaultDataType": null,
+      "orderDataType": 77,
+      "dataTypeKey": 85
+    },
+    {
+      "id": 86,
+      "name": "Threshold Incentive Percent",
+      "agingFactor": 0,
+      "defaultDataType": null,
+      "orderDataType": 78,
+      "dataTypeKey": 86
+    },
+    {
+      "id": 87,
+      "name": "Annual Incentive Maximum Opportunity",
+      "agingFactor": 0,
+      "defaultDataType": null,
+      "orderDataType": 79,
+      "dataTypeKey": 87
+    }
+  ]

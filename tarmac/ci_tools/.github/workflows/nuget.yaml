@@ -1,0 +1,73 @@
+name: Build, publish or unpublish NuGet package
+run-name: ${{ github.actor }} - Manage NuGet package
+
+on:
+  workflow_call:
+    inputs:
+      net-version:
+        required: false
+        description: '.NET version used to build'
+        type: string
+        default: "7"
+      publish:
+        required: false
+        description: 'Set to true to publish the package'
+        type: boolean
+      search:
+        required: false
+        description: 'Set to true to perform NuGet search'
+        type: boolean
+      unpublish:
+        required: false
+        description: 'Set to true to unpublish the package'
+        type: boolean
+      package-name:
+        required: false
+        description: 'Name of the NuGet package'
+        type: string
+      package-version:
+        required: false
+        description: 'Version of the NuGet package'
+        type: string
+
+    secrets:
+      NEXUS_NUGET_TOKEN:
+        required: true
+      NEXUS_USERNAME:
+        required: true
+      NEXUS_PASSWORD:
+        required: true
+
+jobs:
+  nuget-package-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ inputs.net-version }} # Replace with the desired .NET version
+
+      - name: Build package
+        if: inputs.publish == true
+        run: |
+          dotnet restore
+          dotnet pack -c Release
+
+      - name: Upload to Artifactory
+        if: inputs.publish == true
+        run: |
+          dotnet nuget push ./${{ inputs.package-name }}/bin/Release/*.nupkg --source "https://sonatype.cliniciannexus.com/repository/cn_nuget/" --api-key ${{ secrets.NEXUS_NUGET_TOKEN }}
+
+      - name: Search NuGet package
+        if: inputs.search == true
+        run: |
+          curl -X 'GET' -u ${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }} 'https://sonatype.cliniciannexus.com/service/rest/v1/search/assets?repository=cn_nuget'
+
+      - name: Destroy NuGet package
+        if: inputs.unpublish == true
+        run: |
+          dotnet nuget delete ${{ inputs.package-name }} ${{ inputs.package-version }} --source "https://sonatype.cliniciannexus.com/repository/cn_nuget/" --non-interactive --api-key ${{ secrets.NEXUS_NUGET_TOKEN }}

@@ -1,0 +1,68 @@
+base_url: oncall.cliniciannexus.com
+broker:
+  type: redis
+cert-manager:
+  enabled: false
+slack:
+  enabled: false
+  existingSecret: oncall-slack
+  clientIdKey: slack_client_id
+  clientSecretKey: slack_client_secret
+  signingSecretKey: slack_signing_secret
+service:
+  enabled: true
+  type: NodePort
+externalMysql:
+  existingSecret: oncall-database
+  usernameKey: username
+  passwordKey: password
+  host: oncall-mysql.c247fifybbbt.us-east-1.rds.amazonaws.com
+  portKey: port
+  databaseKey: db_name
+mariadb:
+  enabled: false
+rabbitmq:
+  enabled: false
+  auth:
+    existingPasswordSecret: rabbitmq-definition
+grafana:
+  enabled: false
+externalGrafana:
+  url: https://monitoring.cliniciannexus.com
+redis:
+  auth:
+    existingSecret: oncall-redis
+    existingSecretPasswordKey: redis-password
+  metadata:
+    namespace: oncall
+  persistence:
+    enabled: true
+ingress-nginx:
+  enabled: false
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/load-balancer-name: oncall
+    cert-manager.io/cluster-issuer: "letsencrypt"
+    external-dns.alpha.kubernetes.io/hostname: oncall.cliniciannexus.com
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: >-
+      {"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port":
+      "443", "StatusCode": "HTTP_301"}}
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/tags: Environment=sharedservices,Team=devops
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /
+  defaultBackend:
+    service:
+      port:
+        name: http
+  extraPaths:
+  - path: /
+    pathType: Prefix
+    backend:
+      service:
+        name: ssl-redirect
+        port:
+          name: use-annotation

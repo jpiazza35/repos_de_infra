@@ -1,0 +1,929 @@
+defaultRules:
+  create: false
+  rules:
+    kubeScheduler: true
+    etcd: true
+    general: true
+    kubernetesApps: true
+    rubookUrl: true
+    k8s: true
+    kubeApiserver: true
+    kubeApiserverAvailability: true
+    kubeApiserverError: true
+    kubeApiserverSlos: true
+    kubelet: true
+    kubePrometheusGeneral: true
+    kubePrometheusNodeAlerting: true
+    kubePrometheusNodeRecording: true
+    kubernetesAbsent: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: true
+    kubeStateMetrics: true
+    network: true
+    node: true
+    prometheus: true
+    prometheusOperator: true
+    time: true
+
+additionalPrometheusRulesMap:
+  rules:
+    groups:
+    - name: Pod Resource Alerts
+      rules:
+      - alert: High Pod Memory
+        expr: sum(container_memory_usage_bytes) > 60000000000 #60GB
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: High Memory Usage
+          message: "{{ $labels.name }} Memory usage at {{ humanize $value }}%"
+      
+      - alert: High Pod CPU
+        expr: sum(rate(container_cpu_usage_seconds_total[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 60
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: High CPU Usage
+          message: "{{ $labels.name }} CPU usage at {{ humanize $value }}%"
+
+    - name: Host
+      rules:
+      - alert: HostDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: "critical"
+        annotations:
+          summary: "Endpoint {{ $labels.instance }} down"
+          message: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minutes."
+
+      - alert: HostOutOfMemory
+        expr: node_memory_MemAvailable / node_memory_MemTotal * 100 < 25
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Host out of memory (instance {{ $labels.instance }})"
+          message: "Node memory is filling up (< 25% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+      - alert: HostOutOfDiskSpace
+        expr: (node_filesystem_avail{mountpoint="/"}  * 100) / node_filesystem_size{mountpoint="/"} < 50
+        for: 1s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Host out of disk space (instance {{ $labels.instance }})"
+          message: "Disk is almost full (< 50% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+      - alert: HostHighCpuLoad
+        expr: (sum by (instance) (irate(node_cpu{job="node_exporter_metrics",mode="idle"}[5m]))) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Host high CPU load (instance {{ $labels.instance }})"
+          message: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+      - alert: DiskSpaceFree10Percent
+        expr: node_filesystem_free_percent <= 10
+        labels:
+          severity: warning
+        annotations:
+          summary: "Instance [{{ $labels.instance }}] has 10% or less Free disk space"
+          message: "[{{ $labels.instance }}] has only {{ $value }}% or less free."
+    - name: KubeStateMetrics
+      rules:
+      - alert: KubeStateMetricsListErrors
+        annotations:
+          message: kube-state-metrics is experiencing errors at an elevated rate in list operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.
+          summary: kube-state-metrics is experiencing errors in list operations.
+        expr: |
+          (sum(rate(kube_state_metrics_list_total{job="kube-state-metrics",result="error"}[5m]))
+            /
+          sum(rate(kube_state_metrics_list_total{job="kube-state-metrics"}[5m])))
+          > 0.01
+        for: 15m
+        labels:
+          severity: critical
+      - alert: KubeStateMetricsWatchErrors
+        annotations:
+          message: kube-state-metrics is experiencing errors at an elevated rate in watch operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.
+          summary: kube-state-metrics is experiencing errors in watch operations.
+        expr: |
+          (sum(rate(kube_state_metrics_watch_total{job="kube-state-metrics",result="error"}[5m]))
+            /
+          sum(rate(kube_state_metrics_watch_total{job="kube-state-metrics"}[5m])))
+          > 0.01
+        for: 15m
+        labels:
+          severity: critical
+      - alert: KubeStateMetricsShardingMismatch
+        annotations:
+          message: kube-state-metrics pods are running with different --total-shards configuration, some Kubernetes objects may be exposed multiple times or not exposed at all.
+          summary: kube-state-metrics sharding is misconfigured.
+        expr: |
+          stdvar (kube_state_metrics_total_shards{job="kube-state-metrics"}) != 0
+        for: 15m
+        labels:
+          severity: critical
+      - alert: KubeStateMetricsShardsMissing
+        annotations:
+          message: kube-state-metrics shards are missing, some Kubernetes objects are not being exposed.
+          summary: kube-state-metrics shards are missing.
+        expr: |
+          2^max(kube_state_metrics_total_shards{job="kube-state-metrics"}) - 1
+            -
+          sum( 2 ^ max by (shard_ordinal) (kube_state_metrics_shard_ordinal{job="kube-state-metrics"}) )
+          != 0
+        for: 15m
+        labels:
+          severity: critical
+
+    - name: k8s.rules
+      rules:
+      - record: node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate
+        expr: sum(irate(container_cpu_usage_seconds_total[5m])) by (node, namespace, pod, container)
+
+      - record: node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate
+        expr: sum(rate(container_cpu_usage_seconds_total[5m])) by (node, namespace, pod, container)
+
+      - record: node_namespace_pod_container:container_memory_working_set_bytes
+        expr: container_memory_working_set_bytes{node=~"$node", container!=""} * on (cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1, max by(cluster, namespace, pod, node) (kube_pod_info{node!=""}))
+  
+      - record: node_namespace_pod_container:container_memory_rss
+        expr: sum(container_memory_rss) by (node, namespace, pod, container)
+
+      - record: node_namespace_pod_container:container_memory_cache
+        expr: sum(container_memory_cache) by (node, namespace, pod, container)
+
+      - record: node_namespace_pod_container:container_memory_swap
+        expr: sum(container_memory_swap) by (node, namespace, pod, container)
+
+      - record: node_memory_MemAvailable_bytes:sum
+        expr: sum(node_memory_MemAvailable_bytes)
+
+      - record: cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests
+        expr: kube_pod_container_resource_requests{namespace="$namespace", resource="cpu", job="kube-state-metrics"}  * on (pod) group_left() max by (pod) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))
+
+      - record: cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits
+        expr: kube_pod_container_resource_limits{namespace="$namespace", resource="cpu", job="kube-state-metrics"}  * on (pod) group_left() max by (pod) ((kube_pod_status_phase{phase=~"Pending|Running"} == 1))
+
+      - record: namespace_workload_pod:kube_pod_owner:relabel
+        expr: sum(irate(kube_pod_owner[5m])) by (namespace, workload, pod)
+
+alertmanager:
+  enabled: true
+
+  apiVersion: v2
+
+  serviceAccount:
+    create: true
+
+  ingress:
+    enabled: false
+
+  config:
+    global:
+      slack_api_url: /etc/alertmanager/secrets/alertmanager-secrets/slack_api_url
+
+    templates:
+    - '/etc/alertmanager/config/*.tmpl'
+    
+    route:
+      receiver: 'null'
+      group_by: ['alertname', 'priority', 'job']
+      group_wait: 10s
+      group_interval: 5m
+      repeat_interval: 1h
+      routes:
+      - matchers:
+          - alertname =~ "InfoInhibitor|Watchdog"
+        receiver: 'null'
+      - receiver: 'slack-notifications'
+        continue: true
+ 
+    receivers:
+    - name: 'null'
+    - name: 'slack-notifications'
+      slack_configs:
+      - channel: '#monitoring-alerts'
+        icon_url: https://avatars3.githubusercontent.com/u/3380462
+        title: '{{ template "slack.cp.title" . }}'
+        text: '{{ template "slack.cp.text" . }}'
+        color: '{{ template "slack.color" . }}'
+        send_resolved: true
+        actions:
+          - type: button
+            text: 'Runbook :green_book:'
+            url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+          - type: button
+            text: 'Query :mag:'
+            url: '{{ (index .Alerts 0).GeneratorURL }}'
+          - type: button
+            text: 'Dashboard :chart_with_upwards_trend:'
+            url: '{{ (index .Alerts 0).Annotations.dashboard_url }}'
+          - type: button
+            text: 'Silence :no_bell:'
+            url: '{{ template "__alert_silence_link" . }}'
+
+  templateFiles:
+    cp-slack-templates.tmpl: |-
+      {{ define "slack.cp.title" -}}
+        [{{ .Status | toUpper -}}
+        {{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{- end -}}
+        ] {{ template "__alert_severity_prefix_title" . }} {{ .CommonLabels.alertname }}
+      {{- end }}
+
+      {{/* The text to display in the alert */}}
+      {{ define "slack.cp.text" -}}
+        {{ range .Alerts }}
+            *Alert:* {{ .Annotations.message}}
+            *Details:*
+            {{ range .Labels.SortedPairs }} - *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
+      {{- end }}
+
+      {{ define "__alert_silence_link" -}}
+        {{ .ExternalURL }}/#/silences/new?filter=%7B
+        {{- range .CommonLabels.SortedPairs -}}
+          {{- if ne .Name "alertname" -}}
+            {{- .Name }}%3D"{{- .Value -}}"%2C%20
+          {{- end -}}
+        {{- end -}}
+          alertname%3D"{{ .CommonLabels.alertname }}"%7D
+      {{- end }}
+
+      {{ define "__alert_severity_prefix" -}}
+          {{ if ne .Status "firing" -}}
+          :white_check_mark:
+          {{- else if eq .Labels.severity "critical" -}}
+          :fire:
+          {{- else if eq .Labels.severity "warning" -}}
+          :warning:
+          {{- else -}}
+          :question:
+          {{- end }}
+      {{- end }}
+
+      {{ define "__alert_severity_prefix_title" -}}
+          {{ if ne .Status "firing" -}}
+          :white_check_mark:
+          {{- else if eq .CommonLabels.severity "critical" -}}
+          :fire:
+          {{- else if eq .CommonLabels.severity "warning" -}}
+          :warning:
+          {{- else if eq .CommonLabels.severity "info" -}}
+          :information_source:
+          {{- else if eq .CommonLabels.status_icon "information" -}}
+          :information_source:
+          {{- else -}}
+          :question:
+          {{- end }}
+      {{- end }}
+
+      {{ define "slack.color" -}}
+        {{ if eq .Status "firing" -}}
+          {{ if eq .CommonLabels.severity "warning" -}}
+            warning
+          {{- else if eq .CommonLabels.severity "critical" -}}
+            danger
+          {{- else -}}
+            #439FE0
+          {{- end -}}
+        {{ else -}}
+          good
+          {{- end }}
+      {{- end }}
+
+  alertmanagerSpec:
+    forceEnableClusterMode: true
+    logLevel: info
+    image:
+      registry: quay.io
+      repository: prometheus/alertmanager
+      tag: v0.25.0
+    retention: 120h
+
+    securityContext:
+      runAsGroup: 2000
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 2000
+
+    externalUrl: "http://monitoring.cliniciannexus.com/alertmanager/"
+    routePrefix: "/alertmanager"
+
+    secrets:
+      - alertmanager-secrets
+
+grafana:
+  enabled: true
+  defaultDashboardsEnabled: true
+  defaultDashboardsTimezone: est
+  
+  livenessProbe:
+    httpGet:
+      path: /api/health
+      port: 3000
+    initialDelaySeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 10
+  
+  readinessProbe:
+    initialDelaySeconds: 60
+    
+  deploymentStrategy:
+    type: Recreate
+
+  service:
+    portName: http-web
+    port: 3000
+  
+  # extraConfigmapMounts: #[]
+  #   - name: grafana-dashboards
+  #     mountPath: /etc/grafana/custom/dashboards
+  #     configMap: grafana-dashboards
+  #     readOnly: true
+
+  securityContext:
+    fsGroup: 472
+    runAsUser: 472
+    runAsGroup: 472
+
+  persistence:
+    enabled: true
+    type: pvc
+    storageClassName: "gp3" #gp2
+    accessModes:
+    - ReadWriteOnce
+    size: 10Gi
+    finalizers:
+    - kubernetes.io/pvc-protection
+
+  extraSecretMounts:
+
+    - name: oauth
+      secretName: auth-github-secret
+      mountPath: /etc/secrets/auth_github_oauth/
+      readOnly: true
+      projected:
+        defaultMode: 420
+
+    - name: grafana-admin
+      secretName: grafana-password
+      defaultMode: 0440
+      mountPath: /etc/secrets/grafana-admin/
+      projected:
+        defaultMode: 420
+    
+    - name: grafana-agent
+      secretName: primary-credentials-logs
+      defaultMode: 0440
+      mountPath: /etc/secrets/grafana-agent/
+      projected:
+        defaultMode: 420
+
+    - name: influx-creds
+      secretName: influxdb-credentials
+      defaultMode: 0440
+      mountPath: /etc/secrets/influxdb/
+      projected:
+        defaultMode: 420
+    
+    - name: loki-creds
+      secretName: loki-gateway-auth
+      defaultMode: 0440
+      mountPath: /etc/secrets/loki-creds/
+      projected:
+        defaultMode: 420
+
+  deleteDatasources:
+    - name: Loki
+      orgId: 1
+
+  sidecar:
+    image:
+      registry: quay.io
+      repository: kiwigrid/k8s-sidecar
+    alerts:
+      enabled: true
+      label: grafana_alert
+      labelValue: ""
+      searchNamespace: ALL
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: ""
+      searchNamespace: ALL
+      editable: true
+      provider:
+        allowUiUpdates: true
+        options:
+          foldersFromFilesStructure: true
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: true
+      label: grafana_datasource
+      labelValue: "1"
+      isDefaultDatasource: false
+      uid: prometheus
+      alertmanager:
+        enabled: true
+        editable: true
+        uid: alertmanager
+        handleGrafanaManagedAlerts: true
+        implementation: prometheus
+
+  additionalDataSources:
+    # - name: Alertmanager
+    #   type: "alertmanager"
+    #   url: "http://alertmanager-operated.monitoring:9093"
+    #   version: 1
+    #   access: proxy
+    #   isDefault: false
+    #   editable: true
+    #   jsonData:
+    #     implementation: prometheus
+    #     handleGrafanaManagedAlerts: true
+
+    # - name: CloudWatch_local
+    #   type: cloudwatch
+    #   isDefault: false
+    #   access: proxy
+    #   editable: true
+    #   jsonData:
+    #     authType: default
+    #     defaultRegion: us-east-1
+    #     assumeRoleArn: arn:aws:iam::071766652168:role/cluster-prod-ivZ6kO-grafana-role
+
+    # - name: CloudWatch_infra_prod
+    #   type: cloudwatch
+    #   isDefault: false
+    #   access: proxy
+    #   editable: true
+    #   jsonData:
+    #     authType: default
+    #     defaultRegion: us-east-1
+    #     assumeRoleArn: arn:aws:iam::836442743669:role/cluster-prod-ivZ6kO-grafana-role-infra-prod
+
+    - name: sc-influxdb
+      editable: true
+      type: influxdb
+      access: proxy
+      isDefault: false
+      user: admin
+      url: http://sc-influxdb-influxdb2.monitoring:80
+      jsonData:
+        version: Flux
+        organization: sc
+        defaultBucket: monitoring
+        tlsSkipVerify: true
+        dbName: mpt
+      secureJsonData:
+        token: $__file{/etc/secrets/influxdb/admin-token}
+        password: $__file{/etc/secrets/influxdb/admin-password}
+
+    - name: Thanos
+      type: prometheus
+      url: "http://thanos-query.monitoring:9090"
+      isDefault: false
+      access: proxy
+      editable: true
+      version: 1
+      jsonData:
+      tlsSkipVerify: true
+      timeInterval: "5s"
+      uid: thanos
+ 
+    # - name: Tempo
+    #   type: tempo
+    #   access: proxy
+    #   orgId: 1
+    #   url: http://tempo-query-frontend.monitoring:3100
+    #   basicAuth: false
+    #   isDefault: false
+    #   editable: true
+    #   version: 1
+    #   apiVersion: 1
+    #   uid: tempo
+    #   jsonData:
+    #     tracesToLogsV2:
+    #       # Field with an internal link pointing to a logs data source in Grafana.
+    #       # datasourceUid value must match the uid value of the logs data source.
+    #       datasourceUid: loki-gateway
+    #       spanStartTimeShift: '1h'
+    #       spanEndTimeShift: '-1h'
+    #       tags: [{ key: job, value: job}, { key: instance, value: instance}, {key: pod, value: pod }, { key: namespace, value: 'namespace'}]
+    #       filterByTraceID: false
+    #       filterBySpanID: false
+    #       customQuery: true
+    #       query: 'method="${__span.tags.method}"'
+    #     tracesToMetrics:
+    #       datasourceUid: 'prometheus'
+    #       spanStartTimeShift: '1h'
+    #       spanEndTimeShift: '-1h'
+    #       tags: [{ key: 'service.name', value: 'service' }, { key: 'job' }]
+    #       queries:
+    #         - name: 'Sample query'
+    #           query: 'sum(rate(traces_spanmetrics_latency_bucket{$$__tags}[5m]))'
+    #     serviceMap:
+    #       datasourceUid: 'prometheus'
+    #     nodeGraph:
+    #       enabled: true
+    #     search:
+    #       hide: false
+    #     lokiSearch:
+    #       datasourceUid: 'loki-gateway'
+    #     traceQuery:
+    #       timeShiftEnabled: true
+    #       spanStartTimeShift: '1h'
+    #       spanEndTimeShift: '-1h'
+    #     spanBar:
+    #       type: 'Tag'
+    #       tag: 'http.path'
+    #     oauthPassThru: true
+  
+    - name: Loki-Gateway
+      type: loki
+      uid: loki-gateway
+      access: proxy
+      isDefault: false
+      editable: true
+      url: http://loki-gateway.monitoring
+      basicAuth: true
+      basicAuthUser: loki-gateway
+      jsonData:
+        maxLine: 1000
+        httpHeaderName1: X-Scope-OrgID
+        withCredentials: true
+        derivedFields:
+          - datasourceUid: tempo
+            matcherRegex: "traceID=(\\w+)"
+            name: TraceID
+            url: "$${__value.raw}"
+      secureJsonData:
+        httpHeaderValue1: 'self-monitoring'
+        basicAuthPassword: $__file{/etc/secrets/loki-creds/loki-gateway}
+
+    # - name: prometheus
+    #   access: proxy
+    #   isDefault: false
+    #   basicAuth: false
+    #   # basicAuthPassword: pass
+    #   # basicAuthUser: daco
+    #   editable: true
+    #   jsonData:
+    #     httpMethod: POST
+    #     manageAlerts: true
+    #     prometheusType: Prometheus
+    #     cacheLevel: 'High'
+    #     disableRecordingRules: false
+    #     incrementalQueryOverlapWindow: 10m
+    #     exemplarTraceIdDestinations:
+    #       # Field with internal link pointing to data source in Grafana.
+    #       # datasourceUid value can be anything, but it should be unique across all defined data source uids.
+    #       - datasourceUid: d_eks_traces
+    #         name: traceID
+    #     tlsSkipVerify: true
+    #   orgId: 1
+    #   type: prometheus
+    #   url: https://prometheus-kube-prometheus-prometheus.monitoring:9090
+    #   version: 1
+
+  # grafana.ini:
+  #   check_for_updates: false
+  #   reporting_enabled: false
+  #   analytics:
+  #     check_for_updates: true
+  #     reporting_enabled: true
+  #   aws:
+  #     assume_role_enabled: true
+  #   server:
+  #     # enforce_domain: true
+  #     root_url: "https://monitoring.dev.cliniciannexus.com"
+  #   security:
+  #     disable_gravatar: true
+  #     admin_email: devops@clinciannexus.com
+  #   dashboards:
+  #     min_refresh_interval: 60s
+  #   auth.github:
+  #     enabled: true
+  #     allow_sign_up: true
+  #     auto_login: false
+  #     client_id: $__file{/etc/secrets/auth_github_oauth/clientId}
+  #     client_secret: $__file{/etc/secrets/auth_github_oauth/clientSecret}
+  #     scopes: user:email,read:org
+  #     auth_url: https://github.com/login/oauth/authorize
+  #     token_url: https://github.com/login/oauth/access_token
+  #     api_url: https://api.github.com/user
+  #     team_ids: 7138394,7156544,7156987,7157037
+  #     allowed_organizations: clinician-nexus
+  #     role_attribute_path: contains(groups[*], '@clinician-nexus/devops') && 'Admin' || 'Viewer'
+  #     allow_assign_grafana_admin: true
+  #     skip_org_role_sync: false
+  #   log:
+  #     mode: console file
+  #     level: info
+  #   # log.syslog:
+  #   #   tag: d-eks
+  #   log.frontend:
+  #     enabled: true
+  #     # custom_endpoint: /faro
+  #     instrumentations_errors_enabled: true
+  #     instrumentations_console_enabled: true
+  #     instrumentations_webvitals_enabled: true
+  #     api_key: $__file{/etc/secrets/grafana-agent/apiKey}
+  #   metrics:
+  #    wal_directory: /tmp/wal
+  #    global: {}
+  #    configs:
+  #     - name: default
+  #       remote_write:
+  #        - url: https://monitoring.dev.cliniciannexus.com/api/prom/push
+  #          github_auth: true
+  #          github_client_id: $__file{/etc/secrets/auth_github_oauth/clientId}
+  #          github_client_secret: $__file{/etc/secrets/auth_github_oauth/clientSecret}
+  #          github_scopes: user:email,read:org
+  #   logs:
+  #     positions_directory: /tmp/loki-pos
+  #     configs:
+  #       - name: default
+  #         scrape_configs: []
+  #         clients:
+  #           - url: https://$__file{/etc/secrets/grafana-admin/username}:$__file{/etc/secrets/grafana-admin/password}@monitoring.dev.cliniciannexus.com/loki/api/v1/push
+  #   traces:
+  #     configs:
+  #       - name: default
+  #         remote_write:
+  #           - endpoint: tempo-query-frontend:3100
+  #             github_auth: true
+  #             github_client_id: $__file{/etc/secrets/auth_github_oauth/clientId}
+  #             github_client_secret: $__file{/etc/secrets/auth_github_oauth/clientSecret}
+  #         receivers:
+  #           otlp:
+  #             protocols:
+  #               grpc:
+  #               http:
+  #                 # cors:
+  #                 #   allowed_origins:
+  #                 #     - http://localhost:1234
+  #                 #   max_age: 7200
+  #   tracing.opentelemetry:
+  #     sampler_type: remote
+  #     sampler_param: 0.1
+  #     sampling_server_url: https://opentelemetry-collector:4317
+  #   tracing.opentelemetry.jaeger:
+  #     address: https://jaeger-collector:14268/api/traces
+  #     propagation: jaeger,w3c
+  #   tracing.opentelemetry.otlp:
+  #     address: https://opentelemetry-collector:4317
+  #     propagation: jaeger,w3c
+  #   plugins:
+  #     allow_loading_unsigned_plugins: camptocamp-prometheus-alertmanager-datasource,grafana-oncall-app
+  #   integrations:
+  #     app_agent_receiver_configs:
+  #       - autoscrape:
+  #           enable: true
+  #           metrics_instance: 'default'
+  #         instance: 'frontend'
+  #         logs_instance: 'default'
+  #         traces_instance: 'default'
+  #         server:
+  #           host: 0.0.0.0
+  #           port: 12345
+  #           api_key: 'secret' # optional, if set, client will be required to provide it via x-api-key header
+  #           cors_allowed_origins:
+  #             - 'https://mpt.dev.cliniciannexus.com'
+  #             - 'https://mpt.qa.cliniciannexus.com'
+  #             - 'https://mpt.cliniciannexus.com'
+  #             - 'https://monitoring.cliniciannexus.com'
+  #             - 'https://monitoring.dev.cliniciannexus.com'
+  #         logs_labels: # labels to add to loki log record
+  #           app: frontend # static value
+  #           kind: # value will be taken from log items. exception, log, measurement, etc
+  #         logs_send_timeout: 5000
+  #         sourcemaps:
+  #           download: true # will download source file, extract source map location,
+  #           # download source map and use it to transform stack trace locations
+
+prometheusOperator:
+  enabled: true
+  namespaces: {}
+  resources:
+  limits:
+    cpu: 200m
+    memory: 200Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  patch:
+    enabled: true
+    image:
+      registry: registry.k8s.io
+      repository: ingress-nginx/kube-webhook-certgen
+      tag: controller-v1.6.4
+      sha: ""
+      pullPolicy: IfNotPresent
+      securityContext:
+        runAsGroup: 2000
+        runAsNonRoot: true
+        runAsUser: 2000
+      certManager:
+        enabled: true
+  admissionWebhooks:
+    patch:
+      podAnnotations:
+        sidecar.istio.io/inject: "false"
+
+prometheus:
+  enabled: true
+
+  ingress:
+    enabled: false
+      
+  thanosService:
+    enabled: true
+    annotations: {}
+    labels: {}
+    externalTrafficPolicy: Cluster
+    type: ClusterIP
+
+  prometheusSpec:
+    configMaps:
+      - broker-msk-targets
+
+    additionalScrapeConfigs:
+      - job_name: kafka
+        file_sd_configs:
+          - files:
+            - /etc/prometheus/configmaps/broker-msk-targets/targets.json
+        honor_labels: true
+      - job_name: 'prometheus'
+        static_configs:
+          - targets:
+            - prometheus-kube-prometheus-operator:443
+            - prometheus-kube-prometheus-prometheus:9090
+
+        scheme: https  # to use https instead of http for scraping
+
+        tls_config:
+          insecure_skip_verify: true
+
+    serviceMonitorSelector: {}
+    enableRemoteWriteReceiver: true
+    externalLabels:
+      environment: prod
+    
+    ruleSelectorNilUsesHelmValues: true
+    
+    ## Additional alert rules to be inserted into the Prometheus configuration.
+    ruleSelector:
+      matchLabels:
+        prometheus: custom-rules
+    
+    ## Select rules in all namespaces based on the following labels
+    ruleNamespaceSelector:
+      matchLabels:
+        prometheus: custom-rules
+
+    remoteWriteDashboards: true
+
+    remoteWrite:
+    - url: http://prometheus-kube-prometheus-prometheus:9090/api/prom/push
+      basicAuth:
+        password:
+          key: password
+          name: grafana-password
+        username: 
+          key: username
+          name: grafana-password
+      ## headers:
+        ## X-Scope-OrgID: internal-prometheus
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: "gp3" #gp2
+          accessModes: 
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+
+    # thanos:
+    #   baseImage: quay.io/thanos/thanos
+    #   objectStorageConfig:
+    #     key: thanos.yaml
+    #     name: thanos-objstore-config 
+    #   query:
+    #     enabled: false
+
+    externalUrl: "http://monitoring.cliniciannexus.com/prometheus/"
+    routePrefix: "/prometheus"
+
+  env:
+    GF_ANALYTICS_REPORTING_ENABLED: "false"
+    GF_AUTH_DISABLE_LOGIN_FORM: "true"
+    GF_USERS_ALLOW_SIGN_UP: "false"
+    GF_INSTALL_PLUGINS: "camptocamp-prometheus-alertmanager-datasource, grafana-oncall-app"
+    GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: "camptocamp-prometheus-alertmanager-datasource, grafana-oncall-app"
+    GF_USERS_AUTO_ASSIGN_ORG_ROLE: "Viewer"
+    GF_USERS_VIEWERS_CAN_EDIT: "true"
+    GF_SMTP_ENABLED: "false"
+    GF_FEATURE_TOGGLES_ENABLE: "ngalert"
+
+
+# ## Configuration for thanosRuler
+# ## ref: https://thanos.io/tip/components/rule.md/
+# ##
+# thanosRuler:
+#   enabled: false
+#   objectStorageConfig:
+#     key: thanos.yaml
+#     name: thanos-objstore-config 
+
+#   ## Annotations for ThanosRuler
+#   ##
+#   annotations: {}
+#   serviceAccount:
+#     create: true
+
+#   service:
+#     annotations: {}
+#     labels: {}
+#     clusterIP: ""
+#     port: 10902
+#     targetPort: 10902
+#     externalTrafficPolicy: Cluster
+#     type: ClusterIP
+
+#   serviceMonitor:
+#     selfMonitor: true
+#     sampleLimit: 0
+#     targetLimit: 0
+#     labelLimit: 0
+#     labelNameLengthLimit: 0
+#     labelValueLengthLimit: 0
+#     proxyUrl: ""
+
+#   thanosRulerSpec:
+#     image:
+#       registry: quay.io
+#       repository: thanos/thanos
+#       sha: ""
+#     ruleSelectorNilUsesHelmValues: true
+#     logFormat: logfmt
+#     logLevel: info
+#     replicas: 1
+#     retention: 24h
+
+#     externalPrefix:
+#     routePrefix: /
+#     paused: false
+#     podAntiAffinityTopologyKey: kubernetes.io/hostname
+#     securityContext:
+#       runAsGroup: 2000
+#       runAsNonRoot: true
+#       runAsUser: 1000
+#       fsGroup: 2000
+#     listenLocal: false
+#     portName: "web"
+
+cleanPrometheusOperatorObjectNames: false
+
+kubeScheduler:
+  enabled: true
+  service:
+    enabled: true
+    selector:
+      component: kube-scheduler
+
+kubeEtcd:
+  enabled: true
+  service:
+    enabled: true
+    port: 2381
+    targetPort: 2381
+    selector:
+      component: etcd
+
+kubeControllerManager:
+  enabled: true
+  service:
+    selector:
+      component: kube-controller-manager
+  insecureSkipVerify: null
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+  podMonitor:
+    enabled: true
+
+nodeExporter:
+  enabled: true

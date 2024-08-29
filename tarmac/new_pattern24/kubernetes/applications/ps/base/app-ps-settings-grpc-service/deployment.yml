@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: app-settings-grpc-service
+    app.kubernetes.io/name: app-ps-settings-grpc-service
+  name: app-ps-settings-grpc-service
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-settings-grpc-service
+      app.kubernetes.io/name: app-ps-settings-grpc-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: app-settings-grpc-service
+        app.kubernetes.io/name: app-ps-settings-grpc-service
+    spec:
+      containers:
+      - env:
+        - name: SETTINGS_SERVER_URL
+          value: :50053
+        - name: CONNECTION_STRING_SETTINGS_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-connection-string-settings-database
+              name: ps-external-secret
+        image: app-ps-settings-grpc-service
+        imagePullPolicy: Always
+        name: app-ps-settings-grpc-service
+        ports:
+        - containerPort: 50053
+          name: grpc
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,112 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowViewAccountInfo",
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListVirtualMFADevices",
+                "iam:GetAccountSummary",
+                "iam:GetAccountPasswordPolicy"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "AllowManageOwnPasswords",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetUser",
+                "iam:ChangePassword"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:user/$${aws:username}"
+        },
+        {
+            "Sid": "AllowManageOwnAccessKeys",
+            "Effect": "Allow",
+            "Action": [
+                "iam:UpdateAccessKey",
+                "iam:ListAccessKeys",
+                "iam:DeleteAccessKey",
+                "iam:CreateAccessKey"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:user/$${aws:username}"
+        },
+        {
+            "Sid": "AllowManageOwnSigningCertificates",
+            "Effect": "Allow",
+            "Action": [
+                "iam:UploadSigningCertificate",
+                "iam:UpdateSigningCertificate",
+                "iam:ListSigningCertificates",
+                "iam:DeleteSigningCertificate"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:user/$${aws:username}"
+        },
+        {
+            "Sid": "AllowManageOwnSSHPublicKeys",
+            "Effect": "Allow",
+            "Action": [
+                "iam:UploadSSHPublicKey",
+                "iam:UpdateSSHPublicKey",
+                "iam:ListSSHPublicKeys",
+                "iam:GetSSHPublicKey",
+                "iam:DeleteSSHPublicKey"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:user/$${aws:username}"
+        },
+        {
+            "Sid": "AllowManageOwnGitCredentials",
+            "Effect": "Allow",
+            "Action": [
+                "iam:UpdateServiceSpecificCredential",
+                "iam:ResetServiceSpecificCredential",
+                "iam:ListServiceSpecificCredentials",
+                "iam:DeleteServiceSpecificCredential",
+                "iam:CreateServiceSpecificCredential"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:user/$${aws:username}"
+        },
+        {
+            "Sid": "AllowManageOwnVirtualMFADevice",
+            "Effect": "Allow",
+            "Action": [
+                "iam:DeleteVirtualMFADevice",
+                "iam:CreateVirtualMFADevice"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:mfa/$${aws:username}"
+        },
+        {
+            "Sid": "AllowManageOwnUserMFA",
+            "Effect": "Allow",
+            "Action": [
+                "iam:ResyncMFADevice",
+                "iam:ListMFADevices",
+                "iam:EnableMFADevice",
+                "iam:DeactivateMFADevice"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:user/$${aws:username}"
+        },
+        {
+            "Sid": "DenyAllExceptListedIfNoMFA",
+            "Effect": "Deny",
+            "NotAction": [
+                "sts:GetSessionToken",
+                "iam:ResyncMFADevice",
+                "iam:ListVirtualMFADevices",
+                "iam:ListMFADevices",
+                "iam:GetUser",
+                "iam:EnableMFADevice",
+                "iam:CreateVirtualMFADevice",
+                "iam:ChangePassword"
+            ],
+            "Resource": "arn:aws:iam::${current_account}:user/$${aws:username}",
+            "Condition": {
+                "Bool": {
+                    "aws:MultiFactorAuthPresent": [
+                        "false"
+                    ]
+                }
+            }
+        }
+    ]
+}

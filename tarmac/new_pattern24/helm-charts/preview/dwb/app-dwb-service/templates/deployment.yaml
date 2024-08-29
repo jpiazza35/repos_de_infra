@@ -1,0 +1,133 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ include "app-dwb-service.fullname" . }}'
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "app-dwb-service.labels" . | nindent 4 }}
+    environment: {{ .Values.environment }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "app-dwb-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app-dwb-service.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: dwb
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            {{- range .Values.envvars }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+
+            - name: AUTH0_CLIENTID
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-auth0-clientid
+                  name: dwb-external-secret-preview
+
+            - name: AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-auth0-audience
+                  name: dwb-external-secret-preview
+
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-auth0-domain
+                  name: dwb-external-secret-preview
+
+            - name: LAUNCH_DARKLY_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-launch-darkly-key
+                  name: dwb-external-secret-preview
+
+            - name: AWS_S3BUCKET
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-aws-s3bucket
+                  name: dwb-external-secret-preview
+
+            - name: DATABRICKS_DOWNLOAD_JOBID
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-databricks-download-jobid
+                  name: dwb-external-secret-preview
+
+            - name: DATABRICKS_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-databricks-host
+                  name: dwb-external-secret-preview
+
+            - name: DATABRICKS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-databricks-token
+                  name: dwb-external-secret-preview
+
+            - name: DOMAINORIENTEDCONNECTIONSTRING
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-domainorientedconnectionstring
+                  name: dwb-external-secret-preview
+                  
+            - name: DATABRICKS_AUDITBOOKS_REPLICATE_JOBID
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-databricks-auditbooks-replicate-jobid
+                  name: dwb-external-secret-preview
+
+            - name: KAFKA_BROKER
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-kafka-broker
+                  name: dwb-external-secret-preview
+
+            - name: MSK_ARN_ROLE
+              valueFrom:
+                secretKeyRef:
+                  key: dwb-msk-arn-role
+                  name: dwb-external-secret-preview
+                   
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

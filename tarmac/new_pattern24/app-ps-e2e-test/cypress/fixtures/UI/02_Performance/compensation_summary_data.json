@@ -1,0 +1,25 @@
+{
+    "mockData": {
+        "compSummaryLabel": {
+            "cardname": "Compensation Summary",
+            "projectedWorkRVUCompensation": "Projected Work RVU Compensation",
+            "estimatedValueBasedIncentive": "Estimated Value Based Incentive",
+            "teaching": "Teaching",
+            "totalProjectedCompensation": "Total Projected Compensation",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    },
+    "realData": {
+        "compSummaryLabel": {
+            "FY2023Button": "FY2023",
+            "cardname": "Compensation Summary",
+            "baseSalary": "Base Salary",
+            "wRVUCompensation": "wRVU Compensation",
+            "estimatedValueBasedIncentive": "Estimated Value Based Incentive",
+            "appSupervisorComp": "APP Supervisor Comp",
+            "otherComp": "Other Comp",
+            "totalProjectedCompensation": "Total Projected Compensation",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    }
+}

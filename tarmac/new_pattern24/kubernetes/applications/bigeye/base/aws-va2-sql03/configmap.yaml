@@ -1,0 +1,164 @@
+# https://docs.bigeye.com/docs/agent-connection
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-va2-sql03-bigeye-agent-config
+data:
+  agent.yaml: |
+    # Company Information
+    companyUuid: ${COMPANY_UUID}
+
+    # Data Sources
+    sources:
+      - identifier: 'APIServices_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: APIServices_PROD
+      - identifier: 'APP_Pref_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: APP_Pref_PROD
+      - identifier: 'Benchmark_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: Benchmark_PROD
+      - identifier: 'Client_Portal_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: Client_Portal_PROD
+      - identifier: 'CPT_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: CPT_PROD
+      - identifier: 'DAB_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: DAB_PROD
+      - identifier: 'Data_Clearing_House_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: Data_Clearing_House_PROD
+      - identifier: 'EDW_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: EDW_PROD
+      - identifier: 'Insights360_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: Insights360_PROD
+      - identifier: 'Market_Pricing_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: Market_Pricing_PROD
+      - identifier: 'Pay_Practices_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: Pay_Practices_PROD
+      - identifier: 'PNA_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PNA_PROD
+      - identifier: 'PracticeDB_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PracticeDB_PROD
+      - identifier: 'PracticeDB_Reporting_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: PracticeDB_Reporting_PROD
+      - identifier: 'Survey_Audit_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: Survey_Audit_PROD
+      - identifier: 'WorkForce_Analytics_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: WorkForce_Analytics_PROD
+      - identifier: 'WorkForce_Metrics_PROD'
+        connectionFactory:
+          type: ${DB_TYPE}
+          host: ${DB_HOST}
+          port: ${DB_PORT}
+          user: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: WorkForce_Metrics_PROD
+
+    # Workflow Configuration
+    workflowUrl: app-workflows.bigeye.com
+
+    # Mutual TLS Configuration
+    mutualTlsEnabled: true
+    mtlsCertLocation: /app/config/mtls.pem
+    mtlsKeyLocation: /app/config/mtls.key
+
+    # Encryption Keys
+    publicEncryptionKeyDir: /app/config
+    privateEncryptionKeyPath: /app/config/private.pem
+
+    # Logging Options
+    logQueries: false  # Not recommended for production
+    healthLoggerEnabled: true

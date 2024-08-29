@@ -1,0 +1,25 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.enable": true,
+  "eslint.runtime": "",
+  "eslint.options": {
+    "extensions": [".js", ".jsx", ".svelte"]
+  },
+  "eslint.probe": [
+    "javascript",
+    "html",
+  ],
+  "eslint.validate": [
+    "javascript",
+    "svelte"
+  ],
+  "editor.inlineSuggest.enabled": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+}

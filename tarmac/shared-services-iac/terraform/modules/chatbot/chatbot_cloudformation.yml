@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: AWS Chatbot Configuration
+Parameters:
+  configurationName:
+    Type: String
+    Description: The name of the configuration.
+  roleArn:
+    Type: String
+  logLevel:
+    Type: String
+  slackChannelId:
+    Type: String
+  slackWorkspaceId:
+    Type: String
+  snsTopicArn:
+    Type: CommaDelimitedList
+  guardrailPolicies:
+    Type: CommaDelimitedList
+
+Resources:
+  SlackChannelConfiguration:
+    Type: AWS::Chatbot::SlackChannelConfiguration
+    Properties:
+      ConfigurationName: !Ref configurationName
+      GuardrailPolicies: !Ref guardrailPolicies
+      IamRoleArn: !Ref roleArn
+      LoggingLevel: !Ref logLevel
+      SlackChannelId: !Ref slackChannelId
+      SlackWorkspaceId: !Ref slackWorkspaceId
+      SnsTopicArns: !Ref snsTopicArn

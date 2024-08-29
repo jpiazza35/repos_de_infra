@@ -1,0 +1,12 @@
+{
+  "tab1": {
+		"name": "Demo Tab 1",
+		"header": "Header description of tab 1",
+		"subHeader": "Sub Header of tab 1"
+	},
+	"tab2": {
+		"name": "Demo Tab 2",
+		"header": "Header description of tab 2",
+		"subHeader": "Sub Header of tab 2"
+	}
+}

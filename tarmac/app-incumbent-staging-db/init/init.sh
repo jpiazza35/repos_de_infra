@@ -1,0 +1,1 @@
+pg_restore -U postgres -d Incumbent_Staging_DB /seed/Incumbent_Staging_DB.tar

@@ -1,0 +1,67 @@
+{
+    "ZoneDefinition": {
+        "Name": "dev1.sullivancotter.com",
+        "Parent": "sullivancotter.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "dev1.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "dev1.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "q18bb5jx725zh7skws5kmr7d1jr36mvb"
+                }
+            ]
+        },
+        {
+            "Name": "*.dev1.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "_4ce84d92b06dfa2da5af92e5dcfc0bff.dev1.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_8e67053b64a9872efafccb7a7daed213.jfrzftwwjs.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "tab.dev1.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-tab-dev01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "obi.dev1.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.internal-aws-va2-alb02-private-1148750107.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        }
+    ]
+}

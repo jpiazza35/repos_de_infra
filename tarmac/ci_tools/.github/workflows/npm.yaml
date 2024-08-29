@@ -1,0 +1,72 @@
+name: Build, publish or unpublish NPM package
+run-name: ${{ github.actor }} - Manage NPM package
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        description: 'Node version used to build'
+        type: string
+        default: "18"
+      publish:
+        required: false
+        description: 'Set to true to publish the package'
+        type: boolean
+      search:
+        required: false
+        description: 'Set to true to perform npm search'
+        type: boolean
+      unpublish:
+        required: false
+        description: 'Set to true to unpublish the package'
+        type: boolean
+      package-name:
+        required: false
+        description: 'Name of the NPM package'
+        type: string
+      package-version:
+        required: false
+        description: 'Version of the NPM package'
+        type: string
+    secrets:
+      NEXUS_TOKEN:
+        required: true
+
+jobs:
+  npm-package-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Build package
+        if:  inputs.publish == true
+        run: |
+          npm install
+          npm ci
+          npm pack
+
+      - name: Upload to Artifactory
+        if:  inputs.publish == true
+        run: |
+          npm config set //sonatype.cliniciannexus.com/repository/cn_npm/:_auth="${{ secrets.NEXUS_TOKEN }}"
+          npm publish --registry="https://sonatype.cliniciannexus.com/repository/cn_npm/"
+
+      - name: Search NPM package
+        if:  inputs.search == true
+        run: |
+          npm config set //sonatype.cliniciannexus.com/repository/cn_npm/:_auth="${{ secrets.NEXUS_TOKEN }}"
+          npm search ${{  inputs.package-name }} --registry="https://sonatype.cliniciannexus.com/repository/cn_npm/"
+
+      - name: Destroy NPM package
+        if:  inputs.unpublish == true
+        run: |
+          npm config set //sonatype.cliniciannexus.com/repository/cn_npm/:_auth="${{ secrets.NEXUS_TOKEN }}"
+          npm unpublish ${{  inputs.package-name }}@${{  inputs.package-version }} --force --registry="https://sonatype.cliniciannexus.com/repository/cn_npm/"

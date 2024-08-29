@@ -1,0 +1,196 @@
+# Default values for jaeger.
+# This is a YAML-formatted file.
+# Jaeger values are grouped by component. Cassandra values override subchart values
+
+provisionDataStore:
+  cassandra: false
+  elasticsearch: false
+  kafka: false
+
+networkPolicy:
+  enabled: false
+storage:
+  # allowed values (cassandra, elasticsearch)
+  type: elasticsearch
+  elasticsearch:
+    host: elastic-cluster-es-internal-http.monitoring
+    port: 9200
+    username: elastic
+    existingSecret: elastic-cluster-es-elastic-user
+    existingSecretKey: elastic
+    index-prefix: jaeger-es
+    nodesWanOnly: true
+    cmdlineParams:
+      #{}
+      es.version: 7
+      es.create-index-templates: "false"
+      es.index-rollover-frequency-services: day
+      es.index-rollover-frequency-spans: day
+      es.use-ilm: "true"
+      es.use-aliases: "true"
+      es.tls.enabled: "true"
+      es.tls.skip-host-verify: "true"
+      es.tls.cert: /es-tls/tls.crt
+      es.tls.key: /es-tls/tls.key
+      es.tls.ca: /es-tls/ca.crt
+    tls:
+      enabled: true
+      secretName: elastic-cluster-es-http-certs-internal
+      # # The mount properties of the secret
+      mountPath: /es-tls
+      subPath: 
+      # How ES_TLS_CA variable will be set in the various components
+      ca: /es-tls/ca.crt
+
+agent:
+  daemonset:
+    useHostPort: false
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+  useHostNetwork: false
+  serviceMonitor:
+    enabled: true
+    additionalLabels: #{}
+      prometheus-monitor: "true"
+      app: jaeger
+
+collector:
+  cmdlineParams: #{}
+    es.use-aliases: "true"
+    es.use-ilm: "true"
+  replicaCount: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    behavior: {}
+  serviceMonitor:
+    enabled: true
+    additionalLabels: #{}
+      prometheus-monitor: "true"
+      app: jaeger
+  samplingConfig: |-
+    {
+      "default_strategy": {
+        "type": "probabilistic",
+        "param": 1
+      }
+    }
+
+query:
+  oAuthSidecar:
+    enabled: false
+    args:
+      - --config
+      - /etc/oauth2-proxy/oauth2-proxy.cfg
+      - --client-secret
+      - "$(client-secret)"
+    extraEnv:
+      - name: METRICS_STORAGE_TYPE
+        value: prometheus
+      - name: PROMETHEUS_SERVER_URL
+        value: http://prometheus-operated.monitoring:9090/
+    extraConfigmapMounts: []
+    extraSecretMounts: []
+    config: |-
+      ## https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider#github-auth-provider
+      provider = "github"
+      scope = "user:email read:org"
+      github_org = "clinician-nexus"
+      github_team = "devops,app-devs"
+      email_domains = ["*"]
+      client_id = "19e4bd5a373d20b3f0ed"
+      cookie_secure = "true"
+      cookie_domains = [ ".cliniciannexus.com" ] 
+      ## export cookie_secret=$(dd if=/dev/urandom bs=32 count=1 2>/dev/null | base64 | tr -d -- '\n' | tr -- '+/' '-_'; echo)
+      cookie_secret = "mCxVE0IPOU5jcSCAwn3KNY00Revk-JpQmFizc9icHy4="
+      # provider=azure
+      # client-id= #application ID
+      # client-secret= #ClientSecret
+      # azure-tenant={tenant-id}
+      # oidc-issuer-url=https://login.microsoftonline.com/{tenant-id}/v2.0
+  agentSidecar:
+    enabled: true
+  service:
+    type: NodePort
+  serviceMonitor:
+    enabled: true
+    additionalLabels: #{}
+      prometheus-monitor: "true"
+      app: jaeger
+  config: |-
+    {
+      "dependencies": {
+        "dagMaxNumServices": 200,
+        "menuEnabled": true
+      },
+      "archiveEnabled": true,
+      "tracking": {
+        "gaID": "UA-000000-2",
+        "trackErrors": true
+      },
+      "search": {
+        "maxLookback": {
+          "label": "2 Days",
+          "value": "2d"
+        }
+      },
+      "menu": [{
+        "label": "About Jaeger",
+        "items": [{
+          "label": "Documentation",
+          "url": "https://www.jaegertracing.io/docs/latest"
+        }]
+      }]
+    }
+ 
+esIndexCleaner:
+  enabled: true
+  extraEnv:
+    #[]
+    - name: ROLLOVER
+      value: 'true'
+  schedule: "55 23 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  numberOfDays: 7
+  ttlSecondsAfterFinished: 120
+
+esRollover:
+  enabled: false
+  extraEnv:
+    - name: CONDITIONS
+      value: '{"max_age": "2d"}'
+  schedule: "10 0 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  ttlSecondsAfterFinished: 120
+  
+esLookback:
+  enabled: true
+  extraEnv:
+    - name: UNIT
+      value: days
+    - name: UNIT_COUNT
+      value: "7"
+  schedule: "5 0 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+
+hotrod:
+  enabled: false
+  args:
+    - all
+  # add extra arguments to the hotrod application to customize tracing
+  extraArgs: #[]
+    - --otel-exporter=otlp
+    - --jaeger-ui=http://jaeger-query.monitoring
+  # add extra environment variables to the hotrod application
+  extraEnv: #[]
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://opentelemetry-collector.monitoring:4318
+
+# Array with extra yaml objects to install alongside the chart. Values are evaluated as a template.
+extraObjects: []

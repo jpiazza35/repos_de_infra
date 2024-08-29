@@ -1,0 +1,34 @@
+---
+# expose via ingress to receive github webhook in cluster
+## Add webhook to org, add hostname to "Payload URL" in github webhook
+## Set "Content type" to application/json.
+## Then click on "let me select individual events" and choose Workflow Jobs.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: actions-runner-controller-github-webhook-server
+  annotations:
+    alb.ingress.kubernetes.io/group.name: "sharedservices"
+    # external-dns.alpha.kubernetes.io/hostname: arc.cliniciannexus.com
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:163032254965:certificate/863c9613-eb68-4dbb-aa75-63de7af504b8
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/load-balancer-name: arc-webhook-listener
+    # alb.ingress.kubernetes.io/inbound-cidrs: ''
+    alb.ingress.kubernetes.io/ip-address-type: ipv4
+spec:
+  ingressClassName: alb
+  tls:
+  - hosts:
+    - arc.cliniciannexus.com
+    secretName: arc-github-webhook-tls
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: actions-runner-controller-github-webhook-server
+                port:
+                  number: 80

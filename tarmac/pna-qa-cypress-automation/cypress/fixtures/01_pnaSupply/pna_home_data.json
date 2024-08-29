@@ -1,0 +1,19 @@
+{
+    "navigationBar": [
+       "Home",
+       "PNA Supply",
+       "PNA Reporting ",
+       "Admin ",
+       "My Profile "
+    ],
+
+    "homePageApps": [
+        "Master Roster Edit",
+        "PNA Reporting"
+    ]
+
+
+
+
+
+}

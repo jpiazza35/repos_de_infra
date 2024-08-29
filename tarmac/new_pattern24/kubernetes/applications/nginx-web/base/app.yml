@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-web
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: argotest=163032254965.dkr.ecr.us-east-1.amazonaws.com/argo-test:*
+    #<alias>=<image-name>:<image-tag>
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: argo-image-updater
+    argocd-image-updater.argoproj.io/write-back-target: kustomization
+    argocd-image-updater.argoproj.io/argotest.force-update: "true"
+    # argocd-image-updater.argoproj.io/argotest.update-strategy: digest #semver
+    # argocd-image-updater.argoproj.io/<alias>.helm.image-name: <chart-name>.image.name
+    # argocd-image-updater.argoproj.io/<alias>.helm.image-tag: <chart-name>.image.tag #<chat-name>.image.shasum ##To be used for digest
+    argocd-image-updater.argoproj.io/argotest.kustomize.image-name: argo-test
+    # argocd-image-updater.argoproj.io/argotest.pull-secret: ext:/scripts/ecr-login.sh
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/kubernetes
+    targetRevision: argo-image-updater
+    path: applications/nginx-web/base
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true 
+      prune: true

@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+resources:
+- ../../../base
+
+configMapGenerator:
+  - name: argocd-image-updater-config
+    behavior: merge
+    files:
+      - registries.conf
+
+patches:
+  - patch: |
+      - op: add
+        path: /metadata/annotations/eks.amazonaws.com~1role-arn
+        value: arn:aws:iam::063890802877:role/eks-node-group-cluster-qa
+    target:
+      kind: ServiceAccount
+      name: argocd-image-updater
+      namespace: argocd
+  - patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: AWS_ECR_ACCOUNT_ID
+          value: "063890802877"
+    target:
+     kind: Deployment
+     name: argocd-image-updater
+     namespace: argocd

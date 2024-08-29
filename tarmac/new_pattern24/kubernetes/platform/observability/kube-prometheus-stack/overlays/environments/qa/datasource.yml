@@ -1,0 +1,30 @@
+apiVersion: 1
+datasources:
+- name: cloudwatch_infra_prod
+  type: cloudwatch
+  access: proxy
+  editable: true
+  isDefault: false
+  jsonData:
+    authType: default
+    defaultRegion: us-east-1
+    assumeRoleArn: arn:aws:iam::836442743669:role/eks-grafana-role
+
+- name: cloudwatch_local
+  type: cloudwatch
+  access: proxy
+  editable: true
+  isDefault: false
+  jsonData:
+    authType: default
+    defaultRegion: us-east-1
+    
+- access: proxy
+  editable: true
+  isDefault: false
+  jsonData:
+    assumeRoleArn: arn:aws:iam::975050241955:role/cluster-eks-msk-read-only
+    authType: default
+    defaultRegion: us-east-1
+  name: cloudwatch_s_data_platform
+  type: cloudwatch

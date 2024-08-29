@@ -1,0 +1,37 @@
+{
+     "CompSummaryAPIUrl": "http://localhost:10000/compensation-summary",
+     "CompSummaryLabel": {
+          "ProductionCompensation": "Production Compensation",
+          "EstimatedValueBased": "Estimated Value Based",
+          "BaseSalary": "Base Salary",
+          "Other": "Other",
+          "Name": "Sharp Lancaster",
+          "Specialty": "Family Medicine",
+          "Cardname": "Compensation Summary",
+          "TotalCompensation": "Total Compensation",
+          "ProjectedWorkRVUCompensation": "Projected Work RVU Compensation",
+          "EstimatedValueBasedIncentive": "Estimated Value Based Incentive",
+          "Teaching": "Teaching",
+          "TotalProjectedCompensation": "Total Projected Compensation"
+     },
+     "CompSummaryValue": {
+          "ProductionComp": 33333.09,
+          "EstimatedValueBased": 8369.51,
+          "BaseSalary": 100000,
+          "Other": 500,
+          "FTE": 1,
+          "YTDBenchmarkPercentile": 82,
+          "ytdwRVUs": 2843.63,
+          "benchmarkFTE": 0.7,
+          "wRVUsFTE": 4062.34,
+          "ProductionCompVal": "$33,333.09",
+          "EstimatedValBasedValue": "$8,369.51",
+          "BaseSalaryValue": "$100,000.00",
+          "OtherValue": "$500.00",
+          "TotalCompensationValue": "$142,202.60",
+          "ProjectedWorkRVUCompensation": "$126,679.79",
+          "EstimatedValueBasedIncentive": "$6,500.00",
+          "Teaching": "$500.00",
+          "TotalProjectedCompensation": "$133,679.79"
+     }
+}

@@ -1,0 +1,140 @@
+syntax = "proto3";
+
+package cn.incumbent.v1;
+
+import "google/protobuf/timestamp.proto";
+
+service Incumbent {
+  rpc ListFilesByIds(FileIdsRequest) returns (FileList);
+  rpc ListSourceData(SourceDataSearchRequest) returns (SourceDataList);
+  rpc ListSourceDataEmployeeLevel(SourceDataSearchRequest) returns (SourceDataEmployeeLevelList);
+  rpc ListClientJobs(SourceDataSearchRequest) returns (SourceDataList);
+  rpc ListClientBasePay(ClientBasePayRequest) returns (ClientBasePayResponse);
+  rpc ListClientPayDetail(ClientJobRequest) returns (ClientPayDetailResponse);
+  rpc ListClientPositionDetail(ClientJobRequest) returns (SourceDataList);
+  rpc UploadMarketPricingSheetPdfFile(UploadMarketPricingSheetPdfFileRequest) returns (UploadMarketPricingSheetPdfFileResponse);
+}
+
+message FileIdsRequest {
+  repeated int32 file_ids = 1;
+}
+
+message FileList {
+  repeated FileModel files = 1;
+}
+
+message FileModel {
+  int32 file_log_key = 1;
+  int32 file_org_key = 2;
+  string source_data_name = 3;
+  google.protobuf.Timestamp data_effective_date = 4;
+  int32 file_status_key = 5;
+  string status_name = 6;
+}
+
+message SourceDataSearchRequest {
+  int32 file_log_key = 1;
+  int32 aggregation_method_key = 2;
+}
+
+message SourceDataList {
+  repeated SourceDataModel client_jobs = 1;
+}
+
+message SourceDataEmployeeLevelList {
+  repeated SourceDataEmployeeModel employees = 1;
+}
+
+message SourceDataModel {
+  int32 source_data_agregationkey = 1;
+  int32 aggregation_method_key = 2;
+  int32 file_log_key = 3;
+  int32 file_org_key = 4;
+  int32 ces_org_id = 5;
+  string job_code = 6;
+  string job_title = 7;
+  int32 incumbent_count = 8;
+  int32 fte_value = 9;
+  string location_description = 10;
+  string job_family = 11;
+  string pay_grade = 12;
+  string pay_type = 13;
+  string position_code = 14;
+  string position_code_description = 15;
+  string job_level = 16;
+  string client_job_group = 17;
+  string market_segment_name = 18;
+  map<int32, float> benchmark_data_types = 19;
+}
+
+message SourceDataEmployeeModel {
+  int32 source_data_key = 1;
+  string source_data_name = 2;
+  int32 file_log_key = 3;
+  int32 file_org_key = 4;
+  int32 ces_org_id = 5;
+  string ces_org_name = 6;
+  string job_code = 7;
+  string job_title = 8;
+  string incumbent_id = 9;
+  string incumbent_name = 10;
+  float fte_value = 11;
+  string position_code = 12;
+  string position_code_description = 13;
+  string job_level = 14;
+  string client_job_group = 15;
+  string credited_yoe = 16;
+  string original_hire_date = 17;
+  map<int32, float> benchmark_data_types = 18;
+}
+
+message ClientBasePayRequest {
+  int32 aggregation_method_key = 1;
+  int32 file_log_key = 2;
+  repeated string job_codes = 3;
+  repeated int32 benchmark_data_type_keys = 4;
+}
+
+message ClientBasePayResponse {
+  message ClientBasePay {
+    string job_code = 1;
+    int32 benchmark_data_type_key = 2;
+    float benchmark_data_type_value = 3;
+  }
+
+  repeated ClientBasePay client_base_pay_lists = 1;
+}
+
+message ClientJobRequest {
+  int32 aggregation_method_key = 1;
+  int32 file_log_key = 2;
+  int32 file_org_key = 3;
+  string job_code = 4;
+  string position_code = 5;
+  repeated int32 benchmark_data_type_keys = 6;
+}
+
+message ClientPayDetailResponse {
+  repeated ClientPayDetail client_pay_details = 1;
+}
+
+message ClientPayDetail {
+  int32 benchmark_data_type_key = 1;
+  float benchmark_data_type_value = 2;
+}
+
+message UploadMarketPricingSheetPdfFileRequest {
+  bytes file = 1;
+  int32 organization_id = 2;
+  string organization_name = 3;
+  int32 project_version_id = 4;
+  google.protobuf.Timestamp report_date = 5;
+  int32 market_pricing_sheet_id = 6;
+}
+
+message UploadMarketPricingSheetPdfFileResponse {
+  bool success = 1;
+  string message = 2;
+  string file_s3_url = 3;
+  string file_s3_name = 4;
+}

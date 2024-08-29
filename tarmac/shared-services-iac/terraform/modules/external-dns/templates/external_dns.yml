@@ -1,0 +1,85 @@
+resolveServiceLoadBalancerHostname: true
+
+serviceAccount:
+  create: false
+  annotations:
+    eks.amazonaws.com/role-arn: ${dns_role_arn}
+  labels: 
+    istio-injection: "enabled"
+  name: "external-dns"
+
+rbac:
+  create: true
+  additionalPermissions: []
+
+shareProcessNamespace: false
+
+podSecurityContext:
+  fsGroup: 65534
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 2
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+service:
+  port: 7979
+  annotations: {}
+
+logLevel: info
+logFormat: text
+
+interval: 1m
+triggerLoopOnEvent: false
+
+namespaced: false
+
+sources:
+  - service
+  - ingress
+
+policy: sync
+
+registry: txt
+txtOwnerId: "${env}"
+txtPrefix: "cn"
+txtSuffix: ""
+
+domainFilters: [
+  "${domain_filter}"
+]
+
+provider: aws
+
+extraArgs:
+- --aws-assume-role=${ssnetwork_dns_role_arn}
+- --aws-zone-type=public
+
+deploymentStrategy:
+  type: Recreate
+
+env:
+  - name: AWS_STS_REGIONAL_ENDPOINTS
+    value: regional

@@ -1,0 +1,48 @@
+fullnameOverride: {{ project_name }}-{{ environment }}
+namespace:
+  name: {{ product }}
+  
+service:
+  port: 7350
+  targetPort: 7350
+  name: {{ project_name }}-{{ environment }}
+  type: ClusterIP
+
+image:
+  repository: '{{ ss_tools_ecr_url }}/{{ project_name }}-ecr-repo'
+  tag: '{{ docker_image_tag }}'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+envvars:
+  - name: "CN_ORGANIZATIONSERVERURL"
+    value: "https://{{ product }}.{{ environment }}.cliniciannexus.com:7004"
+  - name: "CN_USERSERVERURL"
+    value: "https://{{ product }}.{{ environment }}.cliniciannexus.com:7051"
+  - name: "CN_SURVEYSERVERURL"
+    value: "https://{{ product }}.{{ environment }}.cliniciannexus.com:7052"
+  - name: "CN_INCUMBENTSERVERURL"
+    value: "https://{{ product }}.{{ environment }}.cliniciannexus.com:8004"
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+  - name: "CN_SPIREPDF__PLUGINPATH"
+    value: "/plugins"
+
+##we set limit of memory in the pods to 256Mi
+resources:
+  requests:
+    memory: "550Mi"
+  limits:
+    memory: "550Mi"
+
+environment: {{ environment }}

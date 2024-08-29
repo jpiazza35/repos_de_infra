@@ -1,0 +1,38 @@
+{
+    "ZoneDefinition": {
+        "Name": "aws-ses.sullivancotter.com",
+        "Parent": "sullivancotter.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "aws-ses.sullivancotter.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 feedback-smtp.us-east-1.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "aws-ses.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=spf1 include:amazonses.com -all"
+                }
+            ]
+        },
+        {
+            "Name": "_dmarc.aws-ses.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=DMARC1; p=none; rua=mailto:a09c68f9@mxtoolbox.dmarc-report.com;ruf=mailto:a09c68f9@forensics.dmarc-report.com; fo=1; adkim=r; aspf=r"
+                }
+            ]
+        }
+    ]
+}

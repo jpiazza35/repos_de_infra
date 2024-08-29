@@ -1,0 +1,325 @@
+{
+    "mockData": {
+        "tenant": "1",
+        "dashboardKey": 1,
+        "userDashboardResponse": {
+            "dashboards": [
+                {
+                    "dashboardKey": 1,
+                    "name": "Demo Dashboard",
+                    "dashboardOrder": 1,
+                    "categories": [
+                        {
+                            "name": "Productivity",
+                            "type": "productivity",
+                            "order": 1,
+                            "cards": [
+                                {
+                                    "cardSystemName": "Monthly-wRVU-per-FTE-Trends",
+                                    "cardKey": 1,
+                                    "cardOrder": 1,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Benchmark",
+                                    "cardKey": 2,
+                                    "cardOrder": 2,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Monthly-wRVU-Trend",
+                                    "cardKey": 3,
+                                    "cardOrder": 3,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Monthly-wRVU-by-Service-Group",
+                                    "cardKey": 4,
+                                    "cardOrder": 4,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Patient-Detail-wRVU-Heat-Map",
+                                    "cardKey": 5,
+                                    "cardOrder": 5,
+                                    "cardScale": 6
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Performance",
+                            "type": "performance",
+                            "order": 2,
+                            "cards": [
+                                {
+                                    "cardSystemName": "Compensation-Summary",
+                                    "cardKey": 6,
+                                    "cardOrder": 1,
+                                    "cardScale": 3
+                                },
+                                {
+                                    "cardSystemName": "FTE-Allocation",
+                                    "cardKey": 7,
+                                    "cardOrder": 2,
+                                    "cardScale": 3
+                                },
+                                {
+                                    "cardSystemName": "Settlement",
+                                    "cardKey": 8,
+                                    "cardOrder": 3,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Earning-Codes",
+                                    "cardKey": 9,
+                                    "cardOrder": 4,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Productivity-Compensation",
+                                    "cardKey": 10,
+                                    "cardOrder": 5,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Circuit-Breaker-for-Value-Based",
+                                    "cardKey": 11,
+                                    "cardOrder": 6,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Value-Based-Compensation",
+                                    "cardKey": 12,
+                                    "cardOrder": 7,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Value-Based-Measures",
+                                    "cardKey": 13,
+                                    "cardOrder": 8,
+                                    "cardScale": 6
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "fy_realData": {
+        "userId": "BS216",
+        "tenant": 2,
+        "dashboardKey": 3,
+        "userDashboardResponse": {
+            "dashboards": [
+                {
+                    "dashboardKey": 3,
+                    "name": "Demo Dashboard",
+                    "dashboardOrder": 1,
+                    "categories": [
+                        {
+                            "name": "Productivity",
+                            "type": "productivity",
+                            "order": 1,
+                            "cards": [
+                                {
+                                    "cardSystemName": "Monthly-wRVU-per-FTE-Trends",
+                                    "cardKey": 1,
+                                    "cardOrder": 1,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Benchmark",
+                                    "cardKey": 2,
+                                    "cardOrder": 2,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Monthly-wRVU-Trend",
+                                    "cardKey": 3,
+                                    "cardOrder": 3,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Monthly-wRVU-by-Service-Group",
+                                    "cardKey": 4,
+                                    "cardOrder": 4,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Patient-Detail-wRVU-Heat-Map",
+                                    "cardKey": 5,
+                                    "cardOrder": 5,
+                                    "cardScale": 6
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Performance",
+                            "type": "performance",
+                            "order": 2,
+                            "cards": [
+                                {
+                                    "cardSystemName": "Compensation-Summary",
+                                    "cardKey": 6,
+                                    "cardOrder": 1,
+                                    "cardScale": 3
+                                },
+                                {
+                                    "cardSystemName": "FTE-Allocation",
+                                    "cardKey": 7,
+                                    "cardOrder": 2,
+                                    "cardScale": 3
+                                },
+                                {
+                                    "cardSystemName": "Settlement",
+                                    "cardKey": 8,
+                                    "cardOrder": 3,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Earning-Codes",
+                                    "cardKey": 9,
+                                    "cardOrder": 4,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Productivity-Compensation",
+                                    "cardKey": 10,
+                                    "cardOrder": 5,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Circuit-Breaker-for-Value-Based",
+                                    "cardKey": 11,
+                                    "cardOrder": 6,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Value-Based-Compensation",
+                                    "cardKey": 12,
+                                    "cardOrder": 7,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Value-Based-Measures",
+                                    "cardKey": 13,
+                                    "cardOrder": 8,
+                                    "cardScale": 6
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "cy_realData": {
+        "userId": "RA41",
+        "tenant": 1,
+        "dashboardKey": 1,
+        "userDashboardResponse": {
+            "dashboards": [
+                {
+                    "dashboardKey": 1,
+                    "name": "Demo Dashboard",
+                    "dashboardOrder": 1,
+                    "categories": [
+                        {
+                            "name": "Productivity",
+                            "type": "productivity",
+                            "order": 1,
+                            "cards": [
+                                {
+                                    "cardSystemName": "Monthly-wRVU-per-FTE-Trends",
+                                    "cardKey": 1,
+                                    "cardOrder": 1,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Benchmark",
+                                    "cardKey": 2,
+                                    "cardOrder": 2,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Monthly-wRVU-Trend",
+                                    "cardKey": 3,
+                                    "cardOrder": 3,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Monthly-wRVU-by-Service-Group",
+                                    "cardKey": 4,
+                                    "cardOrder": 4,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Patient-Detail-wRVU-Heat-Map",
+                                    "cardKey": 5,
+                                    "cardOrder": 5,
+                                    "cardScale": 6
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Performance",
+                            "type": "performance",
+                            "order": 2,
+                            "cards": [
+                                {
+                                    "cardSystemName": "Compensation-Summary",
+                                    "cardKey": 6,
+                                    "cardOrder": 1,
+                                    "cardScale": 3
+                                },
+                                {
+                                    "cardSystemName": "FTE-Allocation",
+                                    "cardKey": 7,
+                                    "cardOrder": 2,
+                                    "cardScale": 3
+                                },
+                                {
+                                    "cardSystemName": "Settlement",
+                                    "cardKey": 8,
+                                    "cardOrder": 3,
+                                    "cardScale": 6
+                                },
+                                {
+                                    "cardSystemName": "Earning-Codes",
+                                    "cardKey": 9,
+                                    "cardOrder": 4,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Productivity-Compensation",
+                                    "cardKey": 10,
+                                    "cardOrder": 5,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Circuit-Breaker-for-Value-Based",
+                                    "cardKey": 11,
+                                    "cardOrder": 6,
+                                    "cardScale": 4
+                                },
+                                {
+                                    "cardSystemName": "Value-Based-Compensation",
+                                    "cardKey": 12,
+                                    "cardOrder": 7,
+                                    "cardScale": 2
+                                },
+                                {
+                                    "cardSystemName": "Value-Based-Measures",
+                                    "cardKey": 13,
+                                    "cardOrder": 8,
+                                    "cardScale": 6
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

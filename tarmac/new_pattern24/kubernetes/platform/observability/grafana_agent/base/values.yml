@@ -1,0 +1,353 @@
+## Docs: https://github.com/grafana/agent/blob/main/operations/helm/charts/grafana-agent/values.yaml
+agent:
+  mode: flow
+  clustering:
+    # -- Deploy agents in a cluster to allow for load distribution. Only
+    # applies when agent.mode=flow.
+    enabled: true
+  extraArgs: []
+    # - --storage.path=/var/lib/grafana-agent-flow
+  extraEnv: []
+    # - name: LOKI_CREDS
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: loki-gateway-auth
+    #       key: loki-gateway
+    # - name: LOKI_CREDS
+    #   valueFrom:
+    #     fieldRef:
+    #       fieldPath: spec.nodeName
+  envFrom:
+    - secretRef:
+        name: loki-gateway-auth
+
+  configMap:
+    create: true
+    content: |
+      prometheus.remote_write "default" {
+        endpoint {
+          url = "http://prometheus-kube-prometheus-prometheus.monitoring:9090/prometheus/api/prom/push"
+        }
+      }
+
+      logging {
+        level  = "info"
+        format = "logfmt"
+      }
+
+      // discovery rules: https://grafana.com/docs/agent/latest/flow/getting-started/collect-prometheus-metrics/
+
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      discovery.kubernetes "services" {
+        role = "service"
+      }
+
+      discovery.kubernetes "endpoints" {
+        role = "endpoints"
+      }
+
+      discovery.kubernetes "endpointslices" {
+        role = "endpointslice"
+      }
+
+      discovery.kubernetes "ingresses" {
+        role = "ingress"
+      }
+
+      discovery.kubernetes "nodes" {
+        role = "node"
+      }
+
+      // servicemonitor
+      prometheus.operator.servicemonitors "services" {
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+
+      // cadvisor
+      prometheus.scrape "cadvisor" {
+        scheme = "https"
+        tls_config {
+            server_name = "kubernetes"
+            ca_file = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+            insecure_skip_verify = false
+        }
+        bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+        targets = discovery.relabel.metrics_cadvisor.output
+        scrape_interval = "60s"
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+
+
+      discovery.relabel "metrics_cadvisor" {
+        targets = discovery.kubernetes.nodes.targets
+
+        rule {
+          action = "replace"
+          target_label = "__address__"
+          replacement = "kubernetes.default.svc.cluster.local:443"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_node_name"]
+          regex = "(.+)"
+          action = "replace"
+          replacement = "/api/v1/nodes/${1}/proxy/metrics/cadvisor"
+          target_label = "__metrics_path__"
+        }
+      }
+
+      // kubelet
+      discovery.relabel "metrics_kubelet" {
+        targets = discovery.kubernetes.nodes.targets
+
+        rule {
+          action = "replace"
+          target_label = "__address__"
+          replacement = "kubernetes.default.svc.cluster.local:443"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_node_name"]
+          regex = "(.+)"
+          action = "replace"
+          replacement = "/api/v1/nodes/${1}/proxy/metrics"
+          target_label = "__metrics_path__"
+        }
+      }
+
+      prometheus.scrape "kubelet" {
+        scheme = "https"
+        tls_config {
+            server_name = "kubernetes"
+            ca_file = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+            insecure_skip_verify = false
+        }
+        bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+        targets = discovery.relabel.metrics_kubelet.output
+        scrape_interval = "60s"
+        forward_to = [prometheus.remote_write.default.receiver]
+      }
+
+      // logging
+      discovery.relabel "logs" {
+        targets = discovery.kubernetes.pods.targets
+
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          target_label  = "namespace"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          target_label  = "container"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          target_label  = "pod"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_node_name"]
+          action = "keep"
+          regex = env("HOSTNAME")
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          action = "drop"
+          regex = "grafana-agent"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+          target_label  = "__path__"
+          separator     = "/"
+          replacement   = "/var/log/pods/*$1/*.log"
+        }
+      }
+
+      local.file_match "logs" {
+        path_targets = discovery.relabel.logs.output
+      }
+
+      loki.source.file "pods" {
+        targets    = local.file_match.logs.targets
+        forward_to = [loki.process.logs.receiver]
+      }
+
+      loki.process "logs" {
+        stage.cri {}
+        forward_to = [loki.write.local.receiver]
+      }
+
+      loki.source.kubernetes_events "events" {
+        log_format = "json"
+        forward_to = [loki.write.local.receiver]
+      }
+
+      // Get an Creds key from disk.
+      // local.file "loki-creds" {
+      //  filename  = "/var/data/loki-gateway.txt"
+      //  is_secret = true
+      // }
+
+      loki.write "local" {
+        endpoint {
+          url = "http://loki-gateway.monitoring/loki/api/v1/push"
+          tenant_id = "self-monitoring"
+          // basic_auth {
+          //  username = "loki-gateway"
+          //  password = env("LOKI_CREDS")
+          //  //local.file.loki-creds.content
+          // }
+        }
+      }
+
+      // faro config
+      faro.receiver "default" {
+        server {
+          listen_address = "0.0.0.0"
+          listen_port   = 12347
+          api_key = "cn-faro"
+          cors_allowed_origins = ["*"]
+          //[
+          //  'https://mpt.cliniciannexus.com',
+          //  'https://mpt.dev.cliniciannexus.com',
+          //  'https://mpt.qa.cliniciannexus.com',
+          //  'https://mpt.preview.cliniciannexus.com'
+          // ]
+          //["*"]
+        }
+
+        // sourcemaps {
+        //  location {
+        //    path                 = "PATH_TO_SOURCEMAPS"
+        //    minified_path_prefix = "WEB_APP_PREFIX"
+        //  }
+        // }
+
+        output {
+          logs   = [loki.write.local.receiver]
+          traces = [otelcol.exporter.otlp.traces.input]
+          // extra_log_labels = "faro"
+        }
+      }
+
+      otelcol.exporter.otlp "traces" {
+        client {
+          endpoint = "opentelemetry-collector.monitoring:4317"
+        }
+      }
+
+      otelcol.exporter.otlp "tempo" {
+        client {
+          endpoint = "tempo-query-frontend:3100"
+          tls {
+            insecure             = true
+            insecure_skip_verify = true
+          }
+        }
+      }
+
+  # -- Path to where Grafana Agent stores data (for example, the Write-Ahead Log).
+  # By default, data is lost between reboots.
+  storagePath: /tmp/agent
+
+  # -- Address to listen for traffic on. 0.0.0.0 exposes the UI to other containers.
+  listenAddr: 0.0.0.0
+
+  # -- Port to listen for traffic on.
+  listenPort: 12345
+
+  # --  Base path where the UI is exposed.
+  uiPathPrefix: /
+
+  # -- Enables sending Grafana Labs anonymous usage stats to help improve Grafana
+  # Agent.
+  enableReporting: false
+
+  # -- Extra ports to expose on the Agent
+  extraPorts: #[]
+  - name: "faro"
+    port: 12347
+    targetPort: 12347
+    protocol: "TCP"
+  
+
+  mounts:
+    # -- Mount /var/log from the host into the container for log collection.
+    varlog: true
+    # -- Mount /var/lib/docker/containers from the host into the container for log
+    # collection.
+    dockercontainers: true
+
+controller:
+  # -- Type of controller to use for deploying Grafana Agent in the cluster.
+  # Must be one of 'daemonset', 'deployment', or 'statefulset'.
+  type: 'daemonset'
+
+  securityContext:
+    privileged: true
+    runAsUser: 0
+
+service:
+  # -- Creates a Service for the controller's pods.
+  enabled: true
+  # -- Service type
+  type: ClusterIP
+  # -- Cluster IP, can be set to None, empty "" or an IP address
+  clusterIP: ''
+  annotations: {}
+    # cloud.google.com/load-balancer-type: Internal
+
+serviceMonitor:
+  enabled: true
+  # -- Additional labels for the service monitor.
+  additionalLabels: #{}
+    prometheus-monitor: "true"
+    app: grafana-agent
+    instance: primary
+
+ingress:
+  # -- Enables ingress for the agent (faro port)
+  enabled: false
+  ingressClassName: alb
+  annotations:
+    #{}
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/load-balancer-name: faro
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/tags: Environment=dev,Team=devops
+    alb.ingress.kubernetes.io/target-type: ip
+    cert-manager.io/cluster-issuer: letsencrypt-dev
+    external-dns.alpha.kubernetes.io/hostname: monitoring.dev.cliniciannexus.com
+  labels: {}
+  path: /
+  faroPort: 12347
+
+  # pathType is only for k8s >= 1.1=
+  pathType: Prefix
+
+  hosts:
+    - monitoring.dev.cliniciannexus.com/faro
+  ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
+  extraPaths: #[]
+  - path: /
+    pathType: Prefix
+    backend:
+      service:
+        name: ssl-redirect
+        port:
+          name: use-annotation
+
+  tls: #[]
+   - secretName: grafana-faro-tls
+     hosts:
+       - monitoring.dev.cliniciannexus.com

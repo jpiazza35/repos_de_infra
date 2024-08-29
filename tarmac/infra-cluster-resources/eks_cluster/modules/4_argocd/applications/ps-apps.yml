@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: ${slack_channel}
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: ${slack_channel}
+    notifications.argoproj.io/subscribe.app-sync-running.slack: ${slack_channel}
+    environment: ${environment}
+  name: app-ps-ui-${environment}
+  namespace: ${argocd_release_namespace}
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: ${github_branch}
+    path: ${environment}/ps/app-ps-ui
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ${ps_namespace}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.slack: ${slack_channel}
+    notifications.argoproj.io/subscribe.on-health-degraded.slack: ${slack_channel}
+    notifications.argoproj.io/subscribe.app-sync-running.slack: ${slack_channel}
+    environment: ${environment}
+  name: app-ps-comp-summary-${environment}
+  namespace: ${argocd_release_namespace}
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/clinician-nexus/helm-charts.git
+    targetRevision: ${github_branch}
+    path: ${environment}/ps/app-ps-comp-summary
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ${ps_namespace}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

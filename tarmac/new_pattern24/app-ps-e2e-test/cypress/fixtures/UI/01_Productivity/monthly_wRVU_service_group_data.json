@@ -1,0 +1,28 @@
+{
+    "cardTitle": "Monthly wRVU by Service Group",
+    "cardSubTitle": "Based on Charge Post Date",
+    "exportDataPDF": "Export Data to PDF",
+    "mockData": {
+        "serviceGroups": [
+            "Service Groups",
+            "Hospital",
+            "Imaging",
+            "Office Established",
+            "Office New",
+            "Other",
+            "Preventative",
+            "SNF",
+            "Surgical"
+        ]
+    },
+    "fy_realData": {
+        "serviceGroups": [
+            
+        ]
+    },
+    "cy_realData": {
+        "serviceGroups": [
+           
+        ]
+    }
+}

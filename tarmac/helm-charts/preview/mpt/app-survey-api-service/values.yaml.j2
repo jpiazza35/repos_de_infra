@@ -1,0 +1,43 @@
+fullnameOverride: {{ project_name }}-{{ environment }}
+namespace:
+  name: {{ product }}-{{ environment }}
+
+service:
+  port: 7286
+  targetPort: 7286
+  name: {{ project_name }}-{{ environment }}
+  type: ClusterIP
+
+image:
+  repository: '{{ ss_tools_ecr_url }}/{{ project_name }}-ecr-repo'
+  tag: '{{ docker_image_tag }}'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+securityContext:
+  runAsUser: 1000  # UID user
+  runAsNonRoot: true
+  
+ingress:
+  enabled: false
+
+envvars:
+  - name: "CN_USERSERVERURL"
+    value: "https://{{ product }}.{{ environment }}.cliniciannexus.com:7051"
+  - name: "CN_AZUREADB2C__INSTANCE"
+    value: "https://auth.cliniciannexus.com"
+  - name: "CN_AZUREADB2C__DOMAIN"
+    value: "auth.cliniciannexus.com"
+  - name: "CN_AZUREADB2C__SIGNEDOUTCALLBACKPATH"
+    value: "/signout/B2C_1A_CN_HRD_SIGNIN"
+  - name: "CN_AZUREADB2C__SIGNUPSIGNINPOLICYID"
+    value: "B2C_1A_CN_HRD_SIGNIN"
+
+environment: {{ environment }}

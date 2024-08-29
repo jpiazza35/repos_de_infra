@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        description: 'Container image to use'
+        required: true
+        type: string
+      arguments:
+        description: 'docker run arguments'
+        required: true
+        type: string
+      command:
+        description: 'Comamand to run against container'
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Command
+        run: docker run ${{ inputs.arguments }} ${{ inputs.image_name }} /bin/sh -c '${{ inputs.command }}'
+        shell: sh

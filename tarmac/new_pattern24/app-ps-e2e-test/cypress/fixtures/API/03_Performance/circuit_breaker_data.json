@@ -1,0 +1,57 @@
+{
+    "mockData": {
+        "userId": 1004,
+        "tenant": 1,
+        "dashboardKey": 2,
+        "cardKey": 11,
+        "specialties": 2223,
+        "periodId": 1,
+        "yearMonth": 202201,
+        "circuitBreakerResponse": {
+            "cardSettings": {
+                "title": "Circuit Breaker for Value Based",
+                "infoIcon": "Eligible for Value Based Incentive"
+            },
+            "summary": {
+                "isTargetMet": true
+            },
+            "detail": [
+                {
+                    "targetValue": 90,
+                    "performanceValue": 96,
+                    "name": "Chart Closure within 72 Hours"
+                },
+                {
+                    "targetValue": 85,
+                    "performanceValue": 93,
+                    "name": "Problem List Review"
+                }
+            ]
+        }
+    },
+    "realData": {
+        "userId": "AD162",
+        "tenant": 2,
+        "dashboardKey": 4,
+        "cardKey": 11,
+        "specialties": 1320,
+        "periodId": 1,
+        "yearMonth": 202207,
+        "circuitBreakerResponse": {
+            "cardSettings": {
+                "title": "Circuit Breaker for Value Based",
+                "infoIcon": "Eligible for Value Based Incentive"
+            },
+            "summary": {
+                "isTargetMet": false
+            },
+            "detail": [
+                {
+                    "targetValue": 0,
+                    "performanceValue": 100,
+                    "name": "wRVU Productivity"
+                }
+            ]
+        }
+    }
+}

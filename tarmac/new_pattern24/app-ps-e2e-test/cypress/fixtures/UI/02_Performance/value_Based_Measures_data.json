@@ -1,0 +1,32 @@
+{
+    "mockData": {
+        "valBasedMeasuresLabel": {
+            "valBasedMeasuresTitle": "Value Based Measures",
+            "infoToolTip": "Quality Capped at 4%",
+            "measureGroupDescription": "Value Based Measure",
+            "measureTypeName": "Value Based",
+            "participantGroupName": "JF FM",
+            "breastCancerScreening": "Breast Cancer Screening",
+            "qualityIndividual": "Quality | Individual",
+            "YTDPerformance": "YTD Performance",
+            "depressionScreening": "Depression Screening",
+            "hypertension": "Hypertension",
+            "wouldRecommendProvider": "Would Recommend Provider",
+            "patientExperienceIndividual": "Patient Experience | Individual",
+            "A1COutcomesGroup": "Outcomes | Group",
+            "A1C": "A1C",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    },
+    "realData": {
+        "valBasedMeasuresLabel": {
+            "valBasedMeasuresTitle": "Value Based Measures",
+            "infoToolTip": "Quality Capped at 4%",
+            "quality": "Quality",
+            "PHQ9": "PHQ-9",
+            "STIScreening": "STI Screening",
+            "teamwork": "Teamwork",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    }
+}

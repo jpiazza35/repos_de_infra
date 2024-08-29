@@ -1,0 +1,101 @@
+# ---
+# apiVersion: networking.k8s.io/v1beta1
+# kind: IngressClassParams
+# metadata:
+#   name: istio
+# spec:
+#   controller: istio.io/ingress-controller
+# ---
+# ## Create Self Signed cert. We will use a key/pair to encrypt traffic from ALB to Istio Gateway.
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: monitoring
+#   namespace: monitoring
+# spec:
+#   duration: 2160h # 90d
+#   renewBefore: 360h # 15d
+#   commonName: monitoring.devops.cliniciannexus.com
+#   secretName: monitoring-certs
+#   privateKey:
+#     algorithm: RSA
+#     encoding: PKCS1
+#     size: 4096
+#   issuerRef:
+#     name: vault-cert-issuer
+#     kind: ClusterIssuer
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: EnvoyFilter
+# metadata:
+#   name: proxy-protocol
+#   namespace: monitoring
+# spec:
+#   configPatches:
+#   - applyTo: LISTENER
+#     patch:
+#       operation: MERGE
+#       value:
+#         listener_filters:
+#         - name: envoy.listener.proxy_protocol
+#         - name: envoy.listener.tls_inspector
+#   workloadSelector:
+#     labels:
+#       istio: ingressgateway
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: DestinationRule
+# metadata:
+#   name: monitoring
+#   namespace: monitoring
+# spec:
+#   host: monitor-grafana
+#   trafficPolicy:
+#     tls:
+#       mode: ISTIO_MUTUAL
+# ---
+# ## Configure PeerAuthentication within an application Namespace to enforce Strict Mutual TLS using the Istio Proxy Sidecar
+# apiVersion: security.istio.io/v1beta1
+# kind: PeerAuthentication
+# metadata:
+#   name: default
+#   namespace: monitoring
+# spec:
+#   mtls:
+#     mode: STRICT
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: monitoring
+#   # namespace: monitoring
+# spec:
+#   gateways:
+#   - istio-ingress/istio-gateway
+#   hosts:
+#   - monitoring.devops.cliniciannexus.com
+#   http:
+#   - match:
+#     - uri:
+#         prefix: "/"
+#     route:
+#     - destination:
+#         host: monitor-grafana.monitoring.svc.cluster.local
+#         port:
+#           number: 80
+#   - match:
+#     - uri:
+#         exact: "/alert"
+#     route:
+#     - destination:
+#         host: alertmanager-operated.monitoring.svc.cluster.local
+#         port:
+#           number: 9093
+#   - match:
+#     - uri:
+#         exact: "/prom"
+#     route:
+#     - destination:
+#         host: prometheus-operated.monitoring.svc.cluster.local
+#         port:
+#           number: 9090

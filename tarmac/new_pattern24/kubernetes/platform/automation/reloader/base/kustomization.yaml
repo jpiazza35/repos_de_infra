@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+- includeCRDs: true
+  name: reloader
+  namespace: reloader
+  releaseName: reloader
+  valuesMerge: replace
+  version: 1.0.50
+  repo: https://stakater.github.io/stakater-charts

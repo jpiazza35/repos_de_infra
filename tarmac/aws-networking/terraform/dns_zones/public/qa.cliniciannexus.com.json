@@ -1,0 +1,18 @@
+{
+    "ZoneDefinition": {
+        "Name": "qa.cliniciannexus.com",
+        "Parent": "cliniciannexus.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "_13ead775384b3e2bd8a51073788bbf5b.qa.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_204e86999db5635587d2ec49f3e03c70.yghrkwvzvz.acm-validations.aws."
+                }
+            ]
+        }
+    ]
+}

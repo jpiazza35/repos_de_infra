@@ -1,0 +1,13 @@
+version: v1
+managed:
+  enabled: true
+plugins:
+    # note: these plugins do not generate __init__.py, so they must be manually created every time a new package is created
+    # intended usage is for the file descriptor set API via
+    # $ buf generate clinician-nexus.buf.dev/bufbuild/reflect
+  - plugin: clinician-nexus.buf.dev/protocolbuffers/python
+    out: src/
+  - plugin: clinician-nexus.buf.dev/protocolbuffers/pyi:v25.2
+    out: src/
+  - plugin: clinician-nexus.buf.dev/grpc/python
+    out: src/

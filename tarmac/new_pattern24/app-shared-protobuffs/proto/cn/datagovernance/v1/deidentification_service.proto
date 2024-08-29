@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package cn.datagovernance.v1;
+
+enum DeidentifictionMethod {
+  DEIDENTIFICTION_METHOD_UNSPECIFIED = 0;
+  DEIDENTIFICTION_METHOD_HASH = 1;
+  DEIDENTIFICTION_METHOD_REMOVE = 2;
+}
+
+message TableDeidentificationPlan {
+  string table_name = 1;
+  DeidentifictionMethod deidentification_method = 2;
+  repeated string column_names = 3;
+}
+
+message DeidentifyTablesRequest {
+  repeated TableDeidentificationPlan table_deidentification_plans = 1;
+}

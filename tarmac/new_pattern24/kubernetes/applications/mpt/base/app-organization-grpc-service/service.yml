@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-organization-grpc-service
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: grpc
+    port: 7004
+    protocol: TCP
+    targetPort: 7004
+  selector:
+    app.kubernetes.io/instance: app-organization-grpc-service
+    app.kubernetes.io/name: app-organization-grpc-service
+  sessionAffinity: None
+  type: ClusterIP

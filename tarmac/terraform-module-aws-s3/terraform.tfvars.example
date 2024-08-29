@@ -1,0 +1,28 @@
+# Boolean variables - creation of resources
+create_bucket_acl                 = true
+create_bucket_encryption          = true
+use_cmk_kms_key                   = false
+create_bucket_block_public_access = false
+create_bucket_policy              = false
+create_bucket_versioning          = false
+create_bucket_website             = false
+create_bucket_lifecycle           = false
+
+# Resources attributes related variables
+bucket_name                                 = "test-bucket"
+bucket_acl                                  = "private"
+cmk_kms_key_arn                             = ""
+force_destroy                               = false
+block_public_acls                           = true
+block_public_policy                         = true
+ignore_public_acls                          = true
+restrict_public_buckets                     = true
+bucket_policy_document                      = ""
+versioning_status                           = "Disabled"
+index_document_file                         = "index.html"
+error_document_file                         = "error.html"
+bucket_lifecycle_id                         = ""
+bucket_lifecycle_status                     = "Disabled"
+bucket_lifecycle_expiration_days            = 90
+bucket_lifecycle_noncurrent_expiration_days = 1
+bucket_lifecycle_incomplete_multipart_days  = 7

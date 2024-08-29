@@ -1,0 +1,79 @@
+  # Options: slack
+  platform: slack
+  # The channel where incident activity is logged
+  digest_channel: incidents
+  # Roles defined here will appear as options for each incident
+  roles:
+    incident_commander: "The Incident Commander is the decision maker during a major incident, delegating tasks and listening to input from subject matter experts in order to bring the incident to resolution. They become the highest ranking individual on any major incident call, regardless of their day-to-day rank. Their decisions made as commander are final.\\n\\nYour job as an Incident Commander is to listen to the call and to watch the incident Slack room in order to provide clear coordination, recruiting others to gather context and details. You should not be performing any actions or remediations, checking graphs, or investigating logs. Those tasks should be delegated.\\n\\nAn IC should also be considering next steps and backup plans at every opportunity, in an effort to avoid getting stuck without any clear options to proceed and to keep things moving towards resolution.\\n\\nMore information: https://response.pagerduty.com/training/incident_commander/"
+    deputy: "The Deputy for an incident is generally the backup Incident Commander. However, as an Incident Commander, you may appoint one or more Deputies. Note that Deputy Incident Commanders must be as qualified as the Incident Commander, and that if a Deputy is assigned, he or she must be fully qualified to assume the Incident Commander's position if required.\\n\nMore information: https://response.pagerduty.com/training/deputy/"
+    communications_liaison: "The purpose of the Communications Liaison is to be the primary individual in charge of notifying our customers of the current conditions, and informing the Incident Commander of any relevant feedback from customers as the incident progresses.\\n\\nIt's important for the rest of the command staff to be able to focus on the problem at hand, rather than worrying about crafting messages to customers.\\n\\nYour job as Communications Liaison is to listen to the call, watch the incident Slack room, and track incoming customer support requests, keeping track of what's going on and how far the incident is progressing (still investigating vs close to resolution).\\n\\nThe Incident Commander will instruct you to notify customers of the incident and keep them updated at various points throughout the call. You will be required to craft the message, gain approval from the IC, and then disseminate that message to customers.\\n\\nMore information: https://response.pagerduty.com/training/customer_liaison/"
+    subject_matter_expert: "A Subject Matter Expert (SME), is a domain expert or designated owner of a component or service that is part of the software stack. The purpose of the SME is to:\\n - Diagnose common problems with the service, \\n - Rapidly fix issues found during an incident\\n - Concise communication skills, specifically for CAN reports:\\n - Condition: What is the current state of the service? Is it healthy or not?\\n - Actions: What actions need to be taken if the service is not in a healthy state?\\n - Needs: What support does the resolver need to perform an action?\\n\\nMore information: https://response.pagerduty.com/training/subject_matter_expert/"
+    scribe: "The purpose of the Scribe is to maintain a timeline of key events during an incident. Documenting actions, and keeping track of any follow-up items that will need to be addressed.\\nIt's important for the rest of the command staff to be able to focus on the problem at hand, rather than worrying about documenting the steps.\\nYour job as Scribe is to listen to the call and to watch the incident Slack room, keeping track of context and actions that need to be performed, documenting these in Slack as you go. You should not be performing any remediations, checking graphs, or investigating logs. Those tasks will be delegated to the subject matter experts (SME's) by the Incident Commander.\\n\\nMore information: https://response.pagerduty.com/training/scribe/"
+  # Severities defined here will appear as options for each incident
+  severities:
+    sev1: 'This signifies a critical production scenario that impacts most or all users with a major impact on SLAs. This is an all-hands-on-deck scenario that requires swift action to restore operation. Customers must be notified.'
+    sev2: 'This signifies a significant production degradation scenario impacting a large portion of users.'
+    sev3: 'This signifies a minor production scenario that may or may not result in degradation. This situation is worth coordination to resolve quickly but does not indicate a critical loss of service for users.'
+    sev4: 'This signifies an ongoing investigation. This incident has not been promoted to SEV3 yet, indicating there may be little to no impact, but the situation warrants a closer look. This is diagnostic in nature. This is the default setting for a new incident.'
+    sev5: 'This signifies a non-production scenario that may or may not result in degradation. This situation is worth coordination to resolve quickly but does not indicate a critical loss of service for users.'
+  # Whether or not to deliver incident update reminders for critical incidents
+  # This will send out a reminder message to an active incident channel at the supplied
+  # interval
+  incident_reminders:
+    # Any severity in this list will have a scheduled reminder job created
+    # This job will remind the channel to send out updates at the interval
+    # specified rate below
+    qualifying_severities:
+      - sev1
+      - sev2
+    # rate determines how often reminders are sent to an incident channel
+    # This is an int and is interpreted as minutes
+    rate: 30
+  # Statuses defined here will appear as options for each incident
+  statuses:
+    - investigating
+    - identified
+    - monitoring
+    - resolved
+  options:
+    # The topic that will be set on all incident channels
+    channel_topic:
+      default: 'This is the default incident channel topic. You can edit it in settings.'
+      # If set to true, set the channel topic to the meeting link. This will override incident_channel_topic.
+      # set_to_meeting_link: true
+    # Timezone to use for logging, etc.
+    timezone: EST
+    # If not using Zoom auto-create
+    conference_bridge_link: "https://app.slack.com/huddle/T02R8QGM1C4/C05KNH29Z1A" #incidents 
+    # Allow creation of an incident by reacting to a message
+    create_from_reaction:
+      # Set to true to enable
+      enabled: true
+      # The name of the reacji
+      # It must exist in your workspace
+      reacji: create-incident
+    # Automatically invite Slack groups to newly created incidents
+    auto_invite_groups:
+      # Set to true to enable
+      enabled: true
+      # List of group names as configured in Slack
+      groups:
+        - itops
+        - devops
+  integrations:
+    # Secret data is provided as environment variables for integrations
+    # Only non-secret data is configured here
+    # Simply provide an empty dict to enable PagerDuty
+    # pagerduty: {}
+    statuspage:
+      # The public URL of the Statuspage.
+      url: https://cliniciannexus.statuspage.io
+      # Which Slack groups have permissions to manage Statuspage incidents?
+      # If not provided, everyone can manage Statuspage incidents from Slack.
+      permissions:
+        groups:
+          - devops
+          - itops
+  links:
+    incident_guide: https://github.com/clinician-nexus/devops-incidents/blob/main/README.md
+    incident_postmortems: https://github.com/clinician-nexus/devops-incidents

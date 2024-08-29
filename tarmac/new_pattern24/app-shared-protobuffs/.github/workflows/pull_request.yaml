@@ -1,0 +1,127 @@
+name: buf-pull-request
+on: pull_request
+
+jobs:
+  protobuf-build:
+    runs-on: ubuntu-latest
+    name: "Lint & build protobuf"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: "1.28.1"
+          buf_domain: clinician-nexus.buf.dev
+          buf_user: ${{ secrets.BUF_PRO_USER }}
+          buf_api_token: ${{ secrets.BUF_PRO_TOKEN }}
+          github_token: ${{ github.token }}
+      - uses: bufbuild/buf-lint-action@v1
+        with:
+          input: "proto"
+      - name: Check formatting
+        continue-on-error: true
+        run: |
+          cd proto
+          buf format . --diff --exit-code --error-format github-actions
+      - uses: bufbuild/buf-breaking-action@v1
+        continue-on-error: true # while in early development, just warn on breaking changes
+        with:
+          input: "proto"
+          against: "https://github.com/${{ github.repository }}.git#branch=main,subdir=proto"
+      ###Python configuration###
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+        env:
+          # Required to detect python properly
+          AGENT_TOOLSDIRECTORY: ${{ runner.tool_cache }}
+      ##Ruby configuration###
+      - name: Ruby version
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - name: Buf Generate
+        run: |
+          cd proto
+          buf generate 
+          cd ../python
+          buf generate clinician-nexus.buf.dev/bufbuild/reflect
+          ./create_init_py.sh
+      - name: Upload Python folder as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-python-artifacts
+          path: python
+      - name: Upload Ruby folder as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-ruby-artifacts
+          path: ruby
+
+  python-build:
+    runs-on: ubuntu-latest
+    name: "Generate Python protobuf classes & package"
+    needs: protobuf-build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Python artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-python-artifacts
+          path: python
+      - uses: tibdex/github-app-token@v2
+        id: get_installation_token
+        with:
+          app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+          installation_retrieval_mode: id
+          installation_retrieval_payload: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y git ca-certificates
+      - name: Setup private repo credentials for private modules
+        run: |
+          git config --global url."https://git:${{ steps.get_installation_token.outputs.token }}@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: "1.27.1"
+          buf_domain: clinician-nexus
+          github_token: ${{ steps.get_installation_token.outputs.token }} #${{ github.token }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - uses: abatilo/actions-poetry@v2
+      - uses: actions/cache@v3
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: python/.venv
+          key: venv-${{ hashFiles('python/poetry.lock') }}
+      - name: Config & install dependencies
+        run: |
+          cd python
+          poetry config http-basic.buf ${{ secrets.BUF_PRO_USER }} ${{ secrets.BUF_PRO_TOKEN }}
+          poetry install --all-extras
+      - name: Build
+        run: |
+          cd python
+          poetry build
+
+  ruby-build:
+    runs-on: ubuntu-latest
+    name: "Ruby protobuf - package"
+    needs: protobuf-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download Ruby artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-ruby-artifacts
+          path: ruby
+      - name: Ruby version
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - name: Generate .gem file
+        run: |
+          cd ruby_gemspec
+          gem build buf_gem.gemspec

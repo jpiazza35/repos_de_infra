@@ -1,0 +1,18 @@
+{
+    "ProductivityCompensationLabel": {
+        "ProductivityCompensationTitle": "Productivity Compensation",
+        "CurrentYearAvgRateperwRVU": "Current Year Avg Rate per wRVU",
+        "PriorYearAvgRateperwRVU": "Prior Year Avg Rate per wRVU",
+        "ProductivityCompensationYTD": "YTD Productivity Compensation",
+        "Tier1": "Tier 1= $44.25",
+        "Tier2": "Tier 2= $49.95",
+        "Tier3": "Tier 3= $43.50",
+        "CurrentYTDwRVUs": "Current YTD wRVUs",
+        "PriorYTDwRVUs": "Prior YTD wRVUs"
+    },
+    "ProductivityCompensationValue": {
+        "CurrentYearAvgRateperwRVU": "$44.25",
+        "PriorYearAvgRateperwRVU": "$44.73",
+        "productCompensationYTD": "$126,679.79"
+    }
+}

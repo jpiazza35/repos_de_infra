@@ -1,0 +1,15 @@
+{
+    "BenchmarkDataTilesLabel": {
+        "BenchmarkDataTilesTitle": "Benchmark",
+        "YTDwRVUs": "YTD wRVUs",
+        "BenchmarkFTE": "Benchmark FTE",
+        "wRVUsFTE": "wRVUs/FTE",
+        "YTDBenchmarkpercentile": "YTD Benchmark %ile"
+    },
+    "BenchmarkDataTilesValue": {
+        "YTDwRVUs": "2,843.63",
+        "BenchmarkFTE": "0.70",
+        "wRVUsFTE": "4,062.34",
+        "YTDBenchmarkpercentile": "82"
+    }
+}

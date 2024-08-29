@@ -1,0 +1,7 @@
+   checks:
+     addAllBuiltIn: false 
+     exclude:
+       - "unset-cpu-requirements"
+       - "non-existent-service-account"
+       
+ 

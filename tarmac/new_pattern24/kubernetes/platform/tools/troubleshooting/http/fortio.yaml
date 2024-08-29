@@ -1,0 +1,14 @@
+# https://github.com/fortio/fortio
+# Tool for load testing
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortio
+  namespace: default
+spec:
+  containers:
+  - name: fortio
+    image: fortio/fortio
+    command: ["fortio", "load", "-c", "20", "-qps", "50", "-L", "-k", "-t", "600s", "https://stage-app-acm.cliniciannexus.com"]
+    imagePullPolicy: IfNotPresent
+    resources: {}

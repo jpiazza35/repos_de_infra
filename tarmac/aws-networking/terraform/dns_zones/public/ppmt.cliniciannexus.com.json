@@ -1,0 +1,27 @@
+{
+    "ZoneDefinition": {
+        "Name": "ppmt.cliniciannexus.com",
+        "Parent": "cliniciannexus.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "api.ppmt.cliniciannexus.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z1UJRXOUMOOFQ8",
+                "DNSName": "d-mkssdkaqhe.execute-api.us-east-1.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "_d12558c9cea95edae239cb1463276554.api.ppmt.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_cbd1980a034ee55c40b2004ba704b707.bkngfjypgb.acm-validations.aws."
+                }
+            ]
+        }
+    ]
+}

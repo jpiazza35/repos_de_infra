@@ -1,0 +1,36 @@
+apiVersion: v1
+data:
+  url: ${argocd_url}
+  admin.enabled: "false"
+  application.instanceLabelKey: argocd.argoproj.io/instance
+  exec.enabled: "false"
+  server.rbac.log.enforce.enable: "false"
+  timeout.hard.reconciliation: 0s
+  timeout.reconciliation: ${argocd_sync_interval_time}
+  dex.config: |-
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: ${argocd_client_id}
+          clientSecret: ${argocd_client_secret}
+          orgs:
+            - name: ${argocd_org_name}
+          useLoginAsID: true
+          teamNameField: slug
+          loadAllGroups: true
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: ${argocd_release_name}
+    meta.helm.sh/release-namespace: ${argocd_release_namespace}
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: argo-cd
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+    helm.sh/chart: argo-cd-${argocd_chart_version}
+  name: argocd-cm
+  namespace: ${argocd_release_namespace}

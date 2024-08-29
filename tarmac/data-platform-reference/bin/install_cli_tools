@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+
+# install homebrew https://brew.sh/
+brew install \
+    awscli \
+    docker \
+    docker-compose \
+    lazydocker \
+    neovim \
+    python@3.11 \
+    pipx \
+    pyenv \
+    direnv \
+    jq \
+    fzf \
+    k9s \
+    kubectx \
+    terraform \
+    terragrunt \
+    pre-commit \
+    tree \
+    java \
+    scala \
+    jupyterlab \
+    gh \
+    black \
+    mermaid-cli
+
+pipx install poetry
+
+pip install databricks-cli

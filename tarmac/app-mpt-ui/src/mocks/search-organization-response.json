@@ -1,0 +1,33 @@
+{
+  "isSuccess": true,
+  "result": [
+    { "id": 10425, "name": "test organization" },
+    { "id": 3774, "name": "Protestant Memorial" },
+    { "id": 4374, "name": "Alfred I. DuPont Testamentary Trust" },
+    { "id": 7700, "name": "SullivanCotter360 Survey Test Parent_PREFERRED" },
+    { "id": 7701, "name": "SullivanCotter360 Survey Test Child 1" },
+    { "id": 7702, "name": "SullivanCotter360 Survey Test Child 2" },
+    { "id": 7860, "name": "Test - Clinic ABC" },
+    { "id": 8563, "name": "SullivanCotter NFP Survey Test Org" },
+    { "id": 8941, "name": "Educational Testing Service" },
+    { "id": 9768, "name": "SullivanCotterBenchmarksTEST" },
+    { "id": 9887, "name": "Test" },
+    { "id": 9888, "name": "test" },
+    { "id": 9951, "name": "SullivanCotter360 Survey Auditbook Test" },
+    { "id": 12027, "name": "W.S. & E.C. Jones Testamentary Trust" },
+    { "id": 12221, "name": "Grace Jones Richardson Testamentary" },
+    { "id": 12326, "name": "Frederick Henry Prince Testamentary Trust" },
+    { "id": 13330, "name": "SullivanCotter360 Survey Test Parent_PREFERRED A" },
+    { "id": 13331, "name": "SullivanCotter360 Survey Test Parent_PREFERRED B" },
+    { "id": 13332, "name": "SullivanCotter360 Survey Test Parent_PREFERRED C" },
+    { "id": 13333, "name": "SullivanCotter360 Survey Test Parent_PREFERRED D" },
+    { "id": 13334, "name": "SullivanCotter360 Survey Test Parent_PREFERRED E" },
+    { "id": 13335, "name": "SullivanCotter360 Survey Test Parent_PREFERRED F" },
+    { "id": 13351, "name": "SullivanCotter360 Survey Test Parent_PREFERRED G" },
+    { "id": 13352, "name": "SullivanCotter360 Survey Test Parent_PREFERRED H" },
+    { "id": 13353, "name": "SullivanCotter360 Survey Test Parent_PREFERRED I" },
+    { "id": 13354, "name": "SullivanCotter360 Survey Test Parent_PREFERRED J" }
+  ],
+  "displayMessage": "",
+  "errorMessages": null
+}

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.101.59" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="IronPdf" Version="2023.8.6" />
+    <PackageReference Include="IronPdf.Linux" Version="2023.8.6" />
+    <PackageReference Include="IronPdf.Native.Chrome.Linux" Version="2023.8.17287" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Npgsql" Version="7.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\grpc-client\CN.Project.Client.csproj" />
+    <ProjectReference Include="..\domain\CN.Project.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

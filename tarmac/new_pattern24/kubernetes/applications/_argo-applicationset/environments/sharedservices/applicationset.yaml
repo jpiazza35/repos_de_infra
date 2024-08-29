@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: applicationset-sharedservices
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - app: github-runners
+        path: applications/github_runners/overlays/environments/sharedservices
+        namespace: actions-runner-system
+      - app: runner-controller
+        path: applications/runner_controller/overlays/environments/sharedservices
+        namespace: actions-runner-system
+      - app: oncall
+        path: applications/oncall/overlays/environments/sharedservices
+        namespace: oncall
+      - app: incident-bot
+        path: applications/incident_bot/overlays/environments/sharedservices
+        namespace: incident-bot
+
+  template:
+    metadata:
+      name: '{{app}}'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      source:
+        repoURL: https://github.com/clinician-nexus/Kubernetes
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'

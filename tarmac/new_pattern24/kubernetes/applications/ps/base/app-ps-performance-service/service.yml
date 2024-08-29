@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-ps-performance-service
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: https
+    port: 10000
+    protocol: TCP
+    targetPort: 10000
+  selector:
+    app.kubernetes.io/instance: app-ps-performance-service
+    app.kubernetes.io/name: app-ps-performance-service
+  sessionAffinity: None
+  type: ClusterIP

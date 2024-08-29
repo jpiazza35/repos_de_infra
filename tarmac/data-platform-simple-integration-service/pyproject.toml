@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "simple-integration-service"
+version = "0.1.0"
+description = "Simple Integration Service provides simple mapping, pvioting, and calculated fields as a service between multiple source schema and a target schema."
+authors = ["Data Platform Team <dataplatform@cliniciannexus.com>"]
+readme = "README.md"
+packages = [{include = "simple_integration_service"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+databricks-connect = { path = "./local-pypi/databricks_connect-13.0.0-py2.py3-none-any.whl", develop = true }
+betterproto = { version = "^1.2.5", extras = ["compiler"] }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,42 @@
+# Bigeye Agent configuration
+
+# Multiple data sources can be defined below (sources is a list)
+sources:
+  # NOTE: The identifier name must match exactly the name used when registering the data source in the Bigeye UI
+  # Jinja that creates an new block of identifiers for each database in the user data
+  {% for db in bigeye_databases %}
+  - identifier: {{ db }}
+    connectionFactory:
+      # possible types: awsathena, mysql, oracle, postgresql, presto, redshift, sap, snowflake, spark,
+      #                 sqlserver, synapse, trino, vertica
+      # types not listed above require additional configuration, examples of which are below
+      type: {{ bigeye_source_type }}
+      host: {{ bigeye_source_host }}
+      port:
+      user: {{ bigeye_source_username }}
+      password: {{ bigeye_source_password }}
+      databaseName: {{ db }}
+  {% endfor %}
+
+##############################
+# Below settings have been generated
+# Typically below this point will not be changed
+##############################
+
+# Ask Bigeye support for this if lost
+companyUuid: 312ec41f-49db-436f-8b64-ee5018bfc956
+
+# This is app-workflows.bigeye.com for multi-tenant saas or <company prefix>-workflows.bigeye.com for single-tenant saas.
+workflowUrl: app-workflows.bigeye.com
+
+mutualTlsEnabled: true
+
+# These paths are "in container" (ie where the certs were mounted and not the path on the local file system where docker is being run)
+mtlsCertLocation: /app/config/mtls.pem
+mtlsKeyLocation: /app/config/mtls.key
+publicEncryptionKeyDir: /app/config
+privateEncryptionKeyPath: /app/config/private.pem
+
+# Set this to true to have the agent print ever query it executes onto console.  Not recommended for production
+logQueries: false
+healthLoggerEnabled: true

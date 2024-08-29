@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: vault-cert-issuer
+rules:
+  - apiGroups: ['']
+    resources: ['serviceaccounts/token']
+    resourceNames: ['vault-cert-issuer']
+    verbs: ['create']
+  - apiGroups:
+    - cert-manager.io
+    resources:
+    - signers
+    verbs:
+    - approve
+    resourceNames:
+    - clusterissuers.vault-cert-issuer/*

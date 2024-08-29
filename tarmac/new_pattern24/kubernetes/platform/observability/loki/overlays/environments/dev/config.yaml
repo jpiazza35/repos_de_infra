@@ -1,0 +1,73 @@
+auth_enabled: true
+common:
+  compactor_address: 'loki-backend'
+  path_prefix: /var/loki
+  replication_factor: 3
+  storage:
+    s3:
+      bucketnames: chunks-loki-cluster-dev
+      insecure: false
+      region: us-east-1
+      s3forcepathstyle: false
+frontend:
+  scheduler_address: query-scheduler-discovery.monitoring.svc.cluster.local.:9095
+frontend_worker:
+  scheduler_address: query-scheduler-discovery.monitoring.svc.cluster.local.:9095
+index_gateway:
+  mode: ring
+limits_config:
+  enforce_metric_name: false
+  max_cache_freshness_per_query: 10m
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+  split_queries_by_interval: 15m
+  ingestion_rate_mb: 1024
+  ingestion_burst_size_mb: 1024
+  max_global_streams_per_user: 0
+  max_entries_limit_per_query: 1000000
+memberlist:
+  join_members:
+  - loki-memberlist
+query_range:
+  align_queries_with_step: true
+  cache_results: true
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 500
+chunk_store_config:
+  max_look_back_period: 0s
+  chunk_cache_config:
+    embedded_cache:
+      enabled: true
+      max_size_mb: 500
+      ttl: 24h
+
+ruler:
+  storage:
+    s3:
+      bucketnames: ruler-loki-cluster-dev
+      insecure: false
+      region: us-east-1
+      s3forcepathstyle: false
+    type: s3
+runtime_config:
+  file: /etc/loki/runtime-config/runtime-config.yaml
+schema_config:
+  configs:
+  - from: "2022-01-11"
+    index:
+      period: 24h
+      prefix: loki_index_
+    object_store: s3
+    schema: v12
+    store: boltdb-shipper
+server:
+  grpc_listen_port: 9095
+  http_listen_port: 3100
+storage_config:
+  hedging:
+    at: 250ms
+    max_per_second: 20
+    up_to: 3

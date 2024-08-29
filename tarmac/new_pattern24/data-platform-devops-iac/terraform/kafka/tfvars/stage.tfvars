@@ -1,0 +1,8 @@
+env                   = "stage"
+app                   = "msk"
+name                  = "msk"
+kafka_version         = "3.5.1"
+kafka_instance_type   = "kafka.t3.small"
+databricks_account_id = "654654541334"
+eks_account_id        = "071766652168"
+qa_eks_account_id     = "063890802877"

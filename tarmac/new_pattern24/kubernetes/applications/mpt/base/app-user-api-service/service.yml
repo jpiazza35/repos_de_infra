@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-user-api-service
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: https
+    port: 7211
+    protocol: TCP
+    targetPort: 7211
+  selector:
+    app.kubernetes.io/instance: app-user-api-service
+    app.kubernetes.io/name: app-user-api-service
+  sessionAffinity: None
+  type: ClusterIP

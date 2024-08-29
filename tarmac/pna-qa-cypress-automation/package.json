@@ -1,0 +1,52 @@
+{
+  "name": "qa-cypress-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "e2e.js",
+  "retries": {
+    "runMode": 1,
+    "openMode": 1
+  },
+  "devDependencies": {
+    "@cypress/xpath": "^2.0.3",
+    "cy-verify-downloads": "^0.1.15",
+    "cypress": "^13.2.0",
+    "cypress-delete-downloads-folder": "^0.0.2",
+    "cypress-downloadfile": "^1.2.3",
+    "cypress-file-upload": "^5.0.8",
+    "cypress-mochawesome-reporter": "^3.2.3",
+    "cypress-xpath": "^2.0.1",
+    "mocha": "^10.2.0",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.2.2",
+    "mochawesome-report-generator": "^6.2.0",
+    "neat-csv": "^5.2.0",
+    "node-xlsx": "^0.23.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cy:open": "npx cypress open",
+    "cy:chrome": "npx cypress run  --browser chrome",
+    "cy:chrome-record": "npx cypress run  --browser chrome --record --key 4a83e345-34b5-4f0c-805f-297161af43d0",
+    "cy:smoke": "npx cypress run --browser chrome --env tags='@smoke'",
+    "cy:regression": "npx cypress run --browser chrome --env tags='@regression'",
+    "mocha-clean-reports": "rm -rf cypress/reports",
+    "cy:run": "npm run mocha-clean-reports && npm run cy:chrome",
+    "cy:run-smoke": "npm run mocha-clean-reports && npm run cy:smoke",
+    "cy:run-regression": "npm run mocha-clean-reports && npm run cy:regression",
+    "cy:run-dev": "npx cypress run --config-file env-configs/dev.config.js",
+    "cy:run-test": "npx cypress run --config-file env-configs/test.config.js",
+    "cy:run-stage": "npx cypress run --config-file env-configs/stage.config.js",
+    "cy:run-prod": "npx cypress run --config-file env-configs/prod.config.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress-downloadfile": "^1.2.3",
+    "cypress-localstorage-commands": "^2.2.1",
+    "cypress-multi-reporters": "^1.6.2",
+    "fs": "^0.0.1-security",
+    "read-excel-file": "^5.5.3",
+    "xlsx": "^0.19.3"
+  }
+}

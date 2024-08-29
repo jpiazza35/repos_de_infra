@@ -1,0 +1,50 @@
+- source:
+    kind: ConfigMap
+    name: app-bm-ui
+    fieldPath: data.url
+  targets:
+  
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - spec.rules.*.host
+    options:
+      create: false
+      delimiter: '.'
+      index: 1
+  
+  - select:
+      name: bm
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+    options:
+      create: false
+      delimiter: '.'
+      index: 1
+
+- source:
+    kind: ConfigMap
+    name: app-bm-ui
+    fieldPath: data.env
+  targets:
+
+  - select:
+      kind: Deployment
+    fieldPaths:
+      - metadata.labels.environment
+    options:
+      create: true
+
+- source:
+    kind: ConfigMap
+    name: app-bm-ui
+    fieldPath: data.acm
+  targets:
+
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[alb.ingress.kubernetes.io/certificate-arn]
+    options:
+      create: false

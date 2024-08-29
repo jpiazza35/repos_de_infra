@@ -1,0 +1,199 @@
+# A hotfix specific workflow that will run on any hotfix/ prefixed branch to deploy directly to production.
+
+name: Hotfix - Build and publish the CN.Incumbent.Servercontainer image
+run-name: Hotfix - ${{ github.actor }} build CN.Incumbent.Server
+
+# Run on push of hotfix/ prefixed branch
+on:
+  push:
+    branches:
+      - 'hotfix/**'
+    paths-ignore:
+      - 'rest-api/**'
+#      - './tests/**'
+# 
+#    tags:
+#      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  REPO_NAME: app-incumbent-service
+  PROJECT_NAME: app-incumbent-grpc-service
+  PROJECT_DIR: ./grpc-server
+  ENVIRONMENT: prod
+  PRODUCT: mpt
+  GH_REGISTRY: ghcr.io
+  HELM_REPO_NAME: helm-charts
+  SS_TOOLS_ECR: app-incumbent-grpc-service-ecr-repo
+  UNIT_TEST_DIR: ./tests
+  DESCRIPTION: Incumbent service for Market Pricing Tool
+  BUILD_PLATFORMS: linux/amd64 #, linux/arm64
+
+jobs:
+  deploy-prod:
+    name: Build, push and deploy container image to prod environment
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['7.0']
+    permissions:
+      contents: write
+      packages: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+
+    steps:
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token}}
+          submodules: true
+          fetch-depth: 0
+
+      # QEMU can be used to build multi-architecture images. I'm not sure if DOTNET runs on ARM. We can revisit this
+      # at a later date.
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+            versionSpec: '5.x'
+            
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+
+      - name: Display SemVer
+        run: |
+          echo "SemVer: $GITVERSION_SEMVER" && echo "$version" && echo "$major.$minor.$patch"
+          
+      - name: Create git tag
+        run: |
+          git tag $GITVERSION_SEMVER
+          
+      - name: Push git tag
+        run: git push origin $GITVERSION_SEMVER
+
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Compute short versions of SHASUM and repository name
+        id: shorten
+        run: |
+          echo "sha=$(git rev-parse --short=10 HEAD)" >> $GITHUB_OUTPUT
+          echo "repo=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: Create new tag
+        id: git-tag
+        run: |
+          echo "git_tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_OUTPUT   
+
+      - name: Print shortend names for debugging
+        run: |
+          echo "Short SHA ${{ steps.shorten.outputs.sha }}" 
+          echo "Short Repo ${{ steps.shorten.outputs.repo }}"
+          echo "Git Tag ${{ steps.git-tag.outputs.git_tag }}"
+
+      - name: Calculate RFC 3339 date
+        id: date
+        run: |
+          echo "date=$(date --rfc-3339=seconds --utc)" >> $GITHUB_OUTPUT
+
+      - name: Print calculated date
+        run: |
+          echo "Calculated date ${{ steps.date.outputs.date }}"
+
+      # If someone pushed a tag, we should add that to the container image.
+      # This takes a little bit of work to sort out.
+      - name: Calculate tag
+        id: tag
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Print calculated tag
+        run: |
+          echo "Calculated tag ${{ steps.tag.outputs.tag }}"
+
+      - name: Login to Github Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.GH_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: MPT-retag-push-PROD
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build using buildx and push
+        id: build-push
+        uses: docker/build-push-action@v3
+        with:
+          tags: |
+            ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:${{ steps.git-tag.outputs.git_tag }}
+            ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:${{ env.ENVIRONMENT }}-hotfix
+            ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:${{ steps.shorten.outputs.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}:${{ steps.git-tag.outputs.git_tag }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}:${{ steps.shorten.outputs.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}:${{ env.ENVIRONMENT }}-hotfix
+          context: .
+          file: ${{ env.PROJECT_DIR }}/Dockerfile
+          platforms: ${{ env.BUILD_PLATFORMS }}
+          outputs: type=docker
+          cache-from: type=registry,ref=${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest
+          cache-to: type=registry,ref=${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}:latest,mode=max
+          labels: |
+            org.opencontainers.image.title=${{ env.PROJECT_NAME }}
+            org.opencontainers.image.description=${{ env.DESCRIPTION }}
+            org.opencontainers.image.licenses=COMMERCIAL
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.created=${{ steps.date.outputs.date }}
+            org.opencontainers.image.version=${{ steps.shorten.outputs.sha }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            org.opencontainers.image.base.name=mcr.microsoft.com/dotnet/sdk::${{ matrix.dotnet-version }}
+
+      - name: Push images to registries
+        run: |
+          docker push -a ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.SS_TOOLS_ECR }}
+          docker push -a ${{ steps.login-ecr.outputs.registry }}/${{ env.SS_TOOLS_ECR }}
+
+      - name: Image digest
+        run: echo ${{ steps.build-push.outputs.digest }}
+
+      - name: Set needed outputs for helm GH repo pipeline
+        id: helm
+        run: |
+          echo "docker_image_tag=${{ env.ENVIRONMENT }}-hotfix" >> $GITHUB_OUTPUT
+          echo "project_name=${{ env.PROJECT_NAME }}" >> $GITHUB_OUTPUT
+          echo "environment=${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "product=${{ env.PRODUCT }}" >> $GITHUB_OUTPUT
+          echo "commit_url=${{ github.server_url }}/${{ github.repository_owner }}/${{ env.REPO_NAME }}/commit/${{ github.sha }}" >> $GITHUB_OUTPUT
+      
+      - name: Trigger production helm GH pipeline and pass docker-tag sha
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: clinician-nexus/${{ env.HELM_REPO_NAME }}
+          event-type: trigger-prod-pipeline
+          client-payload: '{"docker_image_tag": "${{ steps.helm.outputs.docker_image_tag }}", "project_name": "${{ steps.helm.outputs.project_name }}", "environment": "${{ steps.helm.outputs.environment }}", "product": "${{ steps.helm.outputs.product }}", "commit_url": "${{ steps.helm.outputs.commit_url }}", "commit_author": "${{ env.COMMIT_AUTHOR }}"}'

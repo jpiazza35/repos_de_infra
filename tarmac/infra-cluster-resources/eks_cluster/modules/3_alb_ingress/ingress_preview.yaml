@@ -1,0 +1,390 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_mpt_name}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: ${ingress_mpt_preview_host}
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-path: ${ingress_mpt_apps_healthcheck_endpoint}
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/subnets: ${private_subnet_ids}
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-mpt-ui-${environment}
+                port:
+                  name: https
+          - path: /api/users
+            pathType: Prefix
+            backend:
+              service:
+                name: app-user-api-service-${environment}
+                port:
+                  name: https
+          - path: /api/projects
+            pathType: Prefix
+            backend:
+              service:
+                name: app-mpt-project-service-${environment}
+                port:
+                  name: https
+          - path: /api/survey
+            pathType: Prefix
+            backend:
+              service:
+                name: app-survey-api-service-${environment}
+                port:
+                  name: https
+          - path: /api/files
+            pathType: Prefix
+            backend:
+              service:
+                name: app-incumbent-api-service-${environment}
+                port:
+                  name: https
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_organization_grpc_service}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/backend-protocol-version: GRPC
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7004}]'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ${ingress_name_app_organization_grpc_service}-${environment}
+                port:
+                  number: 7004
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_user_grpc_service}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/backend-protocol-version: GRPC
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7051}]'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ${ingress_name_app_user_grpc_service}-preview
+                port:
+                  number: 7051
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_survey_grpc_service}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/backend-protocol-version: GRPC
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7052}]'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ${ingress_name_app_survey_grpc_service}-preview
+                port:
+                  number: 7052
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_incumbent_grpc_service}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/backend-protocol-version: GRPC
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 8004}]'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ${ingress_name_app_incumbent_grpc_service}-preview
+                port:
+                  number: 8004
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_user_api_swagger}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-path: ${ingress_mpt_apps_healthcheck_endpoint}
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7211}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: ${ingress_swagger_endpoint}
+            pathType: Prefix
+            backend:
+              service:
+                name: app-user-api-service-${environment}
+                port:
+                  number: 7211
+          - path: /api/users
+            pathType: Prefix
+            backend:
+              service:
+                name: app-user-api-service-${environment}
+                port:
+                  number: 7211
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_mpt_project_swagger}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-path: ${ingress_mpt_apps_healthcheck_endpoint}
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7350}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: ${ingress_swagger_endpoint}
+            pathType: Prefix
+            backend:
+              service:
+                name: app-mpt-project-service-${environment}
+                port:
+                  number: 7350
+          - path: /api/projects
+            pathType: Prefix
+            backend:
+              service:
+                name: app-mpt-project-service-${environment}
+                port:
+                  number: 7350
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_survey_api_swagger}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-path: ${ingress_mpt_apps_healthcheck_endpoint}
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 7286}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: ${ingress_swagger_endpoint}
+            pathType: Prefix
+            backend:
+              service:
+                name: app-survey-api-service-${environment}
+                port:
+                  number: 7286
+          - path: /api/survey
+            pathType: Prefix
+            backend:
+              service:
+                name: app-survey-api-service-${environment}
+                port:
+                  number: 7286
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_name_app_incumbent_api_swagger}-${environment}
+  namespace: ${mpt_preview_namespace}
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ${ingress_group_name}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-path: ${ingress_mpt_apps_healthcheck_endpoint}
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 8001}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  rules:
+    - host: ${ingress_mpt_preview_host}
+      http:
+        paths:
+          - path: ${ingress_swagger_endpoint}
+            pathType: Prefix
+            backend:
+              service:
+                name: app-incumbent-api-service-${environment}
+                port:
+                  number: 8001
+          - path: /api/files
+            pathType: Prefix
+            backend:
+              service:
+                name: app-incumbent-api-service-${environment}
+                port:
+                  number: 8001
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${ingress_ps_name}-${environment}
+  namespace: ${ps_preview_namespace}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: ${ingress_ps_preview_host}
+    alb.ingress.kubernetes.io/load-balancer-name: ${ingress_ps_preview_alb_name}
+    alb.ingress.kubernetes.io/group.name: ${ingress_ps_preview_group_name}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-path: ${ingress_ps_apps_healthcheck_endpoint}
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/subnets: ${public_subnet_ids}
+    alb.ingress.kubernetes.io/tags: Environment=prod,Team=devops
+    alb.ingress.kubernetes.io/certificate-arn: ${ingress_certificate_arn}
+
+spec:
+  ingressClassName: alb
+  defaultBackend:
+    service:
+      name: app-ps-ui-${environment}
+      port:
+        name: https
+  rules:
+    - host: ${ingress_ps_preview_host}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-ps-ui-${environment}
+                port:
+                  name: https
+          - path: /comp-summary
+            pathType: Prefix
+            backend:
+              service:
+                name: app-ps-comp-summary-${environment}
+                port:
+                  name: https

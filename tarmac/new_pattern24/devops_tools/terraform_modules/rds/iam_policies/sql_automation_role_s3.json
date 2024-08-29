@@ -1,0 +1,16 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "SQLS3Access",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "${sql_automation_bucket_arn}",
+                "${sql_automation_bucket_arn}/*"
+            ]
+        }
+    ]
+}

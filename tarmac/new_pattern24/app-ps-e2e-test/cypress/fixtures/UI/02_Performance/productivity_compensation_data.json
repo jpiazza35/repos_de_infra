@@ -1,0 +1,29 @@
+{
+    "mockData": {
+        "productivityCompensationLabel": {
+            "productivityCompensationTitle": "Productivity Compensation",
+            "currentYearAvgRateperwRVU": "Current Year Avg Rate per wRVU",
+            "priorYearAvgRateperwRVU": "Prior Year Avg Rate per wRVU",
+            "productivityCompensationYTD": "YTD Productivity Compensation",
+            "tier1": "Tier 1 = $44.25",
+            "tier2": "Tier 2 = $49.95",
+            "tier3": "Tier 3 = $43.50",
+            "currentYTDwRVUs": "Current YTD wRVUs",
+            "priorYTDwRVUs": "Prior YTD wRVUs",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    },
+    "realData": {
+        "productivityCompensationLabel": {
+            "productivityCompensationTitle": "Productivity Compensation",
+            "currentYearAvgRateperwRVU": "Current Year Avg Rate per wRVU",
+            "priorYearAvgRateperwRVU": "Prior Year Avg Rate per wRVU",
+            "productivityCompensationYTD": "YTD Productivity Compensation",
+            "tier1": "Tier1 = $0.00",
+            "tier2": "Tier2 = $47.50",
+            "currentYTDwRVUs": "Current YTD wRVUs",
+            "priorYTDwRVUs": "Prior YTD wRVUs",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    }
+}

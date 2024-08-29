@@ -1,0 +1,24 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Sid": "AssumeRole",
+          "Effect": "Allow",
+          "Action": "sts:AssumeRole",
+          "Resource": "arn:aws:iam::993562814415:role/p_eks_oidc_role"
+      },
+      {
+          "Sid": "S3Access",
+          "Effect": "Allow",
+          "Action": [
+              "s3:*"
+          ],
+          "Resource": [
+              "arn:aws:s3:::prod-mpt-etl-source-data-993562814415",
+              "arn:aws:s3:::prod-mpt-etl-source-data-993562814415/*",
+              "arn:aws:s3:::preview-mpt-etl-source-data-993562814415/*",
+              "arn:aws:s3:::preview-mpt-etl-source-data-993562814415"
+          ]
+      }
+  ]
+}

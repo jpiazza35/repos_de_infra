@@ -1,0 +1,96 @@
+{
+    "mockData": {
+        "userId": 1004,
+        "tenant": 1,
+        "dashboardKey": 2,
+        "cardKey": 8,
+        "specialties": 2223,
+        "periodId": 1,
+        "yearMonth": 202201,
+        "settlementResponse": {
+            "cardSettings": {
+                "title": "Settlement",
+                "infoIcon": ""
+            },
+            "detail": [
+                {
+                    "title": "Compensation Earned",
+                    "value": 126679.79,
+                    "label": "YTD Comp Earned",
+                    "image": "CompensationEarned"
+                },
+                {
+                    "title": "Compensation Paid",
+                    "value": 124480,
+                    "label": "YTD Comp Paid",
+                    "image": "CompensationPaid"
+                },
+                {
+                    "title": "Cumulative Difference",
+                    "value": 2199.79,
+                    "label": "YTD Cumulative Diff",
+                    "image": "CumulativeDifference"
+                },
+                {
+                    "title": "Settlement Adjustment",
+                    "value": 0,
+                    "label": "Settlement Adj",
+                    "image": "SettlementAdjustment"
+                },
+                {
+                    "title": "Final Settlement",
+                    "value": 2199.79,
+                    "label": "Final Settlement",
+                    "image": "FinalSettlement"
+                }
+            ]
+        }
+    },
+    "realData": {
+        "userId": "AD162",
+        "tenant": 2,
+        "dashboardKey": 4,
+        "cardKey": 8,
+        "specialties": 1320,
+        "periodId": 1,
+        "yearMonth": 202207,
+        "settlementResponse": {
+            "cardSettings": {
+                "title": "Settlement",
+                "infoIcon": ""
+            },
+            "detail": [
+                {
+                    "title": "Compensation Earned",
+                    "value": 300000,
+                    "label": "YTD Comp Earned",
+                    "image": "CompensationEarned"
+                },
+                {
+                    "title": "Compensation Paid",
+                    "value": 0,
+                    "label": "YTD Comp Paid",
+                    "image": "CompensationPaid"
+                },
+                {
+                    "title": "Cumulative Difference",
+                    "value": 300000,
+                    "label": "YTD Cumulative Diff",
+                    "image": "CumulativeDifference"
+                },
+                {
+                    "title": "Settlement Adjustment",
+                    "value": 0,
+                    "label": "Settlement Adj",
+                    "image": "SettlementAdjustment"
+                },
+                {
+                    "title": "Final Settlement",
+                    "value": 300000,
+                    "label": "Final Settlement",
+                    "image": "FinalSettlement"
+                }
+            ]
+        }
+    }
+}

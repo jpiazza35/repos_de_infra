@@ -1,0 +1,9 @@
+configMap:
+  create: false
+envFromSecret:
+  enabled: true
+  secretName: incident-bot-secret
+ingress:
+  enabled: false
+envVars:
+  # CONFIG_FILE_PATH: /config/incident-bot/config.yml

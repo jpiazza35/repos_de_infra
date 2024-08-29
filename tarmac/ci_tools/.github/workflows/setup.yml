@@ -1,0 +1,18 @@
+name: Connect to ECR and pull a private container image for later use
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: 'Container image to use in subsequent steps'
+        required: true
+        type: string
+
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+        - name: docker pull
+          run: docker pull ${{ inputs.image }}
+          shell: bash

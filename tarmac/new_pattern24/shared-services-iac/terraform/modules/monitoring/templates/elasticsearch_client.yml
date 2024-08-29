@@ -1,0 +1,102 @@
+replicas: ${es_client_replicas}
+
+esMajorVersion: ${es_major_version}
+
+clusterName: ${es_cluster_name}
+
+clusterHealthCheckParams: "wait_for_status=green&timeout=30s"
+
+nodeGroup: client
+
+antiAffinity: "soft"
+
+roles: []
+
+rbac:
+  create: ${es_rbac_enable}
+
+image: ${es_image}
+imageTag: ${es_image_tag}
+
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+
+persistence:
+  enabled: false
+
+volumeClaimTemplate:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: ${es_client_persistence_disk_size}
+
+resources: ${es_client_resources}
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  successThreshold: 3
+  timeoutSeconds: 5
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  # readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+extraEnvs:
+  - name: ELASTIC_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: ${es_cluster_name}-master-credentials
+        key: password
+  - name: xpack.security.enabled 
+    value: "true" 
+  - name: xpack.security.transport.ssl.enabled 
+    value: "true" 
+  - name: xpack.security.http.ssl.enabled 
+    value: "true" 
+  - name: xpack.security.transport.ssl.verification_mode 
+    value: "certificate" 
+  - name: xpack.security.transport.ssl.key 
+    value: "/usr/share/elasticsearch/config/certs/tls.key" 
+  - name: xpack.security.transport.ssl.certificate 
+    value: "/usr/share/elasticsearch/config/certs/tls.crt"
+  - name: xpack.security.transport.ssl.certificate_authorities
+    value: "/usr/share/elasticsearch/config/certs/ca.crt"
+  - name: xpack.security.http.ssl.key
+    value: "/usr/share/elasticsearch/config/certs/tls.key"
+  - name: xpack.security.http.ssl.certificate
+    value: "/usr/share/elasticsearch/config/certs/tls.crt"
+  - name: xpack.security.http.ssl.certificate_authorities
+    value: "/usr/share/elasticsearch/config/certs/ca.crt"
+
+esConfig:
+  elasticsearch.yml: |
+    node.roles: []
+
+secret:
+  enabled: true
+
+createCert: false
+secretMounts:
+  - name: elastic-certificates
+    secretName: ${es_cluster_name}-master-certs
+    path: /usr/share/elasticsearch/config/certs
+
+service:
+  enabled: true
+  type: NodePort
+  publishNotReadyAddresses: false
+  httpPortName: http
+  transportPortName: transport
+  externalTrafficPolicy: Local
+
+protocol: https
+httpPort: 9200
+transportPort: 9300

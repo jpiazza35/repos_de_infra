@@ -1,0 +1,397 @@
+syntax = "proto3";
+
+package cn.survey.app.v1;
+
+import "cn/anomalyprofiling/v1/anomaly_suggestions_framework.proto";
+import "cn/datagovernance/v1/data_governance_framework.proto";
+import "cn/datagovernance/v1/quality_control_framework.proto";
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/timestamp.proto";
+
+message AppIncumbentSourceOrientedQuarantine {
+  string organization_id = 1 [
+    (cn.datagovernance.v1.display_name) = "Organization ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  string internal_tracking_id = 2 [
+    (cn.datagovernance.v1.display_name) = "Your Unique Internal Tracking ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  string npi_number = 3 [
+    (cn.datagovernance.v1.display_name) = "NPI Number (Required)"
+  ];
+  string job_code = 4 [
+    (cn.datagovernance.v1.display_name) = "Specialty/Job Code (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  string position_level = 5 [
+    (cn.datagovernance.v1.display_name) = "Position Level (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  string your_official_title = 6 [(cn.datagovernance.v1.display_name) = "Your Official Title (Leadership Positions Only)"];
+  string titles_to_whom_this_position_reports = 7 [(cn.datagovernance.v1.display_name) = "Reports to the Following - If Dual Reporting, List Both (Leadership Positions Only)"];
+  string date_of_original_app_licensure = 8 [
+    (cn.datagovernance.v1.display_name) = "Original Licensure Date",
+    (cn.datagovernance.v1.format_date) = "M/d/yyyy"
+  ];
+  string date_of_hire = 9 [
+    (cn.datagovernance.v1.display_name) = "Date of Hire (mm/dd/yyyy)",
+    (cn.datagovernance.v1.format_date) = "M/d/yyyy"
+  ];
+  string providers_age = 10 [(cn.datagovernance.v1.display_name) = "Provider's Age"];
+  string gender = 11 [(cn.datagovernance.v1.display_name) = "Gender"];
+  string ethnicity = 12 [(cn.datagovernance.v1.display_name) = "Ethnicity"];
+  string covered_by_collective_bargaining = 13 [(cn.datagovernance.v1.display_name) = "Covered by Collective Bargaining (Y or N)"];
+  string exempt_status = 14 [(cn.datagovernance.v1.display_name) = "Exempt Status"];
+  string surgical_first_assistant = 15 [(cn.datagovernance.v1.display_name) = "Surgical First Assistant (Y or N)"];
+  string fte_total = 16 [
+    (cn.datagovernance.v1.display_name) = "Total FTE (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string fte_clinical = 17 [
+    (cn.datagovernance.v1.display_name) = "Clinical FTE (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string fte_leadership = 18 [
+    (cn.datagovernance.v1.display_name) = "Leadership FTE",
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_base_hourly_rate = 19 [
+    (cn.datagovernance.v1.display_name) = "Base Pay - Hourly Rate",
+    (cn.datagovernance.v1.precision) = 8,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string salary_base_pay_annual = 20 [
+    (cn.datagovernance.v1.display_name) = "Base Pay - Annual Salary",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string salary_leadership_base = 21 [
+    (cn.datagovernance.v1.display_name) = "Leadership Base Salary",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_productivity_incentive = 22 [
+    (cn.datagovernance.v1.display_name) = "Productivity Incentive Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_quality = 23 [
+    (cn.datagovernance.v1.display_name) = "Value/Quality Incentive Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_call = 24 [
+    (cn.datagovernance.v1.display_name) = "Call Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_telehealth_or_evisit_comp = 25 [
+    (cn.datagovernance.v1.display_name) = "Telehealth or eVisits Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  double annual_pay_retention_or_signon_bonus = 26 [
+    (cn.datagovernance.v1.display_name) = "Annualized Retention/Sign-On Bonus",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_other_clinical_cash_comp = 27 [
+    (cn.datagovernance.v1.display_name) = "Other Clinical Cash Compensation",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_other_clinical_cash_comp_description = 28 [(cn.datagovernance.v1.display_name) = "Other Clinical Cash Compensation Description"];
+  string pay_moonlighting = 29 [
+    (cn.datagovernance.v1.display_name) = "Moonlighting Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_extra_shift = 30 [
+    (cn.datagovernance.v1.display_name) = "Extra Shift Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_leadership_incentive = 31 [
+    (cn.datagovernance.v1.display_name) = "Leadership Incentive Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_other_nonclinical_cash_comp = 32 [
+    (cn.datagovernance.v1.display_name) = "Other Nonclinical Cash Compensation",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pay_other_nonclinical_cash_comp_description = 33 [(cn.datagovernance.v1.display_name) = "Other Nonclinical Cash Compensation Description"];
+  string pay_shift_differential = 34 [
+    (cn.datagovernance.v1.display_name) = "Shift Differential Pay",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string compensation_total = 35 [
+    (cn.datagovernance.v1.display_name) = "Total Cash Compensation (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string total_cost_of_benefits = 36 [
+    (cn.datagovernance.v1.display_name) = "Total Cost of Benefits",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pfs_year = 37 [(cn.datagovernance.v1.display_name) = "Physician Fee Schedule (Choose Year for Each Incumbent)"];
+  string work_rvus = 38 [
+    (cn.datagovernance.v1.display_name) = "Work RVUs",
+    (cn.datagovernance.v1.precision) = 9,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string net_collections = 39 [
+    (cn.datagovernance.v1.display_name) = "Net Collections",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string total_encounters = 40 [
+    (cn.datagovernance.v1.display_name) = "Total Encounters",
+    (cn.datagovernance.v1.precision) = 9,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string panel_size = 41 [(cn.datagovernance.v1.display_name) = "Panel Size"];
+  string primary_practice_location = 42 [(cn.datagovernance.v1.display_name) = "Primary Practice Location"];
+  string rural_urban_suburban_or_combination = 43 [(cn.datagovernance.v1.display_name) = "Rural, Urban, Suburban or Combination"];
+  string is_faculty = 44 [(cn.datagovernance.v1.display_name) = "Incumbent Is Faculty"];
+  string faculty_rank = 45 [(cn.datagovernance.v1.display_name) = "Faculty Rank"];
+  string education_role = 46 [(cn.datagovernance.v1.display_name) = "Education Role"];
+  string fte_academic = 47 [
+    (cn.datagovernance.v1.display_name) = "Academic FTE",
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string salary_academic_base = 48 [
+    (cn.datagovernance.v1.display_name) = "Academic Base Salary",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+
+  cn.datagovernance.v1.FileSubmissionDetail submission_detail = 500;
+  repeated cn.datagovernance.v1.QCMetadata qc_metadata = 600;
+  cn.anomalyprofiling.v1.AnomalyProfile anomaly_profile = 601;
+  string sis_mapping_plan_uuid = 602; // versioned UUID of the plan from the plan repo.
+  int64 job_id = 603;
+  int64 run_id = 604;
+  google.protobuf.Timestamp job_utc_ts = 605;
+}
+
+message AppNewHireSourceOrientedQuarantine {
+  string organization_id = 1 [
+    (cn.datagovernance.v1.display_name) = "Organization ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  string internal_tracking_id = 2 [
+    (cn.datagovernance.v1.display_name) = "Your Unique Internal Tracking ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  string npi_number = 3 [
+    (cn.datagovernance.v1.display_name) = "NPI Number (Required)"
+  ];
+  string job_code = 4 [
+    (cn.datagovernance.v1.display_name) = "Specialty/Job Code (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  string position_level = 5 [
+    (cn.datagovernance.v1.display_name) = "Position Level (Required)",
+    (cn.datagovernance.v1.is_required) = true
+  ];
+  string date_of_hire = 6 [
+    (cn.datagovernance.v1.display_name) = "Date of Hire (mm/dd/yyyy)",
+    (cn.datagovernance.v1.format_date) = "M/d/yyyy"
+  ];
+  string providers_age = 7 [(cn.datagovernance.v1.display_name) = "Provider's Age"];
+  string gender = 8 [(cn.datagovernance.v1.display_name) = "Gender"];
+  string ethnicity = 9 [(cn.datagovernance.v1.display_name) = "Ethnicity"];
+  string fte_total = 10 [
+    (cn.datagovernance.v1.display_name) = "Total FTE (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string fte_clinical = 11 [
+    (cn.datagovernance.v1.display_name) = "Clinical FTE",
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string fte_leadership = 12 [
+    (cn.datagovernance.v1.display_name) = "Leadership FTE",
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string new_graduate_app_or_experienced_hire = 13 [(cn.datagovernance.v1.display_name) = "New Graduate APP (N) or Experienced (E) Hire (Required)"];
+  string licensure_date = 14 [(cn.datagovernance.v1.display_name) = "Licensure Date"];
+  string starting_salary = 15 [
+    (cn.datagovernance.v1.display_name) = "Starting Salary (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string forgivable_loan_total_amount = 16 [
+    (cn.datagovernance.v1.display_name) = "Forgivable Loan Total Amount",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string forgivable_loan_number_of_years = 17 [(cn.datagovernance.v1.display_name) = "Forgivable Loan Number of Years"];
+  string sign_on_bonus_amount = 18 [
+    (cn.datagovernance.v1.display_name) = "Sign-On Bonus Amount",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string sign_on_bonus_number_of_years = 19 [(cn.datagovernance.v1.display_name) = "Sign-On Bonus Number of Years"];
+  string first_year_compensation_total = 20 [
+    (cn.datagovernance.v1.display_name) = "First-Year Compensation total",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string total_compensation_package = 21 [
+    (cn.datagovernance.v1.display_name) = "Total Compensation Package",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  double fte_academic = 22 [
+    (cn.datagovernance.v1.display_name) = "Academic FTE",
+    (cn.datagovernance.v1.precision) = 5,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+
+  cn.datagovernance.v1.FileSubmissionDetail submission_detail = 500;
+  repeated cn.datagovernance.v1.QCMetadata qc_metadata = 600;
+  cn.anomalyprofiling.v1.AnomalyProfile anomaly_profile = 601;
+  string sis_mapping_plan_uuid = 602; // versioned UUID of the plan from the plan repo.
+  int64 job_id = 603;
+  int64 run_id = 604;
+  google.protobuf.Timestamp job_utc_ts = 605;
+}
+
+message AppCallPaySourceOrientedQuarantine {
+  string organization_id = 1 [
+    (cn.datagovernance.v1.display_name) = "Organization ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+
+  string job_code = 2 [
+    (cn.datagovernance.v1.display_name) = "Specialty/Job Code (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+
+  string call_type = 3 [
+    (cn.datagovernance.v1.display_name) = "Call Type (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  reserved 4;
+  reserved "coverage_type";
+  string who_provides_coverage = 5 [(cn.datagovernance.v1.display_name) = "Coverage Provider"];
+  string apps_receive_comp_for_on_call_coverage = 6 [(cn.datagovernance.v1.display_name) = "APPs Receive Compensation for Call Coverage"];
+  string only_receive_comp_above_threshold = 7 [(cn.datagovernance.v1.display_name) = "Only Receive Compensation After Required Uncompensated Shifts"];
+  string threshold_description = 8 [(cn.datagovernance.v1.display_name) = "Describe Number of Required Uncompensated Shifts"];
+  string hourly_rate = 9 [
+    (cn.datagovernance.v1.display_name) = "Hourly Rate ($)",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+
+  reserved 10;
+  reserved "stipend_type";
+
+  string stipend_amount = 11 [
+    (cn.datagovernance.v1.display_name) = "Stipend Amount ($)",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string hours_of_coverage_for_stipend = 12 [
+    (cn.datagovernance.v1.display_name) = "Hours of Coverage for Stipend",
+    (cn.datagovernance.v1.precision) = 8,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+
+  reserved 13 to 17;
+  reserved "premium_for_evening_weekend_or_holiday_coverage", "describe_premium_incl_comp_and_basis_for_rate", "apps_receive_comp_for_being_called_in_while_on_call", "describe_com_type_and_amount_for_called_while_on_call", "min_number_of_hours_compensated_for_call_back";
+
+
+  string notes = 18 [(cn.datagovernance.v1.display_name) = "Notes"];
+  string specialty_other_description = 19 [(cn.datagovernance.v1.display_name) = "Specialty/Job Code Other (Describe)"];
+  string compensation_type = 20 [(cn.datagovernance.v1.display_name) = "Compensation Type"];
+
+  cn.datagovernance.v1.FileSubmissionDetail submission_detail = 500;
+  repeated cn.datagovernance.v1.QCMetadata qc_metadata = 600;
+  cn.anomalyprofiling.v1.AnomalyProfile anomaly_profile = 601;
+  string sis_mapping_plan_uuid = 602; // versioned UUID of the plan from the plan repo.
+  int64 job_id = 603;
+  int64 run_id = 604;
+  google.protobuf.Timestamp job_utc_ts = 605;
+}
+
+message AppSalaryGradesAndRangesSourceOrientedQuarantine {
+  string organization_id = 1 [
+    (cn.datagovernance.v1.display_name) = "Organization ID (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  string position_level = 2 [
+    (cn.datagovernance.v1.display_name) = "Position Level (Required)",
+    (cn.datagovernance.v1.is_required) = true,
+    (cn.datagovernance.v1.is_key_field) = true
+  ];
+  string salary_grade_range_description = 3 [(cn.datagovernance.v1.display_name) = "Salary Grade or Range Description"];
+  string np = 4 [(cn.datagovernance.v1.display_name) = "NP"];
+  string pa = 5 [(cn.datagovernance.v1.display_name) = "PA"];
+  string caa = 6 [(cn.datagovernance.v1.display_name) = "CAA"];
+  string crna = 7 [(cn.datagovernance.v1.display_name) = "CRNA"];
+  string nurse_midwife = 8 [(cn.datagovernance.v1.display_name) = "Certified Nurse Midwife"];
+  string hospital_based = 9 [(cn.datagovernance.v1.display_name) = "Hospital Based"];
+  string medical_specialties = 10 [(cn.datagovernance.v1.display_name) = "Medical"];
+  string primary_care = 11 [(cn.datagovernance.v1.display_name) = "Primary Care"];
+  string surgical_specialties = 12 [(cn.datagovernance.v1.display_name) = "Surgical"];
+  string urgent_care_or_retail = 13 [(cn.datagovernance.v1.display_name) = "Urgent Care or Retail"];
+  string other_specialty_area_1 = 14 [(cn.datagovernance.v1.display_name) = "Other Specialty Area 16"];
+  string other_specialty_area_2 = 15 [(cn.datagovernance.v1.display_name) = "Other Specialty Area 2"];
+  string other_specialty_area_3 = 16 [(cn.datagovernance.v1.display_name) = "Other Specialty Area 3"];
+  string other_specialty_area_4 = 17 [(cn.datagovernance.v1.display_name) = "Other Specialty Area 4"];
+  string range_minimum = 18 [
+    (cn.datagovernance.v1.display_name) = "Range Minimum ",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string range_mid_point = 19 [
+    (cn.datagovernance.v1.display_name) = "Range MidPoint",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string range_maximum = 20 [
+    (cn.datagovernance.v1.display_name) = "Range Maximum",
+    (cn.datagovernance.v1.precision) = 12,
+    (cn.datagovernance.v1.scale) = 4
+  ];
+  string pediatric_medial = 21 [(cn.datagovernance.v1.display_name) = "Pediatric Medical"];
+  string pediatric_surgical = 22 [(cn.datagovernance.v1.display_name) = "Pediatric Surgical"];
+  string pediatric_hospital_based = 23 [(cn.datagovernance.v1.display_name) = "Pediatric Hospital Based"];
+  string setting_outpatient = 24 [(cn.datagovernance.v1.display_name) = "Outpatient Setting"];
+  string setting_hybrid = 25 [(cn.datagovernance.v1.display_name) = "Hybrid Setting"];
+  string setting_inpatient_or = 26 [(cn.datagovernance.v1.display_name) = "Inpatient/OR Setting"];
+
+  cn.datagovernance.v1.FileSubmissionDetail submission_detail = 500;
+  repeated cn.datagovernance.v1.QCMetadata qc_metadata = 600;
+  cn.anomalyprofiling.v1.AnomalyProfile anomaly_profile = 601;
+  string sis_mapping_plan_uuid = 602; // versioned UUID of the plan from the plan repo.
+  int64 job_id = 603;
+  int64 run_id = 604;
+  google.protobuf.Timestamp job_utc_ts = 605;
+}

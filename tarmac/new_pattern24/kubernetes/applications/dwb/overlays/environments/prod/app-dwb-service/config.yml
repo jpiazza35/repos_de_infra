@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-dwb-service
+data:
+  key: ""
+  env: prod
+  url: dwb.sullivancotter.com
+  ecr: app-dwb-service-ecr-repo
+  acm: arn:aws:acm:us-east-1:071766652168:certificate/ae97a30d-bd24-4608-a9e2-61cb3707b9c4

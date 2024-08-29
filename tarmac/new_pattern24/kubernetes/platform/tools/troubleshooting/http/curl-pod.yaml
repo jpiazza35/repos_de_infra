@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curlpod
+  namespace: default
+spec:
+  containers:
+  - name: curlpod
+    image: curlimages/curl
+    command: ["tail", "-f", "/dev/null"]
+    imagePullPolicy: IfNotPresent
+    resources: {}
+  restartPolicy: Always
+

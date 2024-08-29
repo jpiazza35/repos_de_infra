@@ -1,0 +1,34 @@
+fullnameOverride: app-mpt-ui-qa
+namespace:
+  name: mpt
+
+service:
+  port: 443
+  targetPort: 443
+  name: app-mpt-ui-qa
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-mpt-ui-ecr-repo'
+  tag: '5746a0179a-qa'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+##we set limit of memory in the pods to 256Mi
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "256Mi"
+
+environment: qa

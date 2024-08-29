@@ -1,0 +1,13 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "organizations:ListAccounts",
+                "organizations:ListAccountsForParent"
+            ],
+            "Resource": "${product_ou_arn}",
+            "Effect": "Allow"
+        }
+    ]
+}

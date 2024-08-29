@@ -1,0 +1,12 @@
+python/ @dwwhitlock @kevinchangum @ryanwradtke
+
+# there is code here that converts protobuf to databricks CREATE TABLE language. Changes here may impact databricks
+python/cn_proto_utils @David-Thomas-SC @markhigginssc @kseeland
+
+proto/cn/* @dwwhitlock @kevinchangum @ryanwradtke
+
+# Survey team needs to review any changes to their protos as they will impact
+# data models within databricks. Direct changes are in cn/survey, while indirect
+# changes are in cn/datagovernance/v1
+proto/cn/survey @David-Thomas-SC @markhigginssc @kseeland
+proto/cn/datagovernance/v1 @David-Thomas-SC @markhigginssc @kseeland

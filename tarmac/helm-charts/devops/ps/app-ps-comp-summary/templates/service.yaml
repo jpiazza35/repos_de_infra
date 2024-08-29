@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: '{{ include "app-ps-comp-summary.fullname" . }}'
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "app-ps-comp-summary.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: https
+  selector:
+    {{- include "app-ps-comp-summary.selectorLabels" . | nindent 4 }}

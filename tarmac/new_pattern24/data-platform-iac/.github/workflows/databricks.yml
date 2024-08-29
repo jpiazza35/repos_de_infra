@@ -1,0 +1,407 @@
+name: 'Databricks Terraform Plan/Apply'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+    - 'terraform/databricks/**/**'
+    - '.github/workflows/databricks.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/databricks/**/**'
+      - '.github/workflows/databricks.yml'
+
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  AWS_REGION: us-east-1
+  VAULT_ADDR: https://vault.cliniciannexus.com:8200
+  SLACK_CHANNEL_ID: "#data-platform-git"
+  ORG: clinician-nexus
+  TF_VAR_nexus_user: ${{ secrets.NEXUS_USER }}
+  TF_VAR_nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+  TF_VAR_bsr_user: ${{ secrets.BUF_PRO_USER  }}
+  TF_VAR_bsr_password: ${{ secrets.BUF_PRO_TOKEN }}
+
+jobs:
+  terraform-plan:
+    name: 'Terraform Plan'
+    container:
+      image: ubuntu
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - aws_account_number: 467744931205
+            account_profile_prefix: p
+            approvals: databricks_prod
+            tf_workspace: prod
+          - aws_account_number: 230176594509
+            account_profile_prefix: ss
+            approvals: databricks_sdlc
+            tf_workspace: sdlc
+          - aws_account_number: 654654541334
+            account_profile_prefix: s
+            approvals: databricks_preview
+            tf_workspace: preview
+    runs-on:
+      - k8s
+    defaults:
+      run:
+        working-directory: terraform/databricks
+    env:
+      TF_WORKSPACE: ${{ matrix.environment.tf_workspace }}
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: prep
+      run: |
+        whoami
+        apt-get update
+        apt-get install -y jq build-essential curl git unzip wget
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/awscliv2.zip"
+        unzip /awscliv2.zip
+        ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+
+    - uses: tibdex/github-app-token@v2
+      id: get_installation_token
+      with:
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_retrieval_mode: id
+        installation_retrieval_payload: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: |
+        git config --global url."https://oauth2:${{ steps.get_installation_token.outputs.token }}@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+
+    - name: Configure AWS credentials from databricks account
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ matrix.environment.aws_account_number }}:role/databricks-${{ matrix.environment.tf_workspace }}-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: ${{ matrix.environment.tf_workspace }}DatabricksConfig
+
+    - name: Setup AWS Profile for DATABRICKS
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+
+    - name: Retrieve Databricks secrets from Vault
+      uses: hashicorp/vault-action@v2.7.3
+      env:
+        VAULT_SECRET_PATH: data_platform/${{ matrix.environment.tf_workspace }}/databricks/service-principal-tokens/terraform-service-principal
+      with:
+        url: ${{ env.VAULT_ADDR }}
+        role: gha-rw-role
+        method: jwt
+        jwtGithubAudience: gha
+        exportToken: true
+        secrets: |
+          ${{ env.VAULT_SECRET_PATH }} client_id | DATABRICKS_CLIENT_ID ;
+          ${{ env.VAULT_SECRET_PATH }} client_secret | DATABRICKS_CLIENT_SECRET ;
+          ${{ env.VAULT_SECRET_PATH }} host | DATABRICKS_HOST
+
+    - name: Retrieve Fivetran secrets from Vault
+      uses: hashicorp/vault-action@v2.7.3
+      env:
+        VAULT_SECRET_PATH: data_platform/fivetran_service_account
+      with:
+        url: ${{ env.VAULT_ADDR }}
+        role: gha-rw-role
+        method: jwt
+        jwtGithubAudience: gha
+        exportToken: true
+        secrets: |
+          ${{ env.VAULT_SECRET_PATH }} api_key | FIVETRAN_APIKEY ;
+          ${{ env.VAULT_SECRET_PATH }} api_secret | FIVETRAN_APISECRET ;
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+
+    - name: Setup databricks config file
+      run: |
+        touch ~/.databrickscfg
+        echo "[tf_${{ matrix.environment.tf_workspace }}]" >> ~/.databrickscfg
+        echo "host = ${{ env.DATABRICKS_HOST }}" >> ~/.databrickscfg
+        echo "client_id = ${{ env.DATABRICKS_CLIENT_ID }}" >> ~/.databrickscfg
+        echo "client_secret = ${{ env.DATABRICKS_CLIENT_SECRET }}" >> ~/.databrickscfg
+
+    - name: Terraform Init
+      id: init
+      run: |
+        terraform init
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
+    # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
+    - name: Terraform Plan
+      id: tf-plan
+      run: |
+        export exitcode=0
+        terraform plan -var-file tfvars/${{ matrix.environment.tf_workspace }}.tfvars -detailed-exitcode -no-color -out ${{ matrix.environment.tf_workspace }}_tfplan || export exitcode=$?
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+        if [ $exitcode -eq 1 ]; then
+          echo Terraform Plan Failed!
+          exit 1
+        else
+          exit 0
+        fi
+
+    # Save plan to artifacts
+    - name: Publish Terraform Plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.environment.tf_workspace }}_tfplan
+        path: ${{ github.workspace }}/terraform/databricks/${{ matrix.environment.tf_workspace }}_tfplan
+
+    - name: Create String Output
+      id: tf-plan-string
+      run: |
+        TERRAFORM_PLAN=$(terraform show -no-color ${{ matrix.environment.tf_workspace }}_tfplan)
+
+        delimiter="$(openssl rand -hex 8)"
+        echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+        echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+        echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo '```terraform' >> $GITHUB_OUTPUT
+        echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+        echo '```' >> $GITHUB_OUTPUT
+        echo "</details>" >> $GITHUB_OUTPUT
+        echo "${delimiter}" >> $GITHUB_OUTPUT
+
+    - name: Publish Terraform Plan to Task Summary
+      env:
+        SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+      run: |
+        echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+    - name: Push Terraform Output to PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      env:
+        SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const body = `#### Terraform Initialization \`${{ steps.init.outcome }}\`
+          #### Terraform Validation \`${{ steps.validate.outcome }}\`
+          #### Terraform Plan \`${{ steps.tf-plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${process.env.SUMMARY}
+          \`\`\`
+
+          </details>
+          *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          })
+
+    - name: Send a Slack Notification - Failure
+      if: failure()
+      uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        config: .github/workflows/slack-notifications-template/slack.yml
+        channel: ${{ env.SLACK_CHANNEL_ID }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Send a Slack Notification - Success
+      if: success()
+      uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        config: .github/workflows/slack-notifications-template/slack.yml
+        channel: ${{ env.SLACK_CHANNEL_ID }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  terraform-apply:
+    name: 'Terraform Apply'
+    if: github.ref == 'refs/heads/main'
+    needs: terraform-plan
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - aws_account_number: 467744931205
+            account_profile_prefix: p
+            approvals: databricks_prod
+            tf_workspace: prod
+          - aws_account_number: 230176594509
+            account_profile_prefix: ss
+            approvals: databricks_sdlc
+            tf_workspace: sdlc
+          - aws_account_number: 654654541334
+            account_profile_prefix: s
+            approvals: databricks_preview
+            tf_workspace: preview
+    environment: ${{ matrix.environment.approvals }}
+    container:
+      image: ubuntu
+    runs-on:
+      - k8s
+    defaults:
+      run:
+        working-directory: terraform/databricks
+    env:
+      TF_WORKSPACE: ${{ matrix.environment.tf_workspace }}
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: prep
+      run: |
+        whoami
+        apt-get update
+        apt-get install -y jq build-essential curl git unzip wget
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/awscliv2.zip"
+        unzip /awscliv2.zip
+        ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+
+    - uses: tibdex/github-app-token@v2
+      id: get_installation_token
+      with:
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_retrieval_mode: id
+        installation_retrieval_payload: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: |
+        git config --global url."https://oauth2:${{ steps.get_installation_token.outputs.token }}@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+
+    - name: Configure AWS credentials from DATABRICKS account
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ matrix.environment.aws_account_number }}:role/databricks-${{ matrix.environment.tf_workspace }}-github-oidc-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: ${{ matrix.environment.tf_workspace }}DatabricksConfig
+
+    - name: Setup AWS Profile for DATABRICKS
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ matrix.environment.account_profile_prefix }}_databricks
+
+    - name: Retrieve Databricks secrets from Vault
+      uses: hashicorp/vault-action@v2.7.3
+      env:
+        VAULT_SECRET_PATH: data_platform/${{ matrix.environment.tf_workspace }}/databricks/service-principal-tokens/terraform-service-principal
+      with:
+        url: ${{ env.VAULT_ADDR }}
+        role: gha-role
+        method: jwt
+        jwtGithubAudience: gha
+        exportToken: true
+        secrets: |
+          ${{ env.VAULT_SECRET_PATH }} client_id | DATABRICKS_CLIENT_ID ;
+          ${{ env.VAULT_SECRET_PATH }} client_secret | DATABRICKS_CLIENT_SECRET ;
+          ${{ env.VAULT_SECRET_PATH }} host | DATABRICKS_HOST
+
+    - name: Retrieve Fivetran secrets from Vault
+      uses: hashicorp/vault-action@v2.7.3
+      env:
+        VAULT_SECRET_PATH: data_platform/fivetran_service_account
+      with:
+        url: ${{ env.VAULT_ADDR }}
+        role: gha-rw-role
+        method: jwt
+        jwtGithubAudience: gha
+        exportToken: true
+        secrets: |
+          ${{ env.VAULT_SECRET_PATH }} api_key | FIVETRAN_APIKEY ;
+          ${{ env.VAULT_SECRET_PATH }} api_secret | FIVETRAN_APISECRET ;
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+
+    - name: Setup databricks config file
+      run: |
+        touch ~/.databrickscfg
+        echo "[tf_${{ matrix.environment.tf_workspace }}]" >> ~/.databrickscfg
+        echo "host = ${{ env.DATABRICKS_HOST }}" >> ~/.databrickscfg
+        echo "client_id = ${{ env.DATABRICKS_CLIENT_ID }}" >> ~/.databrickscfg
+        echo "client_secret = ${{ env.DATABRICKS_CLIENT_SECRET }}" >> ~/.databrickscfg
+
+    - name: Terraform Init
+      id: init
+      run: |
+        terraform init
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ matrix.environment.tf_workspace }}_tfplan
+        path: ${{ github.workspace }}/terraform/databricks
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve ${{ matrix.environment.tf_workspace }}_tfplan
+
+    - uses: geekyeggo/delete-artifact@v2
+      with:
+        name: ${{ matrix.environment.tf_workspace }}_tfplan
+        failOnError: false
+
+    - name: Send a Slack Notification - Failure
+      if: failure()
+      uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        config: .github/workflows/slack-notifications-template/slack.yml
+        channel: ${{ env.SLACK_CHANNEL_ID }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Send a Slack Notification - Success
+      if: success()
+      uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        config: .github/workflows/slack-notifications-template/slack.yml
+        channel: ${{ env.SLACK_CHANNEL_ID }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

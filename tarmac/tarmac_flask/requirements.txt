@@ -1,0 +1,7 @@
+Flask
+requests
+beautifulsoup4
+gunicorn
+SQLAlchemy
+Flask-SQLAlchemy
+pymysql

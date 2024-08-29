@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package com.cliniciannexus.dataplatform.services.mapping;
+import "google/protobuf/timestamp.proto";
+
+message ElementMetadata {
+  int32 element_order = 1;
+  string element_name = 2;
+  string element_type = 3;
+  string element_description = 4;
+}
+
+message DomainRegisteredAsset {
+  string fq_data_asset_id = 1;
+  google.protobuf.Timestamp version_id = 2;
+	repeated ElementMetadata asset_elements = 3;
+}
+
+message ElementMapping {
+	ElementMetadata source_element_metadata = 1;
+	ElementMetadata target_element_metadata = 2;
+}
+
+message ObjectMapping {
+	string source_object_name_pattern = 1; // Supports Wildcards
+	repeated ElementMapping element_mappings = 2;
+}
+
+message DataMapping {
+  // Contemplates multipe source files/tables mapped to one target.
+	string registered_data_asset_id = 1;
+  google.protobuf.Timestamp version_id = 2;
+	repeated ObjectMapping object_mappings = 3;
+}
+

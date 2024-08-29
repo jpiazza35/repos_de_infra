@@ -1,0 +1,41 @@
+fullnameOverride: {{ project_name }}-{{ environment }}
+namespace:
+  name: {{ product }}
+
+service:
+  port: 7051
+  targetPort: 7051
+  name: {{ project_name }}-{{ environment }}
+  type: ClusterIP
+
+image:
+  repository: '{{ ss_tools_ecr_url }}/{{ project_name }}-ecr-repo'
+  tag: '{{ docker_image_tag }}'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+securityContext:
+  runAsUser: 1000  # UID user
+  runAsNonRoot: true
+
+ingress:
+  enabled: false
+
+envvars:
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "256Mi"
+
+environment: {{ environment }}

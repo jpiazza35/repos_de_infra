@@ -1,0 +1,52 @@
+- source:
+    kind: ConfigMap
+    name: replacement
+    fieldPath: data.key
+
+  targets:
+  - select:
+      name: dwb-external-secret
+      kind: ExternalSecret
+    fieldPaths:
+      - spec.data.0.remoteRef.key
+      - spec.data.1.remoteRef.key
+      - spec.data.2.remoteRef.key
+      - spec.data.3.remoteRef.key
+      - spec.data.4.remoteRef.key
+      - spec.data.5.remoteRef.key
+      - spec.data.6.remoteRef.key
+      - spec.data.8.remoteRef.key
+      - spec.data.9.remoteRef.key
+      - spec.data.10.remoteRef.key
+      - spec.data.11.remoteRef.key
+    options:
+      create: true
+      delimiter: '/'
+      index: 0
+
+  - select:
+      name: dwb-databricks-connstring-external-secret
+      kind: ExternalSecret
+    fieldPaths:
+      - spec.data.1.remoteRef.key
+    options:
+      create: true
+      delimiter: '/'
+      index: 0
+
+- source:
+    kind: ConfigMap
+    name: replacement
+    fieldPath: data.connstring_key
+
+  targets:
+  - select:
+      name: dwb-databricks-connstring-external-secret
+      kind: ExternalSecret
+    fieldPaths:
+      - spec.data.0.remoteRef.key
+      - spec.data.2.remoteRef.key
+    options:
+      create: true
+      delimiter: '/'
+      index: 0

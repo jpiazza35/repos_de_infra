@@ -1,0 +1,72 @@
+name: 'Vault Token Job'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: "0 0 */28 * *"
+
+env:
+  VAULT_ADDR: https://vault.cliniciannexus.com:8200
+  VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+
+jobs:
+  vault-token:
+    name: 'Vault Token'
+    container:
+      image: ubuntu
+    runs-on:
+      - k8s
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: prep
+      run: |
+        whoami
+        apt-get update
+        apt-get install -y jq unzip wget curl gpg wget sudo lsb-release && apt-get clean all
+
+        ## Install Databricks
+        curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+
+        ## Install Vault CLI
+        wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt install vault
+
+    - name: Import Secrets
+      id: import-secrets
+      uses: hashicorp/vault-action@v2.7.3
+      with:
+        url: ${{ env.VAULT_ADDR }}
+        role: gha-role
+        method: jwt
+        jwtGithubAudience: gha
+        secrets: |
+            devops/secrets/bi-platform databricks_username | DATABRICKS_USERNAME ;
+            devops/secrets/bi-platform databricks_password | DATABRICKS_PASSWORD ;
+    
+    - name: create new token
+      id: create-token
+      run: |
+        db_token=$(vault token create -display-name databricks -policy=data-platform -format json | jq -r .auth.client_token)
+
+        
+        ## Upload to vault
+        vault write data_platform/vault_service_token token=$db_token url=${{ env.VAULT_ADDR }}
+
+        ## Upload secret to databricks
+        export DATABRICKS_HOST="https://cn-prod-databricks.cloud.databricks.com"
+        databricks secrets put-secret hashi-vault vault-token --string-value $db_token
+
+        export DATABRICKS_HOST="https://cn-sdlc-databricks.cloud.databricks.com"
+        databricks secrets put-secret hashi-vault vault-token --string-value $db_token

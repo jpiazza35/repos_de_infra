@@ -1,0 +1,74 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowBucketAcl",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+         "config.amazonaws.com"
+        ]
+      },
+      "Action": "s3:GetBucketAcl",
+      "Resource": "${bucket_config}",
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "true"
+        }
+      }
+    },
+    {
+      "Sid": "AllowConfigWriteAccess",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+         "config.amazonaws.com"
+        ]
+      },
+      "Action": "s3:PutObject",
+      "Resource": "${bucket_config}/*",
+      "Condition": {
+        "StringEquals": {
+          "s3:x-amz-acl": "bucket-owner-full-control"
+        },
+        "Bool": {
+          "aws:SecureTransport": "true"
+        }
+      }
+    },
+    {
+      "Sid": "AllowGetPutObject",
+      "Effect": "Allow",
+      "Principal": {
+          "AWS": "${current_account_id}"
+      },
+      "Action": [
+            "s3:GetObject",
+            "s3:PutObject"
+      ],
+      "Resource": "${bucket_config}/*",
+      "Condition": {
+          "StringEquals": {
+              "aws:PrincipalOrgID": "${aws_organization_id}"
+          },
+          "ArnLike": {
+              "aws:PrincipalArn": "arn:aws:iam::*:role/aws-service-role/config-conforms.amazonaws.com/AWSServiceRoleForConfigConforms"
+          }
+      }
+  },
+    {
+      "Sid": "RequireSSL",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": "${bucket_config}/*",
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    }
+    ]
+}
+
+

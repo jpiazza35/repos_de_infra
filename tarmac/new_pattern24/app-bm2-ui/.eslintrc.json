@@ -1,0 +1,39 @@
+{
+	"env": {
+		"browser": true,
+		"node": true,
+		"es2021": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:svelte/recommended",
+		"plugin:prettier/recommended",
+    "plugin:cypress/recommended"
+	],
+	"plugins": ["prettier"],
+	"overrides": [
+		{
+			"files": ["**/*.svelte"],
+			"parser": "svelte-eslint-parser"
+		}
+	],
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"extraFileExtensions": ".svelte"
+	},
+	"rules": {
+		"import/prefer-default-export": "off",
+		"import/no-unresolved": ["off"],
+		"jsx-a11y/no-noninteractive-element-interactions": "off",
+		"jsx-a11y/click-events-have-key-events": "off",
+		"jsx-a11y/no-static-element-interactions": "off",
+		"svelte/no-at-html-tags": "warn",
+		"prettier/prettier": [
+			"error",
+			{
+			  "endOfLine": "auto"
+			}
+		]
+	}
+}

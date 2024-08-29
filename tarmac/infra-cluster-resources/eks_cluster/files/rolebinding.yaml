@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ClusterRoleBinding
+metadata:
+  name: masters-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  kind: Group
+  name: system:masters

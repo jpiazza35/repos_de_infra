@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ include "app-ps-tenant-grpc-service.fullname" . }}'
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "app-ps-tenant-grpc-service.labels" . | nindent 4 }}
+    environment: {{ .Values.environment }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "app-ps-tenant-grpc-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app-ps-tenant-grpc-service.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            {{- range .Values.envvars }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+
+            - name: CONNECTION_STRING_SETTINGS_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: ps-cn-connection-string-settings-database
+                  name: ps-external-secret-prod
+
+            - name: CONNECTION_STRING_CLIENT_DATABASES
+              valueFrom:
+                secretKeyRef:
+                  key: ps-cn-connection-string-client-databases
+                  name: ps-external-secret-prod
+            
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,73 @@
+- source:
+    kind: ConfigMap
+    name: app-incumbent-api-service
+    fieldPath: data.url
+  targets:
+
+  - select:
+      name: app-incumbent-api-service
+      kind: Deployment
+    fieldPaths:
+      - spec.template.spec.containers.*.env.[name=CN_USERSERVERURL].value
+    options:
+      create: false
+      delimiter: '.'
+      index: 1
+  
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - spec.rules.*.host
+    options:
+      create: false
+      delimiter: '.'
+      index: 1
+
+  - select:
+      name: mpt
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[external-dns.alpha.kubernetes.io/hostname]
+    options:
+      create: false
+      delimiter: '.'
+      index: 1
+
+- source:
+    kind: ConfigMap
+    name: app-incumbent-api-service
+    fieldPath: data.env
+  targets:
+
+  - select:
+      kind: Deployment
+    fieldPaths:
+      - metadata.labels.environment
+    options:
+      create: true
+
+- source:
+    kind: ConfigMap
+    name: app-incumbent-api-service
+    fieldPath: data.acm
+  targets:
+
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[alb.ingress.kubernetes.io/certificate-arn]
+    options:
+      create: false
+
+- source:
+    kind: ConfigMap
+    name: app-incumbent-api-service
+    fieldPath: data.alb-tls
+  targets:
+
+  - select:
+      kind: Ingress
+    fieldPaths:
+      - metadata.annotations.[alb.ingress.kubernetes.io/ssl-policy]
+    options:
+      create: false

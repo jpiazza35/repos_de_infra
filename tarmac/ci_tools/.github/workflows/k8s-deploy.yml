@@ -1,0 +1,119 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      target_environment:
+        description: 'the environment you wish to deploy to.'
+        required: true
+        type: string
+      manifest_repository:
+        description: 'the github repo to push k8s objects to (applied to a k8s cluster by ArgoCD).'
+        required: true
+        type: string
+      gh_token:
+        description: 'token used to connect to the github repo'
+        required: true
+        type: string
+      app_dir:
+        description: 'directory to deploy a .app.yaml to'
+        default: 'applications'
+        required: false
+        type: string
+      source_dir:
+        description: 'directory containing the helm manifests'
+        default: '.deploy'
+        required: false
+        type: string
+      target_dir:
+        description: 'directory to build k8s object in the manifest repository'
+        default: ${{ github.event.repository.name }}
+        required: false
+        type: string
+      image_tag:
+        description: 'container image tag to deploy'
+        default: ${{ github.event.pull_request.head.sha }}
+        required: false
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy ${{ inputs.image_tag }} to ${{ inputs.target_environment }}
+        run: echo "Deploy ${{ inputs.image_tag }} to ${{ inputs.target_environment }}"
+        shell: bash
+
+      - name: Checkout Manifest Repository
+        shell: bash
+        run: |
+          set -Eeuxo pipefail
+
+          WORKDIR="$(pwd)/${{ inputs.source_dir }}"
+
+          echo "Getting Git version info"
+          echo "Working directory is $WORKDIR"
+
+          /usr/bin/git version
+
+          echo "Initializing the repository"
+          /usr/bin/git init $WORKDIR
+          cd $WORKDIR
+
+          /usr/bin/git remote add origin https://github.com/${{ inputs.manifest_repository }}
+
+          echo "Disabling automatic garbage collection"
+
+          /usr/bin/git config --local gc.auto 0
+
+          echo "Setting up auth"
+
+          git config --global user.email "${GITHUB_EMAIL}"
+          git config --local user.name "${{ github.actor }}"
+
+          /usr/bin/git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(echo -n x-access-token:${{ inputs.gh_token }} | base64 )"
+
+          echo "Fetching the repository"
+
+          /usr/bin/git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +refs/heads/${{ inputs.target_environment }}*:refs/remotes/origin/${{ inputs.target_environment }}* +refs/tags/${{ inputs.target_environment }}*:refs/tags/${{ inputs.target_environment }}*
+
+          echo "Determining the checkout info"
+
+          /usr/bin/git branch --list --remote origin/${{ inputs.target_environment }}
+
+          echo "Checking out the ref"
+
+          /usr/bin/git checkout --progress --force -B ${{ inputs.target_environment }} refs/remotes/origin/${{ inputs.target_environment }}
+
+          /usr/bin/git log -1 --format='%H'
+
+      - name: Create Application Definition
+        shell: bash
+        run: |
+          set -Eeuxo pipefail
+
+          echo "Creating Application Definition"
+
+          mkdir -p ${{ inputs.app_dir}}/
+
+          cat ./${{ inputs.source_dir }}/base/.app.yaml | sed "s/TARGET_ENVIRONMENT/${{ inputs.target_environment }}/g" \
+              > ${{ inputs.app_dir}}/${{ inputs.target_dir }}.yaml
+
+      - name: Commit and Push New Manifest
+        shell: bash
+        run: |
+          echo "Commit New Manifest"
+
+          cd manifests
+
+          git config --global user.email "${GITHUB_EMAIL}"
+          git config --local user.name "${{ github.actor }}"
+
+          git add ${{ inputs.target_dir }} ${{ inputs.app_dir}}/
+
+          git commit -m "Deploying ${{ inputs.target_dir }}:${{ inputs.image_tag }}" || echo "¯\_(ツ)_/¯ Nothing changed, so nothing committed, and nothing new will be pushed to manifests."
+
+          echo "Push New Manifest"
+
+          git push https://${{github.actor}}:${{inputs.gh_token}}@github.com/${{ inputs.manifest_repository }}.git HEAD:${{env.TARGET_ENVIRONMENT}}

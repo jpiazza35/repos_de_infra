@@ -1,0 +1,22 @@
+{
+    "adminDropDownValues": [
+        "Security",
+        "Manage Landing",
+        "Engagement Setup",
+        "Manage Engagement",
+        "Report Generator V2",
+        "Manage Reference Data",
+        "View Access"
+    ],
+    "listOfTabs": [
+        "Engagement",
+        "Specialties",
+        "APP Specialties",
+        "Affiliations",
+        "Data Source",
+        "Medical Credential",
+        "Select Fields"
+    ]
+
+    
+}

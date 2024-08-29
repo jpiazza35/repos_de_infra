@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-bm-service
+data:
+  key: ""
+  env: dev
+  app: app-bm-service
+  ecr: app-bm-service-ecr-repo
+  url: dev.sullivancotter
+  

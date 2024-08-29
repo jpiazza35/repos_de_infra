@@ -1,0 +1,132 @@
+
+aggregator:
+  enabled: false
+
+forwarder:
+
+  command: ["/bin/sh", "-c", "cp /opt/bitnami/fluentd/conf/fluentd.conf /home/fluentd.conf && sed -i -e \"s/ELASTIC_PASSWORD_TO_REPLACE/$ELASTIC_PASSWORD/g\" /home/fluentd.conf && sleep 3 && sed -i 's|${FLUENTD_CONF_DIR}/${FLUENTD_CONF:-fluentd.conf}|/home/fluentd.conf|g' /opt/bitnami/scripts/fluentd/run.sh && /opt/bitnami/scripts/fluentd/setup.sh && /opt/bitnami/scripts/fluentd/run.sh"]
+
+
+  extraEnvVars:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: ELASTIC_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: elasticsearch-master-credentials
+          key: password
+
+  ## @param forwarder.enabled Enable forwarder daemonset
+  ##
+  enabled: true
+  ## @param forwarder.image.registry Fluentd forwarder image registry override
+
+  daemonUser: root
+  ## @param forwarder.daemonGroup Fluentd forwarder daemon system group
+  ##
+  daemonGroup: root
+  ## @param forwarder.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  podSecurityContext:
+    enabled: true
+    runAsUser: 0
+    runAsGroup: 0
+    fsGroup: 0
+  ## K8s Security Context for forwarder container
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param forwarder.hostNetwork Enable use of host network
+  ##
+  hostNetwork: false
+
+  extraVolumes:
+    - name: es-certs
+      secret:
+        defaultMode: 420
+        secretName: elasticsearch-master-certs
+  extraVolumeMounts:
+    - name: es-certs
+      mountPath: /elastic/certs/
+      readOnly: true
+
+
+  terminationGracePeriodSeconds: 30
+  ## @param forwarder.configFile Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory
+  ##
+  #configFile: /home/fluentd.conf
+
+# super useful if you need scripts ;)
+  initScripts:
+    install-plugins.sh: |
+      #!/bin/sh
+      echo hello
+      gem install fluent-plugin-multi-format-parser
+
+
+  configMapFiles:
+    fluentd.conf: |
+      # Ignore Fluentd's own events
+      <match fluent.**>
+        @type null
+      </match>
+
+      # HTTP input for liveness and readiness probes
+      <source>
+        @type http
+        bind 0.0.0.0
+        port 9880
+      </source>
+
+      # Throw the healthcheck to standard output instead of forwarding it
+      <match fluentd.healthcheck>
+        @type stdout
+      </match>
+
+      <system>
+        log_level error
+      </system>
+
+      <source>
+        @type tail
+        path /var/log/containers/*app-*.log
+        pos_file fluentd-docker.pos
+        read_from_head true
+        tag mpt.*
+        <parse>
+          @type multiline
+          format_firstline /(?i)(?<regexpfiler1>.*\berror\b.*)/
+          format1 /(?<capture>(?:(?:.*\\n){0,10}.*)\z)/
+        </parse>
+      </source>
+
+      <filter mpt.**>
+        @type kubernetes_metadata
+      </filter>
+
+      # Send the logs to Elasticsearch
+      <match mpt.**>
+        @type elasticsearch
+        host elasticsearch-master
+        port 9200
+        scheme https
+        user elastic
+        password ELASTIC_PASSWORD_TO_REPLACE
+        ssl_verify true
+        ssl_version TLSv1_3
+        ca_file /elastic/certs/ca.crt
+        client_cert /elastic/certs/tls.crt
+        client_key /elastic/certs/tls.key
+        logstash_format true
+        logstash_prefix mpt
+        logstash_dateformat %Y%m%d
+        include_timestamp true
+
+        <buffer>
+          @type file
+          path /opt/bitnami/fluentd/logs/buffers/logs.buffer
+          flush_thread_count 2
+          flush_interval 4s
+        </buffer>
+      </match>

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-mpt-project-service
+data:
+  app: app-mpt-project-service
+  ecr: app-mpt-project-service-ecr-repo
+  env: preview
+  url: preview.cliniciannexus
+  key: ""
+  acm: "arn:aws:acm:us-east-1:071766652168:certificate/ca119fb6-99bc-4f92-9754-20efa05cb39e"

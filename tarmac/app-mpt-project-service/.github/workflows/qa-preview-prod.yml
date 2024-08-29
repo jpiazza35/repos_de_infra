@@ -1,0 +1,274 @@
+# QA and Prod pipeline triggered if the app-mpt-e2e-test gh actions passes successfully (E2E tests are successful)
+
+name: Run QA and Prod CN.Project.RestApi pipeline
+run-name: ${{ github.actor }} build CN.Project.RestApi
+
+on:
+  repository_dispatch:
+    types: [retrigger-mpt-pipeline]
+
+env:
+  REPO_NAME: app-mpt-project-service
+  PROJECT_NAME: ${{ github.event.client_payload.project_name }}
+  PROJECT_DIR: ./rest-api
+  PRODUCT: mpt
+  GH_REGISTRY: ghcr.io
+  SS_TOOLS_ECR: app-mpt-project-service-ecr-repo
+  HELM_REPO_NAME: helm-charts
+  COMMIT_AUTHOR: ${{ github.event.client_payload.commit_author }}
+  IMAGE_TAG: ${{ github.event.client_payload.docker_image_tag }}
+  DESCRIPTION: Project Rest API service for Market Pricing Tool
+  BUILD_PLATFORMS: linux/amd64 #, linux/arm64
+
+jobs:
+## Retag image and deploy it to QA helm-charts ##
+  deploy-qa:
+    name: Retag, push and deploy to QA
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    env:
+      ENVIRONMENT: qa
+    strategy:
+      matrix:
+        dotnet-version: ['7.0']
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+
+    steps:
+      - uses: tibdex/github-app-token@v1
+        id: read-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.read-installation-token.outputs.token }}
+          submodules: true
+      
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: QA-retag-to-SS-TOOLS-ECR
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Retag image in ECR
+        uses: abronin/ecr-retag-action@v1
+        with:
+          repository: ${{ env.SS_TOOLS_ECR }}
+          tag: ${{ env.IMAGE_TAG }}
+          new-tags: ${{ env.ENVIRONMENT }}
+
+      - name: Retag image in GHCR
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.SS_TOOLS_ECR }}
+          image_old_tag: ${{ env.IMAGE_TAG }}
+          image_new_tag: ${{ env.ENVIRONMENT }}
+          registry: ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+
+      - name: Set needed outputs for helm GH repo pipeline
+        id: helm
+        run: |
+          echo "docker_image_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+          echo "project_name=${{ env.PROJECT_NAME }}" >> $GITHUB_OUTPUT
+          echo "environment=${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "product=${{ env.PRODUCT }}" >> $GITHUB_OUTPUT
+      
+      - name: Trigger production helm GH pipeline and pass docker-tag sha
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: clinician-nexus/${{ env.HELM_REPO_NAME }}
+          event-type: trigger-qa-pipeline
+          client-payload: '{"docker_image_tag": "${{ steps.helm.outputs.docker_image_tag }}", "project_name": "${{ steps.helm.outputs.project_name }}", "environment": "${{ steps.helm.outputs.environment }}", "product": "${{ steps.helm.outputs.product }}"}'
+
+## Retag image and deploy it to preview helm-charts ##
+  deploy-preview:
+    name: Retag, push and deploy to preview
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    env:
+      ENVIRONMENT: preview
+    strategy:
+      matrix:
+        dotnet-version: ['7.0']
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+
+    steps:
+      - uses: tibdex/github-app-token@v1
+        id: read-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.read-installation-token.outputs.token }}
+          submodules: true
+      
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: Preview-retag-to-SS-TOOLS-ECR
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Retag image in ECR
+        uses: abronin/ecr-retag-action@v1
+        with:
+          repository: ${{ env.SS_TOOLS_ECR }}
+          tag: ${{ env.IMAGE_TAG }}
+          new-tags: ${{ env.ENVIRONMENT }}
+
+      - name: Retag image in GHCR
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.SS_TOOLS_ECR }}
+          image_old_tag: ${{ env.IMAGE_TAG }}
+          image_new_tag: ${{ env.ENVIRONMENT }}
+          registry: ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+
+      - name: Set needed outputs for helm GH repo pipeline
+        id: helm
+        run: |
+          echo "docker_image_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+          echo "project_name=${{ env.PROJECT_NAME }}" >> $GITHUB_OUTPUT
+          echo "environment=${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "product=${{ env.PRODUCT }}" >> $GITHUB_OUTPUT
+      
+      - name: Trigger production helm GH pipeline and pass docker-tag sha
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: clinician-nexus/${{ env.HELM_REPO_NAME }}
+          event-type: trigger-preview-pipeline
+          client-payload: '{"docker_image_tag": "${{ steps.helm.outputs.docker_image_tag }}", "project_name": "${{ steps.helm.outputs.project_name }}", "environment": "${{ steps.helm.outputs.environment }}", "product": "${{ steps.helm.outputs.product }}"}'  
+
+## Retag image and trigger prod helm-charts pipeline (open a PR for prod deploy) ##
+  deploy-prod:
+    name: Retag, push and deploy to prod
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+    env:
+      ENVIRONMENT: prod
+    strategy:
+      matrix:
+        dotnet-version: ['7.0']
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # Required for requesting the JWT to use OIDC <-> AWS
+    needs:
+      - deploy-qa
+
+    steps:
+      - uses: tibdex/github-app-token@v1
+        id: read-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.read-installation-token.outputs.token }}
+          submodules: true
+      
+      - name: Configure AWS Credentials
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: PROD-retag-to-SS-TOOLS-ECR
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Retag image in ECR
+        uses: abronin/ecr-retag-action@v1
+        with:
+          repository: ${{ env.SS_TOOLS_ECR }}
+          tag: ${{ env.IMAGE_TAG }}
+          new-tags: ${{ env.ENVIRONMENT }}
+
+      - name: Retag image in GHCR
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.SS_TOOLS_ECR }}
+          image_old_tag: ${{ env.IMAGE_TAG }}
+          image_new_tag: ${{ env.ENVIRONMENT }}
+          registry: ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+
+      - name: Set needed outputs for helm GH repo pipeline
+        id: helm
+        run: |
+          echo "docker_image_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+          echo "project_name=${{ env.PROJECT_NAME }}" >> $GITHUB_OUTPUT
+          echo "environment=${{ env.ENVIRONMENT }}" >> $GITHUB_OUTPUT
+          echo "product=${{ env.PRODUCT }}" >> $GITHUB_OUTPUT
+          echo "commit_url=${{ github.server_url }}/${{ github.repository_owner }}/${{ env.REPO_NAME }}/commit/${{ github.sha }}" >> $GITHUB_OUTPUT
+      
+      - name: Trigger production helm GH pipeline and pass docker-tag sha
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ steps.rw-installation-token.outputs.token }}
+          repository: clinician-nexus/${{ env.HELM_REPO_NAME }}
+          event-type: trigger-prod-pipeline
+          client-payload: '{"docker_image_tag": "${{ steps.helm.outputs.docker_image_tag }}", "project_name": "${{ steps.helm.outputs.project_name }}", "environment": "${{ steps.helm.outputs.environment }}", "product": "${{ steps.helm.outputs.product }}", "commit_url": "${{ steps.helm.outputs.commit_url }}", "commit_author": "${{ env.COMMIT_AUTHOR }}"}'

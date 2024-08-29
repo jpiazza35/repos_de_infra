@@ -1,0 +1,38 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: prometheus-grafana
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: REQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-password
+                  key: password
+          name: grafana-sc-alerts
+        - env:
+            - name: REQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-password
+                  key: password
+          name: grafana-sc-dashboard
+        - env:
+            - name: REQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-password
+                  key: password
+          name: grafana-sc-datasources
+        - env:
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-password
+                  key: password
+            - name: GF_INSTALL_PLUGINS
+              value: grafana-oncall-app
+          name: grafana

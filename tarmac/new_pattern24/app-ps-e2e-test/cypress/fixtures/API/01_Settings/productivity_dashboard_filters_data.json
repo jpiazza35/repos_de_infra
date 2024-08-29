@@ -1,0 +1,1074 @@
+    {
+        "mockData": {
+            "tenantKey": 1,
+            "dashboardKey": 1,
+            "productivityFilterResponse": {
+                "specialty": [
+                    {
+                        "id": "1110",
+                        "name": "Family Medicine",
+                        "isDefault": true
+                    }
+                ],
+                "periodTypes": [
+                    {
+                        "id": 3,
+                        "name": "Calendar Year",
+                        "isDefault": true,
+                        "period": {
+                            "years": [
+                                {
+                                    "id": 1,
+                                    "name": "2019",
+                                    "isDefault": false,
+                                    "yearMonths": [
+                                        {
+                                            "id": 201901,
+                                            "name": "January",
+                                            "isDefault": true
+                                        },
+                                        {
+                                            "id": 201902,
+                                            "name": "February",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201903,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201904,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201905,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201906,
+                                            "name": "June",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201907,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201908,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201909,
+                                            "name": "September",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201910,
+                                            "name": "October",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201911,
+                                            "name": "November",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 201912,
+                                            "name": "December",
+                                            "isDefault": false
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 4,
+                                            "name": "Q4",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "2020",
+                                    "isDefault": false,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202001,
+                                            "name": "January",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202002,
+                                            "name": "February",
+                                            "isDefault": true
+                                        },
+                                        {
+                                            "id": 202003,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202004,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202005,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202006,
+                                            "name": "June",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202007,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202008,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202009,
+                                            "name": "September",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202010,
+                                            "name": "October",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202011,
+                                            "name": "November",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202012,
+                                            "name": "December",
+                                            "isDefault": false
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 4,
+                                            "name": "Q4",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 3,
+                                    "name": "2021",
+                                    "isDefault": false,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202101,
+                                            "name": "January",
+                                            "isDefault": true
+                                        },
+                                        {
+                                            "id": 202102,
+                                            "name": "February",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202103,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202104,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202105,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202106,
+                                            "name": "June",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202107,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202108,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202109,
+                                            "name": "September",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202110,
+                                            "name": "October",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202111,
+                                            "name": "November",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202112,
+                                            "name": "December",
+                                            "isDefault": false
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 4,
+                                            "name": "Q4",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "name": "2022",
+                                    "isDefault": false,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202201,
+                                            "name": "January",
+                                            "isDefault": true
+                                        },
+                                        {
+                                            "id": 202202,
+                                            "name": "February",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202203,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202204,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202205,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202206,
+                                            "name": "June",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202207,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202208,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202209,
+                                            "name": "September",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202210,
+                                            "name": "October",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202211,
+                                            "name": "November",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202212,
+                                            "name": "December",
+                                            "isDefault": false
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 4,
+                                            "name": "Q4",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 5,
+                                    "name": "2023",
+                                    "isDefault": true,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202301,
+                                            "name": "January",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202302,
+                                            "name": "February",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202303,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202304,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202305,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202306,
+                                            "name": "June",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202307,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202308,
+                                            "name": "August",
+                                            "isDefault": true
+                                        },
+                                        {
+                                            "id": 202309,
+                                            "name": "September",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202310,
+                                            "name": "October",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202311,
+                                            "name": "November",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202312,
+                                            "name": "December",
+                                            "isDefault": false
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "serviceGroup": [
+                    {
+                        "id": 1,
+                        "name": "Other",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 2,
+                        "name": "Anesthesia",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 3,
+                        "name": "Cosmetic",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 4,
+                        "name": "Dental",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 5,
+                        "name": "Imaging",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 6,
+                        "name": "CT Scan",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 7,
+                        "name": "Mammography",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 8,
+                        "name": "MRA/MRI",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 9,
+                        "name": "Nuc Med",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 10,
+                        "name": "Pet Scan",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 11,
+                        "name": "Radiation Therapy",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 12,
+                        "name": "Ultrasound",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 13,
+                        "name": "Xray",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 14,
+                        "name": "Emergency",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 15,
+                        "name": "Home",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 16,
+                        "name": "Hospital",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 17,
+                        "name": "Opthalmology",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 18,
+                        "name": "Office Consult",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 19,
+                        "name": "Office Established",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 20,
+                        "name": "Office New",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 21,
+                        "name": "Office Psych",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 22,
+                        "name": "Preventative",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 23,
+                        "name": "SNF",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 24,
+                        "name": "Phone/Online",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 25,
+                        "name": "Pathology",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 26,
+                        "name": "Surgical",
+                        "isDefault": true
+                    }
+                ]
+            }
+        },
+        "fy_realData": {
+            "userId": "BS216",
+            "tenantKey": 2,
+            "dashboardKey": 3,
+            "productivityFilterResponse": {
+                "specialty": [
+                    {
+                        "id": "1320",
+                        "name": "Pediatrics - General",
+                        "isDefault": true
+                    }
+                ],
+                "periodTypes": [
+                    {
+                        "id": 1,
+                        "name": "Fiscal Year",
+                        "isDefault": true,
+                        "period": {
+                            "years": [
+                                {
+                                    "id": 1,
+                                    "name": "FY2023",
+                                    "isDefault": false,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202207,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202208,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202209,
+                                            "name": "September",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202210,
+                                            "name": "October",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202211,
+                                            "name": "November",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202212,
+                                            "name": "December",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202301,
+                                            "name": "January",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202302,
+                                            "name": "February",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202303,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202304,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202305,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202306,
+                                            "name": "June",
+                                            "isDefault": true
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 4,
+                                            "name": "Q4",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "FY2024",
+                                    "isDefault": true,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202307,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202308,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202309,
+                                            "name": "September",
+                                            "isDefault": true
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "name": "Calendar Year",
+                        "isDefault": false,
+                        "period": {
+                            "years": null
+                        }
+                    }
+                ],
+                "serviceGroup": [
+                    {
+                        "id": 1,
+                        "name": "~",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 2,
+                        "name": "Anesthesia Services",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 3,
+                        "name": "Eval \u0026 Mgmt - Dental",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 4,
+                        "name": "Diagnostic Radiology",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 5,
+                        "name": "Diagnostic \u0026 Therapeutic",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 6,
+                        "name": "Evaluation \u0026 Management Services",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 7,
+                        "name": "HCPCS",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 8,
+                        "name": "Laboratory \u0026 Pathology",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 9,
+                        "name": "Miscellaneous",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 10,
+                        "name": "Miscellaneous",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 11,
+                        "name": "Pharmacy \u0026 IV",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 12,
+                        "name": "Supplies",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 13,
+                        "name": "Surgery",
+                        "isDefault": true
+                    }
+                ]
+            }
+        },
+        "cy_realData": {
+            "userId": "RA41",
+            "tenantKey": 1,
+            "dashboardKey": 1,
+            "productivityFilterResponse": {
+                "specialty": [
+                    {
+                        "id": "1110",
+                        "name": "Family Medicine",
+                        "isDefault": true
+                    }
+                ],
+                "periodTypes": [
+                    {
+                        "id": 1,
+                        "name": "Fiscal Year",
+                        "isDefault": false,
+                        "period": {
+                            "years": null
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "name": "Calendar Year",
+                        "isDefault": true,
+                        "period": {
+                            "years": [
+                                {
+                                    "id": 1,
+                                    "name": "CY2022",
+                                    "isDefault": false,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202201,
+                                            "name": "January",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202202,
+                                            "name": "February",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202203,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202204,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202205,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202206,
+                                            "name": "June",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202207,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202208,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202209,
+                                            "name": "September",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202210,
+                                            "name": "October",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202211,
+                                            "name": "November",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202212,
+                                            "name": "December",
+                                            "isDefault": true
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 4,
+                                            "name": "Q4",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "CY2023",
+                                    "isDefault": true,
+                                    "yearMonths": [
+                                        {
+                                            "id": 202301,
+                                            "name": "January",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202302,
+                                            "name": "February",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202303,
+                                            "name": "March",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202304,
+                                            "name": "April",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202305,
+                                            "name": "May",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202306,
+                                            "name": "June",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202307,
+                                            "name": "July",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202308,
+                                            "name": "August",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 202309,
+                                            "name": "September",
+                                            "isDefault": true
+                                        }
+                                    ],
+                                    "quarters": [
+                                        {
+                                            "id": 1,
+                                            "name": "Q1",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 2,
+                                            "name": "Q2",
+                                            "isDefault": false
+                                        },
+                                        {
+                                            "id": 3,
+                                            "name": "Q3",
+                                            "isDefault": false
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "serviceGroup": [
+                    {
+                        "id": 1,
+                        "name": "~",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 2,
+                        "name": "Anesthesia Services",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 3,
+                        "name": "Eval \u0026 Mgmt - Dental",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 4,
+                        "name": "Diagnostic Radiology",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 5,
+                        "name": "Diagnostic \u0026 Therapeutic",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 6,
+                        "name": "Evaluation \u0026 Management Services",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 7,
+                        "name": "HCPCS",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 8,
+                        "name": "Laboratory \u0026 Pathology",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 9,
+                        "name": "Miscellaneous",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 10,
+                        "name": "Miscellaneous",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 11,
+                        "name": "Pharmacy \u0026 IV",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 12,
+                        "name": "Supplies",
+                        "isDefault": true
+                    },
+                    {
+                        "id": 13,
+                        "name": "Surgery",
+                        "isDefault": true
+                    }
+                ]
+            }
+        }
+    }

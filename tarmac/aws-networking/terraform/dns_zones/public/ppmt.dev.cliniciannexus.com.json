@@ -1,0 +1,18 @@
+{
+    "ZoneDefinition": {
+        "Name": "ppmt.dev.cliniciannexus.com",
+        "Parent": "dev.cliniciannexus.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "api.ppmt.dev.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms48968390"
+                }
+            ]
+        }
+    ]
+}

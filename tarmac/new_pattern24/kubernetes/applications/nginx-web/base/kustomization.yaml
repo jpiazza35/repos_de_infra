@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nginx-web
+images:
+- name: argo-test
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/argo-test
+  newTag: 0.1.5
+resources:
+- deployment.yaml
+- service.yaml
+- app.yml

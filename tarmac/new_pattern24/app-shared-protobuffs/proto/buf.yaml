@@ -1,0 +1,14 @@
+version: v1
+name: clinician-nexus.buf.dev/cn-shared/app-shared-protobuffs
+breaking:
+  use:
+    - FILE
+deps:
+  - clinician-nexus.buf.dev/googleapis/googleapis
+lint:
+  ignore:
+    - cn/incumbent/v1/incumbent.proto
+    - cn/organization/v1/organization.proto
+    - cn/survey/v1/survey_service.proto
+  use:
+    - DEFAULT

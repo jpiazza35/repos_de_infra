@@ -1,0 +1,55 @@
+name: Update corresponding application values.yaml file
+run-name: Update ${{ github.event.client_payload.environment }} ${{ github.event.client_payload.project_name }} with new docker tag ${{ github.event.client_payload.docker_image_tag }}
+
+on:
+  repository_dispatch:
+    types: 
+      - trigger-prod-pipeline
+
+env:
+  SS_TOOLS_ECR_URL: ${{ secrets.SS_TOOLS_ECR_URL }}
+  ENVIRONMENT: ${{ github.event.client_payload.environment }}
+  PRODUCT: ${{ github.event.client_payload.product }}
+  DOCKER_IMAGE_TAG: ${{ github.event.client_payload.docker_image_tag }}
+  PROJECT_NAME: ${{ github.event.client_payload.project_name }}
+  COMMIT_URL: ${{ github.event.client_payload.commit_url }}
+  COMMIT_AUTHOR: ${{ github.event.client_payload.commit_author }}
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Update ${{ env.ENVIRONMENT }}/${{ env.PROJECT_NAME }} values.yaml file
+        env:
+          BRANCH_NAME: release/${{ env.DOCKER_IMAGE_TAG }}-${{ env.ENVIRONMENT }}-${{ env.PROJECT_NAME }}
+          PR_COMMIT_MSG: Deploy ${{ env.DOCKER_IMAGE_TAG }} to ${{ env.ENVIRONMENT }} ${{ env.PROJECT_NAME }}.
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_EMAIL}"
+          git fetch && git pull
+          git checkout -b "${{ env.BRANCH_NAME }}"
+          python3 update-values.py
+          git add -A
+          git commit -m "${{ env.PR_COMMIT_MSG }}"
+          git push --set-upstream origin "${{ env.BRANCH_NAME }}"
+          
+      - uses: tibdex/github-app-token@v1
+        id: rw-installation-token
+        with: 
+          app_id: ${{ secrets.PIPELINE_GH_RW_APP_ID }}
+          installation_id: ${{ secrets.PIPELINE_GH_RW_APP_INSTALLATION_ID }}
+          private_key: ${{ secrets.PIPELINE_GH_RW_APP_PRIVATE_KEY }}
+
+      - name: Open a PR with corresponding changes
+        env:
+          GITHUB_TOKEN: ${{ steps.rw-installation-token.outputs.token }}
+          PR_BODY: Release PR that will deploy the **${{ env.DOCKER_IMAGE_TAG }}** docker image tag to **${{ env.ENVIRONMENT }} ${{ env.PROJECT_NAME }}**. Link to commit - ${{ env.COMMIT_URL }}
+          PR_REVIEWERS: antonioned,DanDevOpsSCH,${{ env.COMMIT_AUTHOR }}
+          PR_TITLE: Release PR - deploy ${{ env.DOCKER_IMAGE_TAG }} tag to ${{ env.ENVIRONMENT }} ${{ env.PROJECT_NAME }}
+        run: |
+          gh pr create -B "main" -b "$PR_BODY" -r "$PR_REVIEWERS" -t "$PR_TITLE"

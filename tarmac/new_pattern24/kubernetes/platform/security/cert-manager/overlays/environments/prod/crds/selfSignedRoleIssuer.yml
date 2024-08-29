@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: vault-cert-issuer
+spec:
+  vault:
+    path: cluster-prod-pki/sign/cliniciannexus-dot-com
+    server: https://vault.cliniciannexus.com:8200
+    auth:
+      kubernetes:
+        role: vault-cert-issuer
+        mountPath: /v1/auth/cluster-prod
+        serviceAccountRef:
+          name: vault-cert-issuer

@@ -1,0 +1,10 @@
+region: ${aws_region}
+replicaCount: 3
+vpcId: ${vpc_id}
+serviceAccount:
+  create: "true"
+  name: "aws-load-balancer-controller"
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+clusterName : ${cluster_Name}
+hostNetwork: "true"

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: app-ps-performance-service
+    app.kubernetes.io/name: app-ps-performance-service
+  name: app-ps-performance-service
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-ps-performance-service
+      app.kubernetes.io/name: app-ps-performance-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: app-ps-performance-service
+        app.kubernetes.io/name: app-ps-performance-service
+    spec:
+      containers:
+      - env:
+        - name: TENANT_SERVER_URL
+          value: ""
+        - name: SETTINGS_SERVER_URL
+          value: ""
+        - name: AUTH0_AUDIENCE
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-auth0-audience
+              name: ps-external-secret
+        - name: AUTH0_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-auth0-clientid
+              name: ps-external-secret
+        - name: AUTH0_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-auth0-domain
+              name: ps-external-secret
+        - name: LAUNCH_DARKLY_KEY
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-launch-darkly-key
+              name: ps-external-secret
+        image: app-ps-performance-service
+        imagePullPolicy: Always
+        name: app-ps-performance-service
+        ports:
+        - containerPort: 10000
+          name: https
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubecost
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: kubecost.dev.cliniciannexus.com
+    alb.ingress.kubernetes.io/group.name: dev
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:946884638317:certificate/e1a35943-f788-43ce-9bde-4cc783009c8d
+    alb.ingress.kubernetes.io/tags: Environment=dev,Team=devops
+    alb.ingress.kubernetes.io/auth-type: oidc
+    alb.ingress.kubernetes.io/auth-idp-oidc: '{"issuer":"https://login.microsoftonline.com/${kubecost_oidc_tenant_id}/v2.0","authorizationEndpoint":"https://login.microsoftonline.com/${kubecost_oidc_tenant_id}/oauth2/v2.0/authorize","tokenEndpoint":"https://login.microsoftonline.com/${kubecost_oidc_tenant_id}/oauth2/v2.0/token","userInfoEndpoint":"https://graph.microsoft.com/oidc/userinfo","secretName":"${kubecost_oidc_secret_name}"}'
+    alb.ingress.kubernetes.io/auth-on-unauthenticated-request: authenticate
+    alb.ingress.kubernetes.io/auth-scope: 'openid'
+    alb.ingress.kubernetes.io/auth-session-cookie: AWSELBAuthSessionCookie
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-3-2021-06
+spec:
+  ingressClassName: alb
+  rules:
+    - host: kubecost.dev.cliniciannexus.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kubecost-cost-analyzer
+                port:
+                  name: tcp-frontend

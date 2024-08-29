@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: app-dwb-service
+    app.kubernetes.io/name: app-dwb-service
+  name: app-dwb-service
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-dwb-service
+      app.kubernetes.io/name: app-dwb-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/instance: app-dwb-service
+        app.kubernetes.io/name: app-dwb-service
+    spec:
+      containers:
+      - env:
+        - name: APIBASEURL
+          value: /api/service
+        - name: KAFKA_BROKER
+          valueFrom:
+            secretKeyRef:
+              key: dwb-kafka-broker
+              name: dwb-external-secret
+        - name: KAFKA_BROKER
+          valueFrom:
+            secretKeyRef:
+              key: dwb-kafka-broker
+              name: dwb-external-secret
+        - name: KAFKA_TOPIC
+          value: submission-statuses
+        - name: DATABRICKS_PREFIX
+          valueFrom:
+            secretKeyRef:
+              key: dwb-databricks-prefix
+              name: dwb-external-secret
+        - name: AUTH0_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              key: dwb-auth0-clientid
+              name: dwb-external-secret
+        - name: AUTH0_AUDIENCE
+          valueFrom:
+            secretKeyRef:
+              key: dwb-auth0-audience
+              name: dwb-external-secret
+        - name: AUTH0_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              key: dwb-auth0-domain
+              name: dwb-external-secret
+        - name: LAUNCH_DARKLY_KEY
+          valueFrom:
+            secretKeyRef:
+              key: dwb-launch-darkly-key
+              name: dwb-external-secret
+        - name: AWS_S3BUCKET
+          valueFrom:
+            secretKeyRef:
+              key: dwb-aws-s3bucket
+              name: dwb-external-secret
+        - name: DATABRICKS_DOWNLOAD_JOBID
+          valueFrom:
+            secretKeyRef:
+              key: dwb-databricks-download-jobid
+              name: dwb-external-secret
+        - name: DATABRICKS_AUDITBOOKS_REPLICATE_JOBID
+          valueFrom:
+            secretKeyRef:
+              key: dwb-databricks-auditbooks-replicate-jobid
+              name: dwb-external-secret
+        - name: DATABRICKS_HOST
+          valueFrom:
+            secretKeyRef:
+              key: dwb-databricks-host
+              name: dwb-external-secret
+        - name: DATABRICKS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: dwb-databricks-token
+              name: dwb-external-secret
+        - name: DOMAINORIENTEDCONNECTIONSTRING
+          valueFrom:
+            secretKeyRef:
+              key: dwb-domainorientedconnectionstring
+              name: dwb-connectionstring
+        - name: MSK_ARN_ROLE
+          valueFrom:
+            secretKeyRef:
+              key: dwb-msk-arn-role
+              name: dwb-external-secret
+        image: app-dwb-service
+        imagePullPolicy: Always
+        name: app-dwb-service
+        ports:
+        - containerPort: 10000
+          name: https
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: dwb
+      serviceAccountName: dwb
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,17 @@
+{
+    "ZoneDefinition": {
+        "Name": "cn-prod-databricks.cloud.databricks.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "cn-prod-databricks.cloud.databricks.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z7HUB22UULQXV",
+                "DNSName": "vpce-0048a4dbb3c13f48d-uqkrbq5x.vpce-svc-09143d1e626de2f04.us-east-1.vpce.amazonaws.com.",
+                "EvaluateTargetHealth": true
+            }
+        }
+    ]
+}

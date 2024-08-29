@@ -1,0 +1,77 @@
+certs:
+  issuer:
+    create: true
+    name: ""
+  certificate:
+    create: true
+    namespace: ${ns}
+    secretName: ""
+    # Specify the cert-manager issuer kind to use an existing cert-manager
+    # issuer; typically Issuer or ClusterIssuer
+    # This field will be ignored if issuer.create is true
+    issuerKind: ""
+
+jaeger:
+  # Specifies whether Jaeger instance should be created
+  create: true
+  # namespace where Jaeger resource should be created default to .Release.Namespace
+  namespace: ${ns}
+  spec:
+    query:
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          prometheus-monitor: "true"
+          app: jaeger
+      extraEnv:
+        - name: METRICS_STORAGE_TYPE
+          value: prometheus
+        - name: PROMETHEUS_SERVER_URL
+          value: http://prometheus-operated.${ns}:9090/
+    agent:
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          prometheus-monitor: "true"
+          app: jaeger
+    collector:
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          prometheus-monitor: "true"
+          app: jaeger
+    ingester:
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          prometheus-monitor: "true"
+          app: jaeger
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  pspEnabled: false
+  # Ensure jaeger-operator operates on things (e.g. CRs) in cluster-wide scope.
+  clusterRole: true
+
+service:
+  type: ClusterIP
+  # Specify a specific node port when type is NodePort
+  # nodePort: 32500
+  # Annotations for service
+  annotations: {}
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+  # Annotations for serviceAccount
+  annotations: {}
+
+# Specifies whether host network should be used
+hostNetwork: false
+
+metricsPort: 8383
+

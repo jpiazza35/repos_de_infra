@@ -1,0 +1,38 @@
+{
+    "ZoneDefinition": {
+        "Name": "test2.sullivancotter.com",
+        "Parent": "sullivancotter.com"
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "test2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "test2.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "hngrdc5f1b7nc4g4zd1mfs3dvhrq5yjn"
+                }
+            ]
+        },
+        {
+            "Name": "*.test2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        }
+    ]
+}

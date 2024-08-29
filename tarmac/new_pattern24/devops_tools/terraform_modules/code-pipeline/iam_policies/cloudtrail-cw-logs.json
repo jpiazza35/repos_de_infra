@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "logs:CreateLogStream",
+            "Resource": "arn:aws:logs:${region}:${aws_account_id}:log-group:${cw_log_group_name}:*",
+            "Effect": "Allow",
+            "Sid": "AWSCloudTrailCreateLogStream"
+        },
+        {
+            "Action": "logs:PutLogEvents",
+            "Resource": "arn:aws:logs:${region}:${aws_account_id}:log-group:${cw_log_group_name}:*",
+            "Effect": "Allow",
+            "Sid": "AWSCloudTrailPutLogEvents"
+        }
+    ]
+}

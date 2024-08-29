@@ -1,0 +1,487 @@
+{
+    "ZoneDefinition": {
+        "Name": "cliniciannexus.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "cliniciannexus.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "104.154.180.169"
+                }
+            ]
+        },
+        {
+            "Name": "cliniciannexus.com.",
+            "Type": "MX",
+            "TTL": 60,
+            "ResourceRecords": [
+                {
+                    "Value": "10 cliniciannexus-com.mail.protection.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms16985889"
+                },
+                {
+                    "Value": "v=spf1 ip4:12.218.63.72/29 ip4:209.10.195.32/28 include:spf.protection.outlook.com include:amazonses.com -all"
+                },
+                {
+                    "Value": "google-site-verification=4jE_q7a-zDRZL5RynL802M2cgmJ1Q1PsdCsOs_0O3U4"
+                },
+                {
+                    "Value": "hcp-domain-verification=f6c02257ffc95c15f3d30798032f9db39246a1c8a912a9acc6a2dbbabe11b3d7"
+                },
+                {
+                    "Value": "hcp-domain-verification=cae4d442be25bc4dab8d3a941fc916f364d5e167571097ee77eae72f93817d4b"
+                }
+            ]
+        },
+        {
+            "Name": "6072007.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sendgrid.net."
+                }
+            ]
+        },
+        {
+            "Name": "_4e1a17bf62cf3b67157b062a32c980a0.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_00a5f20779bfcde7e46ec3e060eb6209.hsmgrxbjqd.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_cc7b8c0c8241e2da4ecb1aa33c667bcd.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_b2f8343248aeaccb8eb257ac1e8c838e.qxcwttcyyb.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_dmarc.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=DMARC1;p=none;rua=mailto:1546aa73@mxtoolbox.dmarc-report.com;ruf=mailto:1546aa73@forensics.dmarc-report.com;fo=1;adkim=r;aspf=r"
+                }
+            ]
+        },
+        {
+            "Name": "fvchqaz7brwqlt727dsfkf6f2t2r6bfg._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "fvchqaz7brwqlt727dsfkf6f2t2r6bfg.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "hs1-20796010._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cliniciannexus-com.hs18a.dkim.hubspotemail.net."
+                }
+            ]
+        },
+        {
+            "Name": "hs2-20796010._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cliniciannexus-com.hs18b.dkim.hubspotemail.net."
+                }
+            ]
+        },
+        {
+            "Name": "intercom._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "26210bcc-5f64-4f08-9943-372caaa07fff.dkim.intercom.io."
+                }
+            ]
+        },
+        {
+            "Name": "o2ravhyqec2q3lrcr7lkeyvi55ctij4w._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "o2ravhyqec2q3lrcr7lkeyvi55ctij4w.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "s1._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "s1.domainkey.u6072007.wl008.sendgrid.net."
+                }
+            ]
+        },
+        {
+            "Name": "s2._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "s2.domainkey.u6072007.wl008.sendgrid.net."
+                }
+            ]
+        },
+        {
+            "Name": "selector1._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector1-cliniciannexus-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector2._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "selector2-cliniciannexus-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "wjsb3o3rxd56uyf5eohk7rzfisrbge5d._domainkey.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "wjsb3o3rxd56uyf5eohk7rzfisrbge5d.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "_domfnvzm8xfgme8qnqk4.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "vpce:46DmlQjXsjQzeK0XBNrU"
+                }
+            ]
+        },
+        {
+            "Name": "api.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms40706439"
+                }
+            ]
+        },
+        {
+            "Name": "app.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cliniciannexusweb.azurewebsites.net."
+                }
+            ]
+        },
+        {
+            "Name": "auth.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "cn-b2c-prod-ewc2akd5a7e8ckhy.z01.azurefd.net"
+                }
+            ]
+        },
+        {
+            "Name": "_dnsauth.auth.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "b6yvkwy6zxrjh23z6mrj225br6dpsg0h"
+                }
+            ]
+        },
+        {
+            "Name": "autodiscover.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "aws-ses.cliniciannexus.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 feedback-smtp.us-east-1.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "aws-ses.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=spf1 include:amazonses.com ~all"
+                }
+            ]
+        },
+        {
+            "Name": "calendar.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ghs.google.com."
+                }
+            ]
+        },
+        {
+            "Name": "demo.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cliniciannexusdemo.azurewebsites.net."
+                }
+            ]
+        },
+        {
+            "Name": "docs.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ghs.google.com."
+                }
+            ]
+        },
+        {
+            "Name": "em6241.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "u6072007.wl008.sendgrid.net."
+                }
+            ]
+        },
+        {
+            "Name": "gsuite.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "google-site-verification=bi0Lcy7F-ts8fPRC9HQW9Qhjz3V5T48XHBFhC15PO8A"
+                }
+            ]
+        },
+        {
+            "Name": "help.cliniciannexus.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "_e0c76ec1fc3ae9f88b64f70ea5491789.help.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_cec2e63836cc4dfec50b28157cf8c715.dlgthlwgnp.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "images.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cliniciannexusstorage.blob.core.windows.net."
+                }
+            ]
+        },
+        {
+            "Name": "info.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "20796010.group10.sites.hubspot.net"
+                }
+            ]
+        },
+        {
+            "Name": "outbound.intercom.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "rp.clinician-nexus.intercom-mail.com."
+                }
+            ]
+        },
+        {
+            "Name": "mail.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ghs.google.com."
+                }
+            ]
+        },
+        {
+            "Name": "_5d92de4a67d4513c0523d3b5f068e6ef.nginx.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_8e90208c0b976087d24d71acfdd237ff.tctzzymbbs.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "o365.cliniciannexus.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "google-site-verification=rPWdzYx7aoh62rLw2xsvyln4HC3FoKvF0ccI_jw70II"
+                }
+            ]
+        },
+        {
+            "Name": "phpipam.cliniciannexus.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "ss-lb-1201734399.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": true
+            }
+        },
+        {
+            "Name": "_7d378b023f3a052af1683519c1fbeb48.phpipam.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_e91924c2197769d0cc4fe87291b9a202.gtlqmkpmvp.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "preview.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cliniciannexuspreview.azurewebsites.net."
+                }
+            ]
+        },
+        {
+            "Name": "o1.ptr7523.cliniciannexus.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "168.245.12.208"
+                }
+            ]
+        },
+        {
+            "Name": "start.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ghs.google.com."
+                }
+            ]
+        },
+        {
+            "Name": "url9472.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sendgrid.net."
+                }
+            ]
+        },
+        {
+            "Name": "vault.cliniciannexus.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "ss-lb-1201734399.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": true
+            }
+        },
+        {
+            "Name": "_085ae048b5713f5f410511db5f3e9b73.vault.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_816b4eba33461ac445e278d13fcc546a.btsqtkxpyp.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "www.cliniciannexus.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "cliniciannexus.com"
+                }
+            ]
+        }
+    ]
+}

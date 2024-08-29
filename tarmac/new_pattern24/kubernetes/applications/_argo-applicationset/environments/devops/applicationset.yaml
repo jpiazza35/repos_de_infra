@@ -1,0 +1,221 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: applicationset-devops
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - app: nginx-web
+        path: applications/nginx-web/overlays/environments/devops
+        namespace: nginx-web
+      - app: mpt
+        path: applications/mpt/overlays/environments/devops/secrets
+        namespace: mpt
+      # - app: ps
+      #   path: applications/ps/overlays/environments/devops
+      #   namespace: ps
+      # - app: bm
+      #   path: applications/bm/overlays/environments/devops
+      #   namespace: bm
+
+  template:
+    metadata:
+      name: '{{app}}'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      source:
+        repoURL: https://github.com/clinician-nexus/Kubernetes
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mpt
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/clinician-nexus/kubernetes
+      revision: main
+      directories:
+        - path: applications/mpt/base/*
+      values:
+        app: "{{path.basename}}"
+        namespace: mpt
+        ecr: "{{path.basename}}-ecr-repo"
+  template:
+    metadata:
+      name: '{{values.app}}'
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: "{{values.app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{values.ecr}}:*"
+        argocd-image-updater.argoproj.io/{{values.app}}.kustomize.image-name: "{{values.app}}"
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+        argocd-image-updater.argoproj.io/write-back-target: kustomization
+        argocd-image-updater.argoproj.io/{{values.app}}.force-update: "true"
+        application: "{{values.app}}"
+        argocd-image-updater.argoproj.io/{{values.app}}.pull-secret: ext:/scripts/ecr-login.sh
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      source:
+        repoURL: https://github.com/clinician-nexus/kubernetes
+        targetRevision: main
+        path: applications/mpt/overlays/environments/devops/{{path.basename}}
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{values.namespace}}'
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: applicationset-ps
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#       - app: app-ps-performance-service
+#         path: devops/ps/app-ps-performance-service
+#         namespace: ps
+#         ecr: app-ps-performance-service-ecr-repo
+#       - app: app-ps-ui
+#         path: devops/ps/app-ps-ui
+#         namespace: ps
+#         ecr: app-ps-ui-ecr-repo
+#       - app: app-bm-ui
+#         path: devops/bm/app-bm-ui
+#         namespace: bm
+#         ecr: app-bm-ui-ecr-repo
+#       - app: app-bm-service
+#         path: devops/bm/app-bm-service
+#         namespace: bm
+#         ecr: app-bm-service-ecr-repo
+#   template:
+#     metadata:
+#       name: '{{app}}'
+#       annotations:
+#         argocd-image-updater.argoproj.io/image-list: "{{app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{ecr}}:*"
+#         argocd-image-updater.argoproj.io/{{app}}.kustomize.image-name: "{{app}}"
+#         argocd-image-updater.argoproj.io/write-back-method: git
+#         argocd-image-updater.argoproj.io/git-branch: main
+#         argocd-image-updater.argoproj.io/write-back-target: kustomization
+#         argocd-image-updater.argoproj.io/{{app}}.force-update: "true"
+#     spec:
+#       project: default
+#       syncPolicy:
+#         automated:
+#           prune: true
+#         syncOptions:
+#           - Validate=false
+#           - CreateNamespace=true
+#       source:
+#         repoURL: https://github.com/clinician-nexus/kubernetes
+#         targetRevision: main
+#         path: '{{path}}'
+#       destination:
+#         server: 'https://kubernetes.default.svc'
+#         namespace: '{{namespace}}'
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: applicationset-bm
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#       - app: app-bm-ui
+#         path: devops/bm/app-bm-ui
+#         namespace: bm
+#         ecr: app-bm-ui-ecr-repo
+#       - app: app-bm-service
+#         path: devops/bm/app-bm-service
+#         namespace: bm
+#         ecr: app-bm-service-ecr-repo
+#   template:
+#     metadata:
+#       name: '{{app}}'
+#       annotations:
+#         argocd-image-updater.argoproj.io/image-list: "{{app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{ecr}}:*"
+#         argocd-image-updater.argoproj.io/{{app}}.kustomize.image-name: "{{app}}"
+#         argocd-image-updater.argoproj.io/write-back-method: git
+#         argocd-image-updater.argoproj.io/git-branch: main
+#         argocd-image-updater.argoproj.io/write-back-target: kustomization
+#         argocd-image-updater.argoproj.io/{{app}}.force-update: "true"
+#     spec:
+#       project: default
+#       syncPolicy:
+#         automated:
+#           prune: true
+#         syncOptions:
+#           - Validate=false
+#           - CreateNamespace=true
+#       source:
+#         repoURL: https://github.com/clinician-nexus/kubernetes
+#         targetRevision: main
+#         path: '{{path}}'
+#       destination:
+#         server: 'https://kubernetes.default.svc'
+#         namespace: '{{namespace}}'
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: applicationset-dwb
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#       - app: app-dwb-ui
+#         path: devops/dwb/app-dwb-ui
+#         namespace: dwb
+#         ecr: app-dwb-ui-ecr-repo
+#       - app: app-dwb-service
+#         path: devops/dwb/app-dwb-service
+#         namespace: dwb
+#         ecr: app-dwb-service-ecr-repo
+#   template:
+#     metadata:
+#       name: '{{app}}'
+#       annotations:
+#         argocd-image-updater.argoproj.io/image-list: "{{app}}=163032254965.dkr.ecr.us-east-1.amazonaws.com/{{ecr}}:*"
+#         argocd-image-updater.argoproj.io/{{app}}.kustomize.image-name: "{{app}}"
+#         argocd-image-updater.argoproj.io/write-back-method: git
+#         argocd-image-updater.argoproj.io/git-branch: main
+#         argocd-image-updater.argoproj.io/write-back-target: kustomization
+#         argocd-image-updater.argoproj.io/{{app}}.force-update: "true"
+#     spec:
+#       project: default
+#       syncPolicy:
+#         automated:
+#           prune: true
+#         syncOptions:
+#           - Validate=false
+#           - CreateNamespace=true
+#       source:
+#         repoURL: https://github.com/clinician-nexus/kubernetes
+#         targetRevision: main
+#         path: '{{path}}'
+#       destination:
+#         server: 'https://kubernetes.default.svc'
+#         namespace: '{{namespace}}'

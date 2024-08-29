@@ -1,0 +1,19 @@
+{
+    "mockData": {
+        "circuitBreakerValBasedLabel": {
+            "circuitBreakerValBasedTitle": "Circuit Breaker for Value Based",
+            "infoToolTip": "Eligible for Value Based Incentive",
+            "chartClosure": "Chart Closure within 72 Hours",
+            "problemListReview": "Problem List Review",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    },
+    "realData": {
+        "circuitBreakerValBasedLabel": {
+            "circuitBreakerValBasedTitle": "Circuit Breaker for Value Based",
+            "infoToolTip": "Eligible for Value Based Incentive",
+            "wRVUProductivity": "wRVU Productivity",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    }
+}

@@ -1,0 +1,8 @@
+loki:
+  storage:
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+  minio:
+    enabled: true

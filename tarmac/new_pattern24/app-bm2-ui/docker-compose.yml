@@ -1,0 +1,70 @@
+# # for development purposes only
+ services:
+#   # simulate shared SQL dbs the app will use until data platform team replaces w/ more tailored data products
+#   commondb:
+#     image: commondb:latest
+#     build:
+#       context: ../app-ps-common-db
+#     ports:
+#       - "1435:1433"
+#     volumes:
+#       - commondb-data:/var/opt/mssql/
+
+#   clientdb:
+#     image: clientdb:latest
+#     build:
+#       context: ../app-ps-client-db
+#     ports:
+#       - "1434:1433"
+#     volumes:
+#       - clientdb-data:/var/opt/mssql/
+
+#   settingsdb:
+#     image: settingsdb:latest
+#     build:
+#       context: ../app-ps-settings-db
+#     ports:
+#       - "5433:5432"
+#     environment:
+#       POSTGRES_DB: ps_settings_db
+#     volumes:
+#       - settingsdb-data:/var/lib/postgresql/data/ 
+
+#   grpc-tenant-server:
+#     image: grpc-tenant-server
+#     build:
+#       context: ../app-ps-tenant-service
+#       dockerfile: ./grpc-server/Dockerfile
+#     ports:
+#       - "50052:50052"
+#     depends_on:
+#       - commondb
+#     environment:
+#       - CONNECTION_STRING=Data Source=commondb,1433;Initial Catalog=_PPM_COMMON_TEST;User ID=sa;Password=Admin1234;MultipleActiveResultSets=True
+#       - TENANT_SERVER_URL=:50052
+
+  rest-tenant-server:
+    image: rest-bm2-server
+    build:
+      context: ../app-bm2-service
+      dockerfile: ../app-bm2-service/Dockerfile
+    ports:
+      - "10001:10000"
+
+#   grpc-settings-server:
+#     image: grpc-settings-server
+#     build:
+#       context: ../app-ps-settings-service
+#       dockerfile: ./grpc-server/Dockerfile
+#     ports:
+#       - "50053:50053"
+#     depends_on:
+#       - settingsdb
+#     environment:
+#       - SETTINGS_DATABASE_CONNECTION_STRING=host=settingsdb user=postgres password=Admin1234 dbname=ps_settings_db port=5432 sslmode=disable
+#       - SETTINGS_SERVER_URL=:50053
+      
+# volumes:
+#   commondb-data:
+#   clientdb-data:
+#   settingsdb-data:

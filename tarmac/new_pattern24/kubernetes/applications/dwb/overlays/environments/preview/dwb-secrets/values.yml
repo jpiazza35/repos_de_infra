@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: replacement
+data:
+  key: preview/dwb
+  env: preview
+  url: preview.sullivancotter
+  connstring_key: preview/databricks

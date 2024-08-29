@@ -1,0 +1,80 @@
+{
+  "PHYSICIAN_TILES": [
+    {
+      "title": "Market Report",
+      "icon": "tile-spaceship",
+      "url": "/physician/marketReport",
+      "type": "physician"
+    },
+    {
+      "title": "Benchmarks",
+      "icon": "tile-spaceship",
+      "url": "/physician/benchmarks",
+      "type": "physician"
+    },
+    {
+      "title": "Provider At-A-Glance",
+      "icon": "tile-spaceship",
+      "url": "/physician/providerAtGlance",
+      "type": "physician"
+    },
+    {
+      "title": "Percentile Report",
+      "icon": "tile-spaceship",
+      "url": "/physician/percentileReport",
+      "type": "physician"
+    },
+    {
+      "title": "Clinical FTE Assessment",
+      "icon": "tile-spaceship",
+      "url": "/physician/clinicalFTEAssessment",
+      "type": "physician"
+    },
+    {
+      "title": "Market Positioning",
+      "icon": "tile-spaceship",
+      "url": "/physician/marketPositioning",
+      "type": "physician"
+    },
+    {
+      "title": "Market Outer Analysis",
+      "icon": "tile-spaceship",
+      "url": "/physician/marketOuterAnalysis",
+      "type": "physician"
+    },
+    {
+      "title": "The Trend Report",
+      "icon": "tile-spaceship",
+      "url": "/physician/trendReport",
+      "type": "physician"
+    },
+    {
+      "title": "Risk Assessment",
+      "icon": "tile-spaceship",
+      "url": "/physician/riskAssessment",
+      "type": "physician"
+    }
+  ],
+  "ADVANCED_PRACTICE_PROVIDER_TILES": [
+    {
+      "title": "Market Report",
+      "icon": "tile-star",
+      "url": "/app/marketReport",
+      "type": "advancedPracticeProvider"
+    },
+    {
+      "title": "Benchmarks",
+      "icon": "tile-star",
+      "url": "/app/benchmarks",
+      "type": "advancedPracticeProvider"
+    }
+  ],
+  "OTHER_STUDIES_TILES": [
+    {
+      "title": "On-Call",
+      "icon": "tile-other",
+      "url": "https://paypractices.dev2.sullivancotter.com/Home/Index",
+      "type": "otherStudies"
+    }
+  ]
+}

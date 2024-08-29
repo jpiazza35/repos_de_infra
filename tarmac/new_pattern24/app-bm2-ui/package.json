@@ -1,0 +1,73 @@
+{
+  "name": "app-bm2-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint --fix --quiet src --ext .js,.svelte",
+    "format": "prettier --write '{public,src}/**/*.{css,html,js,svelte}'",
+    "commit": "npm run prepare && git commit",
+    "prepare": "husky install",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "cypress": "npx cypress run --browser chrome",
+    "checkout:ui": "git checkout main && git pull",
+    "checkout:bm2-service": "git -C ../app-bm2-service/ checkout main && git -C ../app-bm2-service/ pull",
+    "checkout-main": "npm-run-all --parallel checkout:*",
+    "start:bm2-service-api": "cd ../app-bm2-service && go run .",
+    "start-db": "docker compose up --build -d",
+    "stop-db": "docker compose down",
+    "reset-db-volumes": "docker compose down -v",
+    "start-backend": "npm run start-db && npm-run-all --parallel start:*"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "autoprefixer": "^10.4.14",
+    "cypress": "^13.6.3",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-cypress": "^2.14.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-svelte": "^2.32.4",
+    "flowbite-svelte-icons": "^0.3.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.24",
+    "postcss-load-config": "^4.0.1",
+    "prettier": "2.8.8",
+    "prettier-plugin-svelte": "^2.10.1",
+    "sass": "^1.63.4",
+    "svelte": "^4.0.0",
+    "svelte-preprocess": "^5.0.4",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "@amcharts/amcharts5": "^5.3.16",
+    "@auth0/auth0-spa-js": "^2.1.1",
+    "@cn/ui": "^0.0.0",
+    "@fortawesome/pro-solid-svg-icons": "^6.4.2",
+    "@popperjs/core": "^2.11.8",
+    "@tanstack/svelte-query": "^4.33.0",
+    "buffer": "^6.0.3",
+    "calendarize": "^1.1.1",
+    "dayjs": "^1.11.9",
+    "flowbite": "^1.8.1",
+    "flowbite-svelte": "^0.40.2",
+    "svelte-fa": "^3.0.4",
+    "svelte-routing": "^2.3.0",
+    "tailwind-merge": "^1.14.0"
+  },
+  "lint-staged": {
+    "*.{js,svelte}": [
+      "eslint",
+      "prettier --write"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: elastic-cluster-high-priority
+value: 10000000
+globalDefault: false
+description: "This priority class should be used for elasticsearch cluster pods only."
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: filebeat-high-priority
+value: 2000000
+globalDefault: false
+description: "This priority class should be used for filebeat pods only."

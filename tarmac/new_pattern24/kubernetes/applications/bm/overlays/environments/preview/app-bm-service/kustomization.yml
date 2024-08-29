@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: bm-preview
+resources:
+- ../../../../base/app-bm-service
+- config.yml
+replacements:
+- path: replacements.yml
+images:
+- name: app-bm-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-bm-service-ecr-repo
+  digest: sha256:9de6cd284f4780fb230395fd0e8bd10aa0286df1a67840496495b9af6c734c2b

@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-applicationset-sharedservices
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - app: external-dns
+        path: platform/networking/external-dns/overlays/environments/sharedservices
+        namespace: external-dns
+      - app: cert-manager
+        path: platform/security/cert-manager/overlays/environments/sharedservices
+        namespace: cert-manager
+      - app: external-secrets
+        path: platform/security/external-secrets-controller/overlays/environments/sharedservices
+        namespace: default
+  template:
+    metadata:
+      name: '{{app}}'
+    spec:
+      project: platform
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+          - ServerSideApply=true
+      source:
+        repoURL: https://github.com/clinician-nexus/Kubernetes
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'

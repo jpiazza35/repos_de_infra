@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: ${istio_gw_name}
+  namespace: ${istio_namespace}
+spec:
+  selector:
+    istio: ${istio_gw_type}
+  servers:
+    - hosts:
+        - "${istio_ingress_hostname}"
+      port:
+        name: ${istio_gw_port_name}
+        number: ${istio_gw_port}
+        protocol: ${istio_gw_port_protocol}
+      tls:
+        mode: SIMPLE                          
+        credentialName: ${istio_cert_secret_name}

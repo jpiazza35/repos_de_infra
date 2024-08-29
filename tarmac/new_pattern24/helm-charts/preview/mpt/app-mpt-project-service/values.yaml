@@ -1,0 +1,47 @@
+fullnameOverride: app-mpt-project-service-preview
+namespace:
+  name: mpt-preview
+  
+service:
+  port: 7350
+  targetPort: 7350
+  name: app-mpt-project-service-preview
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-mpt-project-service-ecr-repo'
+  tag: '852fd85cc7'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+envvars:
+  - name: "CN_ORGANIZATIONSERVERURL"
+    value: "https://mpt.preview.cliniciannexus.com:7004"
+  - name: "CN_USERSERVERURL"
+    value: "https://mpt.preview.cliniciannexus.com:7051"
+  - name: "CN_SURVEYSERVERURL"
+    value: "https://mpt.preview.cliniciannexus.com:7052"
+  - name: "CN_INCUMBENTSERVERURL"
+    value: "https://mpt.preview.cliniciannexus.com:8004"
+  - name: "CN_AZUREADB2C__INSTANCE"
+    value: "https://auth.cliniciannexus.com"
+  - name: "CN_AZUREADB2C__DOMAIN"
+    value: "auth.cliniciannexus.com"
+  - name: "CN_AZUREADB2C__SIGNEDOUTCALLBACKPATH"
+    value: "/signout/B2C_1A_CN_HRD_SIGNIN"
+  - name: "CN_AZUREADB2C__SIGNUPSIGNINPOLICYID"
+    value: "B2C_1A_CN_HRD_SIGNIN"
+  - name: "CN_SPIREPDF__PLUGINPATH"
+    value: "\\plugins\\plugins-linux-x64\\plugins"
+
+environment: preview

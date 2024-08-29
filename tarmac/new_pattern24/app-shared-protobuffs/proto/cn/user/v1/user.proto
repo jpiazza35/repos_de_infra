@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package cn.user.v1;
+
+service UserService {
+  rpc ListRolesByUserObjectID(ListRolesByUserObjectIDRequest) returns (ListRolesByUserObjectIDResponse);
+  rpc ListEmulatedUsersByUser(ListEmulatedUsersByUserRequest) returns (ListEmulatedUsersByUserResponse);
+}
+
+message ListRolesByUserObjectIDRequest {
+  string user_object_id = 1;
+  string user_email = 2;
+}
+
+message ListRolesByUserObjectIDResponse {
+  repeated string roles = 1;
+}
+
+message ListEmulatedUsersByUserRequest {
+  string user_object_id = 1;
+  string user_application = 2;
+  string user_search_term = 3;
+}
+
+message UserDto {
+  string firstname = 1;
+  string lastname = 2;
+  string email = 3;
+}
+
+message ListEmulatedUsersByUserResponse {
+   repeated UserDto users = 1;
+}

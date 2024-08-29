@@ -1,0 +1,14 @@
+- source:
+    kind: ConfigMap
+    name: app-bm-ui
+    fieldPath: data.env
+  targets:
+
+  - select:
+      kind: Deployment
+    fieldPaths:
+      - metadata.labels.environment
+    options:
+      create: true
+
+      

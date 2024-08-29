@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package cn.dataexchange.files.v1;
+
+import "cn/datagovernance/v1/data_governance_framework.proto";
+
+service FileRegistrationService {
+  rpc CreateFileRegistration(CreateFileRegistrationRequest) returns (CreateFileRegistrationResponse) {}
+  rpc GetFileRegistration(GetFileRegistrationRequest) returns (GetFileRegistrationResponse) {}
+  rpc DeprecateFileRegistration(DeprecateFileRegistrationRequest) returns (DeprecateFileRegistrationResponse) {}
+  rpc CreateS3PresignedPost(CreateS3PresignedPostRequest) returns (CreateS3PresignedPostResponse) {}
+}
+
+message Sheet {
+  string display_name = 1;
+  cn.datagovernance.v1.RegisteredSchema registered_schema = 2;
+  string fq_target_table = 3; // fully qualified target source oriented table name.
+  string fq_quarantine_table = 4; // fully qualified target quarantine table name.
+}
+
+// Used to inform what driver to use during the ingestion process
+enum RegistrationType {
+  REGISTRATION_TYPE_UNSPECIFIED = 0;
+  REGISTRATION_TYPE_EXCEL_SURVEY_SUBMISSION = 1;
+}
+
+message FileRegistration {
+  // Some file types may come from multiple applications. We expect uploads to come from any of these locations
+  string uuid = 2;
+  RegistrationType registration_type = 3;
+  string name = 4;
+  repeated Sheet sheets = 5;
+  bool active = 7;
+}
+
+message CreateFileRegistrationRequest {
+  RegistrationType registration_type = 1;
+  string name = 3;
+  repeated Sheet sheets = 4;
+}
+
+message CreateFileRegistrationResponse {
+  string registration_uuid = 1;
+}
+
+message GetFileRegistrationRequest {
+  string registration_uuid = 1;
+}
+
+message GetFileRegistrationResponse {
+  FileRegistration file_registration = 1;
+}
+
+message GetFileRegistrations {
+  repeated string registration_uuids = 1;
+}
+
+// note that this is a SOFT delete
+message DeprecateFileRegistrationRequest {
+  string registration_uuid = 1;
+}
+
+message DeprecateFileRegistrationResponse {
+  string deprecated_registration_uuid = 1;
+}
+
+message CreateS3PresignedPostRequest {
+  cn.datagovernance.v1.S3Object object_path = 1;
+  int32 auth_expiration_seconds = 2;
+  cn.datagovernance.v1.SubmissionRequiredUploadObjectMetadata object_metadata = 5;
+  string sha_256_checksum = 4;
+}
+
+message CreateS3PresignedPostResponse {
+  string url = 1;
+  map<string, string> fields = 2;
+  repeated string required_user_submitted_fields = 3;
+}

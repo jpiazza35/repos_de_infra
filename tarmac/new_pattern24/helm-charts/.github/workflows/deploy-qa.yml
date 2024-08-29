@@ -1,0 +1,33 @@
+name: Update QA application values.yaml file
+run-name: Update ${{ github.event.client_payload.environment }} ${{ github.event.client_payload.project_name }} with new docker tag ${{ github.event.client_payload.docker_image_tag }}
+
+on:
+  repository_dispatch:
+    types: 
+      - trigger-qa-pipeline
+
+env:
+  SS_TOOLS_ECR_URL: ${{ secrets.SS_TOOLS_ECR_URL }}
+  ENVIRONMENT: ${{ github.event.client_payload.environment }}
+  PRODUCT: ${{ github.event.client_payload.product }}
+  DOCKER_IMAGE_TAG: ${{ github.event.client_payload.docker_image_tag }}
+  PROJECT_NAME: ${{ github.event.client_payload.project_name }}
+
+jobs:
+  deploy-qa:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update and push ${{ env.ENVIRONMENT }}/${{ env.PROJECT_NAME }} values.yaml file to repo
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_EMAIL}"
+          git fetch && git pull
+          python3 update-values.py
+          git add -A 
+          git commit -m "Deploy ${{ env.DOCKER_IMAGE_TAG }} docker image tag to ${{ env.ENVIRONMENT }} ${{ env.PROJECT_NAME }}." 
+          git push

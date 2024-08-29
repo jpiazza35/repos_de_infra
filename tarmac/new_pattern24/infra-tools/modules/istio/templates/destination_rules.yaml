@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: ${mpt_ui_vs_name}
+  namespace: ${istio_vs_namespace}
+spec:
+  host: ${mpt_ui_vs_name}
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: ${mpt_ui_vs_port_number}
+      tls:
+        mode: SIMPLE
+        credentialName: ${istio_cert_secret_name}

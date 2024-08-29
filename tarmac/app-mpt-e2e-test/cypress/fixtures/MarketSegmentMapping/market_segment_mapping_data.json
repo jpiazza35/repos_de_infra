@@ -1,0 +1,27 @@
+{
+    "alert": "The Client Job Group and Market Segment columns are the only editable fields.",
+    "orgErrorMessage": "To visualize Market Segment Mapping, please select Organization, Project ID, Project Version.",
+    "projectIdErrorMessage": "To visualize Market Segment Mapping, please select Project ID, Project Version.",
+    "projectVersionErrorMessage": "To visualize Market Segment Mapping, please select Project Version.",
+    "label": "Aggregation Methodology",
+    "alertProjectValidating": "The file uploaded for this project version has a status of Validating. Please check back once it is validated.",
+    "alertProjectNoData": "The file uploaded for this project version has a status of null. Please check back once it is validated.",
+    "marketSegmentMappingExport": [
+        "Organization",
+        "Client Job Code",
+        "Position Code",
+        "Client Job Title",
+        "Market Segment",
+        "Client Job Group",
+        "n Incumbents",
+        "n FTEs",
+        "Location Description",
+        "Job Family",
+        "Pay Grade",
+        "Pay Type",
+        "Position Code Description",
+        "Job Level"
+    ],
+    "marketMappingJobsRowCount":41,
+    "errorPopupMessage":"The value that you entered violates the validation rules set on the cell."
+}

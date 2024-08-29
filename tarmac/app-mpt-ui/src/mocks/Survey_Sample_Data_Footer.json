@@ -1,0 +1,7 @@
+[{"Desc_ID":1,"Desc":"Region Average:","Field_1_25":83,"Field_1_50":77,"Field_1_75":4,"Field_1_90":38,"Field_2_25":59,"Field_2_50":6,"Field_2_75":52,"Field_2_90":6},
+{"Desc_ID":2,"Desc":"State Average:","Field_1_25":38,"Field_1_50":48,"Field_1_75":75,"Field_1_90":51,"Field_2_25":49,"Field_2_50":40,"Field_2_75":74,"Field_2_90":92},
+{"Desc_ID":3,"Desc":"Local Average:","Field_1_25":97,"Field_1_50":87,"Field_1_75":62,"Field_1_90":73,"Field_2_25":90,"Field_2_50":34,"Field_2_75":13,"Field_2_90":15},
+{"Desc_ID":4,"Desc":"ERI Adj. National Average for Birmingham (-3%):","Field_1_25":43,"Field_1_50":26,"Field_1_75":37,"Field_1_90":93,"Field_2_25":93,"Field_2_50":28,"Field_2_75":37,"Field_2_90":80},
+{"Desc_ID":5,"Desc":"State / Local Average:","Field_1_25":82,"Field_1_50":42,"Field_1_75":42,"Field_1_90":70,"Field_2_25":8,"Field_2_50":94,"Field_2_75":36,"Field_2_90":54},
+{"Desc_ID":6,"Desc":"Region / State / Local Average:","Field_1_25":44,"Field_1_50":9,"Field_1_75":72,"Field_1_90":2,"Field_2_25":20,"Field_2_50":99,"Field_2_75":43,"Field_2_90":9}
+]

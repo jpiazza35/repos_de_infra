@@ -1,0 +1,71 @@
+{
+    "draftPNASearchFilters": [
+        "Service Area",
+        "Population Type",
+        "Patient Management %",
+        "Report Year",
+        "Provider Class"
+    ],
+
+    "patientMngmntDropdownValues": [
+        "0%",
+        "25%",
+        "50%",
+        "75%",
+        "100%"
+    ],
+
+    "providerClassValues": [
+        "Ancillary",
+        "APP",
+        "Physician"
+    ],
+
+    "draftPNAServiceArea": [
+        "All",
+        "Central Region ",
+        "County - Arthur, NE (Stark)",
+        "County - Blaine, NE",
+        "County - Box Butte, NE",
+        "County - Chase, NE",
+        "CSA",
+        "PSA",
+        "Stark SA 1",
+        "Stark SA 2",
+        "Strategic SA"
+    ],
+
+    "draftPNAReportYr2019": [
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+    ],
+
+    "draftPNAReportYr2020": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+    ],
+
+    
+    "draftPNAReportYrV23": [
+        "2023",
+        "2024",
+        "2025",
+        "2026",
+        "2027",
+        "2028"
+    ]
+
+   
+
+
+
+
+}

@@ -1,0 +1,11 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "SharedServiceECRAllow",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::${shared_services_account_id}:role/core-ecr-readonly-role"
+        }
+    ]
+}

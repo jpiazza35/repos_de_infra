@@ -1,0 +1,26 @@
+{
+    "fileTypeDropdownValues": [
+        "Select below",
+        "Affiliation",
+        "cFTE",
+        "Engagement",
+        "Service_Area",
+        "Supply Roster"
+    ],
+
+    "tableHeaders": [
+        "File Type",
+        "Data Source",
+        "File Name",
+        "Uploaded By",
+        "Upload Date",
+        "Upload Status",
+        "Log"
+    ],
+
+    "dataSourceDropdownValues": [
+        "Client Roster",
+        "Mailing List",
+        "Multiple Sources"
+    ]
+}

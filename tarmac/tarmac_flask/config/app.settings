@@ -1,0 +1,3 @@
+DEBUG = True
+SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:root@tarmac_flask_db:3306/tarmac_flask_db"
+SQLALCHEMY_ECHO = True

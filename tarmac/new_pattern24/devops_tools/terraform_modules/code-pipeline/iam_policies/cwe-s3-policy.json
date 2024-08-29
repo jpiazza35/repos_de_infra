@@ -1,0 +1,23 @@
+{
+    "source": [
+      "aws.s3"
+    ],
+    "detail": {
+      "eventSource": [
+        "s3.amazonaws.com"
+      ],
+      "eventName": [
+        "PutObject",
+        "CompleteMultipartUpload",
+        "CopyObject"
+      ],
+      "requestParameters": {
+        "bucketName": [
+          "${s3_pipeline_source}"
+        ],
+        "key": [
+          "imagedefinitions.json.zip"
+        ]
+      }
+    }
+  }

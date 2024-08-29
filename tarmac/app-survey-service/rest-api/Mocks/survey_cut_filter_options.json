@@ -1,0 +1,2044 @@
+﻿{
+  "survey_publisher_name_key_set": {
+    "filter_name": "SullivanCotter",
+    "filter_key_year": [
+      {
+        "survey_year": 2018,
+        "filter_key": 1
+      }
+    ]
+  },
+  "survey_name_key_sets": [
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Medical Group Executive",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 62
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Medical Group Executive",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Provider FTEs",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 4
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Physician",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 37
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Physician",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Region",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 1
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Private College",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 32
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Private College",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "Health Care Staff",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 43
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "Health Care Staff",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Region",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 1
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Revenue Size",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 9
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Locale",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 10
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "State",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 17
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Total FTEs",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 15
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Number of beds",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 14
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter APC Productivity",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 40
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter APC Productivity",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Coverage Type",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 8
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Trauma Center",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 7
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter APP Productivity",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 41
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter APP Productivity",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Practice Setting",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 11
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Locale",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 10
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Region",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 1
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Organization Type",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 2
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Manager and Executive",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 39
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Manager and Executive",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 51
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Region",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 1
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Revenue Size",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 9
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Endowment",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 35
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Endowment",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 55
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Pediatrics",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 50
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Pediatrics",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Revenue Size",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 9
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Private College",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 32
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Private College",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 56
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Endowment",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 35
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Endowment",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Endowment Size",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 13
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Physician",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 37
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Physician",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Organization Type",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 2
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Physician",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 37
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Physician",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Organization Type",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 2
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "Large Clinic APP",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 36
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "Large Clinic APP",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Region",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 1
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Organization Type",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 2
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Practice Setting",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 11
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Locale",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 10
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Manager and Executive",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 39
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Manager and Executive",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 57
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Revenue Size",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 9
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Endowment",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 35
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Endowment",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 54
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Endowment",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 35
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Endowment",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 53
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter APP",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 42
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter APP",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Practice Setting",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 11
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Region",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 1
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Organization Type",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 2
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Locale",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 10
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Medical Group",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 38
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Medical Group",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "New Hire",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 6
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Provider FTEs",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 4
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Academic",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 5
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Region",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 1
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Academics",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 49
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Academics",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Revenue Size",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 9
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "survey_name_key_set": {
+        "filter_name": "SullivanCotter Physician Executive",
+        "filter_key_year": [
+          {
+            "survey_year": 2018,
+            "filter_key": 61
+          }
+        ]
+      },
+      "industry_sector_name_key_sets": [
+        {
+          "filter_name": null,
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": null
+            }
+          ]
+        }
+      ],
+      "organization_type_name_key_sets": [
+        {
+          "filter_name": "SullivanCotter Physician Executive",
+          "filter_key_year": [
+            {
+              "survey_year": 2018,
+              "filter_key": 52
+            }
+          ]
+        }
+      ],
+      "cut_group_name_key_sets": [
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "Revenue Size",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 9
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cut_group_name_key_set": {
+            "filter_name": "National",
+            "filter_key_year": [
+              {
+                "survey_year": 2018,
+                "filter_key": 3
+              }
+            ]
+          },
+          "cut_sub_group_name_key_sets": [
+            {
+              "cut_sub_group_name_key_set": {
+                "filter_name": null,
+                "filter_key_year": [
+                  {
+                    "survey_year": 2018,
+                    "filter_key": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

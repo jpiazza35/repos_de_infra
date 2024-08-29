@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-ps-websocket
+data:
+  key: ""
+  env: qa
+  app: app-ps-websocket
+  ecr: app-ps-websocket-ecr-repo
+  acm: "arn:aws:acm:us-east-1:063890802877:certificate/2391662d-2fa0-4878-b56b-8a8c25444613"
+  url: ps.qa.cliniciannexus.com
+  wss_port: "8084"
+  ws_port: "8080"

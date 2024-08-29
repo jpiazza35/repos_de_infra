@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ include "app-mpt-project-service.fullname" . }}'
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "app-mpt-project-service.labels" . | nindent 4 }}
+    environment: {{ .Values.environment }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "app-mpt-project-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app-mpt-project-service.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            {{- range .Values.envvars }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            - name: CN_CONNECTIONSTRINGS__MPTPROJECTCONNECTION
+              valueFrom:
+                secretKeyRef:
+                  key: mpt-cn-awsconfiguration-mptprojectconnection
+                  name: mpt-external-secret-dev
+
+            - name: CN_IRONPDF_LICENSEKEY
+              valueFrom:
+                secretKeyRef:
+                  key: mpt-cn-ironpdf-licensekey
+                  name: mpt-external-secret-dev
+
+            - name: CN_AUTH0__DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  key: mpt-cn-auth0-domain
+                  name: mpt-external-secret-dev
+
+            - name: CN_AUTH0__AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  key: mpt-cn-auth0-audience
+                  name: mpt-external-secret-dev    
+
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

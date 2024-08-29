@@ -1,0 +1,47 @@
+name: Publish a container Image tag to repo
+
+on:
+  workflow_call:
+    inputs:
+      image_id_file:
+        description: 'name of the file to store the container image name'
+        default: ci-image-id.txt
+        type: string
+      target_environment:
+        description: 'the environment you wish to deploy to.'
+        required: true
+        type: string
+      manifest_repository:
+        description: 'the github repo to push k8s objects to (applied to a k8s cluster by ArgoCD).'
+        required: true
+        type: string
+      gh_token:
+        description: 'token used to connect to the github repo'
+        required: true
+        type: string
+      target_dir:
+        description: 'directory to build k8s object in the manifest repository'
+        default: ${{ github.event.repository.name }}
+        type: string
+    outputs:
+      ci-image-id:
+        description: the image tag that we are working with
+        value: ${{ steps.image-id.outputs.image-id }}
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: commit ci-image-id
+      shell: bash
+      run: |
+          set -Eeuxo pipefail
+          git config --global user.email "${GITHUB_EMAIL}"
+          git config --local user.name "${{ github.actor }}"
+          git add ${{ inputs.image_id_file }} || (echo "nothing to add"; exit 0) && \
+          git commit -m "new ci-image-id - github action [Automation]" || (echo "nothing to commit"; exit 0) && \
+          git push origin HEAD:${{ github.head_ref }}
+
+    - name: image-id
+      shell: bash
+      run: echo "::set-output name=image-id::$(cat ${{ inputs.image_id_file }})"

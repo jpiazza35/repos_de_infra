@@ -1,0 +1,102 @@
+replicas: ${es_master_replicas}
+minimumMasterNodes : ${es_master_minimum_replicas}
+
+antiAffinity: "soft"
+antiAffinityTopologyKey: "kubernetes.io/hostname"
+
+esMajorVersion: ${es_major_version}
+
+clusterName: ${es_cluster_name}
+
+clusterHealthCheckParams: "wait_for_status=green&timeout=30s"
+
+nodeGroup: master
+
+roles:
+  - master
+
+rbac:
+  create: ${es_rbac_enable}
+
+# podSecurityPolicy:
+#   create: ${es_psp_enable}
+
+image: ${es_image}
+imageTag: ${es_image_tag}
+imagePullPolicy: "IfNotPresent"
+
+persistence:
+  enabled: true
+
+volumeClaimTemplate:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: ${es_master_persistence_disk_size}
+
+resources: ${es_master_resources}
+
+extraEnvs:
+  - name: ELASTIC_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: ${es_cluster_name}-master-credentials
+        key: password
+
+secret:
+  enabled: false
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  successThreshold: 3
+  timeoutSeconds: 5
+
+createCert: true
+
+protocol: https
+httpPort: 9200
+transportPort: 9300
+
+service:
+  enabled: true
+  type: NodePort
+  publishNotReadyAddresses: false
+  httpPortName: http
+  transportPortName: transport
+  externalTrafficPolicy: Cluster
+
+  
+updateStrategy: RollingUpdate
+
+maxUnavailable: 1
+
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  runAsNonRoot: true
+  runAsUser: 1000
+
+terminationGracePeriod: 120
+
+sysctlVmMaxMapCount: 262144
+sysctlInitContainer:
+  enabled: true
+
+tests:
+  enabled: true
+
+## Security
+esConfig:
+  elasticsearch.yml: |
+    xpack.security.enabled: false
+    xpack.security.transport.ssl.enabled: false
+    xpack.security.transport.ssl.verification_mode: certificate
+    xpack.security.http.ssl.enabled: false

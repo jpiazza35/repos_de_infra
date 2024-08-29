@@ -1,0 +1,24 @@
+{
+    "mockData": {
+        "FTEAllocationLabel": {
+            "FTEAllocationTitle": "FTE Allocation",
+            "clinical": "Clinical",
+            "administrative": "Administrative",
+            "teaching": "Teaching",
+            "totalFTE": "Total FTE",
+            "YTDAvg": "YTD Avg",
+            "currentMonth": "Current Month",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    },
+    "realData": {
+        "FTEAllocationLabel": {
+            "FTEAllocationTitle": "FTE Allocation",
+            "clinicalFTE": "Clinical FTE",
+            "totalFTE": "Total FTE",
+            "YTDAvg": "YTD Avg",
+            "currentMonth": "Current Month",
+            "exportDataPDF": "Export Data to PDF"
+        }
+    }
+}

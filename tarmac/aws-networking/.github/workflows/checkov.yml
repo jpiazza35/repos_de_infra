@@ -1,0 +1,20 @@
+name: Calling checkov golden pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  security-events: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  call-workflow:
+    uses: clinician-nexus/ci_tools/.github/workflows/checkov_ghas_enabled.yml@main
+    with:
+      directory: './results'

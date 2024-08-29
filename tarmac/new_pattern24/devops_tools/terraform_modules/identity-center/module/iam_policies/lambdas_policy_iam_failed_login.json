@@ -1,0 +1,37 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DynamoDBAllow",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:*"
+            ],
+            "Resource": "${dynamodb_table_arn}"
+        },
+        {
+            "Sid": "AllowSNSSendMessage",
+            "Effect": "Allow",
+            "Action": "sns:Publish",
+            "Resource": "${sns_topic_arn}"
+        },
+        {
+            "Sid": "CloudwatchAllow",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"      
+            ],
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ],
+            "Effect": "Allow",
+            "Resource": "${sns_topic_cmk_arn}",
+            "Sid": "AllowPublishencryptedSNS"
+        }
+    ]
+}

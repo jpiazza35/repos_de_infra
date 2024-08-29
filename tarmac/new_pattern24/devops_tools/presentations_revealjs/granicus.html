@@ -1,0 +1,627 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/league.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<a href="https://tarmac.io">
+						<img src="https://tarmac.io/images/tarmac-logo-standard.svg" alt="tarmac.io logo" style="height: 100px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
+					</a>
+					<h4>DevOps & Donuts Project Showcase</h4> 
+					<h3> Granicus HostCompliance</h3>
+					<p>
+						<small>Created by Darko Klincharski</small>
+					</p>
+				</section>
+				<section data-background-image="https://media.giphy.com/media/TUMBjT9u5LmV2/giphy.gif">
+					<h2>
+						Who are Granicus?
+					</h2>
+					<p>
+						A multi-billion dollar company working primarly in the govservice field.
+						Expanding by acquiring and assimilating govservice startups/scale-ups.
+					</p>
+				</section>
+				<section>
+					<h2>
+						What is HostCompliance?
+					</h2>
+					<p>
+						HostCompliance uses fancy logic to automatically process rental properties page listings and determine the exact physical address of it. It then checks the government registered rental properties for a match. If no match, the owner receives a fine. Not cool...
+					</p>
+				</section>
+				<section>
+					<h2>Tech Stack</h2>
+					<ul>
+						<li>AWS</li>
+						<li>Postgresql</li>
+						<li>ELK</li>
+						<li>Angular (to be replaced with React)</li>
+						<li>Python</li>
+						<li>GraphQL</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Infrastructure From Hell</h2>
+					<p>
+						<img src="images/HostCompliance.png" alt="HostComplianceInfra" style="height: 500px; margin: 0 auto 4rem auto; background: transparent;">
+					</p>
+				</section>
+				<section data-background-image="https://media.giphy.com/media/3oEduPlMkw4LZE7624/giphy.gif">
+					<h2>Problem 1 - Database</h2>
+					<p>
+						Production DB size is 14TB. AWS has a hard limit of 16TB.
+					</p>
+				</section>
+				<section>
+					<h2>Problem 1 - Database (Cont'd)</h2>
+					<p>
+						<img src="images/dbtables.png" alt="DBTables" style="height: 500px; margin: 0 auto 4rem auto; background: transparent;">
+					</p>
+				</section>
+				<section>
+					<h2>Problem 1 - Database (Cont'd)</h2>
+					<ul>
+						<li>Historical data is not archived properly</li>
+						<li>Data for no-longer customers is not purged</li>
+						<li>Duplicate data</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Problem 1 - Database (Solutions)</h2>
+					<ul>
+						<li>Purge data</li>
+						<li>Recreate RDS instance to get 64TB limit</li>
+						<li>Implement regular clean up</li>
+					</ul>
+				</section>
+				<section data-background-image="https://media.giphy.com/media/5Zesu5VPNGJlm/giphy.gif">
+					<h2>Problem 2 - Admin Machine</h2>
+					<p>
+						The admin machine is the orchestrator of the entire app. It controls crawling jobs, screenshot workers and the ML jobs.
+					</p>
+					<ul>
+						<li>Setup manually long time ago</li>
+						<li>No documentation</li>
+						<li>Everyone uses it for one-off jobs</li>
+						<li>No auto-scaling</li>
+						<li>No disaster recovery</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Problem 2 - Admin Machine (Solution)</h2>
+					<ul>
+						<li>Reverse Engineer</li>
+						<li>Packer template</li>
+						<li>Dockerize</li>
+					</ul>
+				</section>
+				<section data-background-image="https://media.giphy.com/media/ySpxjJmsq9gsw/giphy.gif">
+					<h2>Problem 3 - CI/CD</h2>
+					<p>
+						Absolute mess.
+					</p>
+					<ul>
+						<li>Combination of circleci, bash scripts and pythons script(s)</li>
+						<li>CircleCI triggers a script that does an ssh to the Admin server and runs a python script that does the deploy</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2 data-id="code-title">CircleCI</h2>
+					<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|45|288,291|125|152,156"><script type="text/template">
+version: 2.1
+orbs:
+  aws-ecs: circleci/aws-ecs@0.0.11
+  aws-cli: circleci/aws-cli@0.1.13
+  ghostinspector: ghostinspector/test-runner@1.0.0
+jobs:
+  code_quality:
+    docker:
+      - image: circleci/python:3.7.6
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "66:48:f9:34:98:05:ed:6d:7a:b8:eb:24:d3:00:12:02"
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - restore_cache:
+          key: pip-packages-v4-{{ checksum "setup/requirements.txt" }}
+      - run:
+          name: install requirements
+          command: |
+            ssh-add -D
+            ssh-add ~/.ssh/id_rsa_6648f9349805ed6d7ab8eb24d3001202
+            pip install -r setup/requirements.txt
+      - save_cache:
+          key: pip-packages-v4-{{ checksum "setup/requirements.txt" }}
+          paths:
+            - ~/.local
+            - ~/.cache/pip/
+      - run:
+          name: Validate alembic version history
+          command: |
+            echo 'export PYTHONPATH=$(pwd)' >> $BASH_ENV
+            dockerfiles/app/validate_alembic.sh
+      - run:
+          name: Linting
+          command: |
+            sh dockerfiles/app/run_lint.sh
+      - store_artifacts:
+          path: /tmp
+      - store_test_results:
+          path: /tmp
+  build:
+    docker:
+      - image: circleci/python:3.7.6
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "66:48:f9:34:98:05:ed:6d:7a:b8:eb:24:d3:00:12:02"
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Setup common env vars
+          command: |
+            echo 'export AWS_RESOURCE_NAME_PREFIX="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export LOCAL_IMAGE_NAME="hostcompliance/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}"' >> $BASH_ENV
+      - run:
+          name: Copy deploy key
+          command: |
+            cp ~/.ssh/id_rsa_6648f9349805ed6d7ab8eb24d3001202 ./setup/
+      - run:
+          name: Build image
+          command: |
+            docker build -t $LOCAL_IMAGE_NAME -f dockerfiles/app/Dockerfile --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa_6648f9349805ed6d7ab8eb24d3001202)" .
+      - run:
+          name: Save image to an archive
+          command: |
+            mkdir docker-image
+            docker save -o docker-image/image.tar $LOCAL_IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - docker-image
+  test:
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+      AWS_REGION: us-east-1
+    docker:
+      - image: circleci/python:3.7.6
+        environment:
+          TEST_DATABASE_URL: postgresql://vrapi:supersecret@db:5432
+          SANDBOX_MODE: False
+      - image: circleci/postgres:11.7-postgis
+        environment:
+          POSTGRES_USER: vrapi_local
+          POSTGRES_DB: vrapi_local
+          POSTGRES_PASSWORD: supersecret
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "66:48:f9:34:98:05:ed:6d:7a:b8:eb:24:d3:00:12:02"
+      - checkout
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: AWS_ACCESS_KEY
+          aws-region: AWS_REGION
+      - run:
+          name: Setup common env vars
+          command: |
+            echo 'export ENV="testing"' >> $BASH_ENV
+            echo 'export AWS_REGION="us-east-1"' >> $BASH_ENV
+      - restore_cache:
+          key: pip-packages-v4-{{ checksum "setup/requirements.txt" }}
+      - run:
+          name: install requirements
+          command: |
+            ssh-add -D
+            ssh-add ~/.ssh/id_rsa_6648f9349805ed6d7ab8eb24d3001202
+            pip install -r setup/requirements.txt
+      - save_cache:
+          key: pip-packages-v4-{{ checksum "setup/requirements.txt" }}
+          paths:
+            - ~/.local
+            - ~/.cache/pip/
+      - run:
+          name: Run tests
+          command: |
+            . ./dockerfiles/app/source_vars.sh
+            python -m pytest --durations=50 
+      - store_test_results:
+          path: test_reports
+      - store_artifacts:
+          path: test_reports
+  admin_deploy:
+    parameters:
+      env:
+        type: string
+      ec2-instance:
+        type: string
+      aws-region:
+        type: string
+      deploy_gunicorn:
+        default: "true"
+        type: string
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+      AWS_REGION: << parameters.aws-region >>
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - aws-cli/configure:
+          aws-access-key-id: AWS_ACCESS_KEY
+          aws-region: AWS_REGION
+      - run:
+          name: Setup ssh config for jump box
+          command: cat ~/project/.circleci/ssh.config >> ~/.ssh/config
+      - run:
+          name: Get public IP address of ec2 machine
+          command: |
+            echo "HOST_MACHINE=$(aws ec2 describe-instances --region << parameters.aws-region >> --instance-ids << parameters.ec2-instance >> | jq '.Reservations[0].Instances[0].PublicDnsName')" >> $BASH_ENV
+            echo 'SSH_USER="circleci"' >> $BASH_ENV
+      - run:
+          name: Deploy site & admin workers
+          command: ssh ${SSH_USER}@${HOST_MACHINE} COMMIT=${CIRCLE_SHA1} DEPLOY_GUNICORN=<< parameters.deploy_gunicorn >> ENV=<< parameters.env >> AWS_REGION=<< parameters.aws-region >> 'bash -s' < ./dockerfiles/app/deploy_admin.sh
+  api_deploy:
+    parameters:
+      env:
+        type: string
+      aws-region:
+        type: string
+    docker:
+      - image: circleci/python:3.7.1
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+      AWS_REGION: << parameters.aws-region >>
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+         at: workspace
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ENVIRONMENT="<< parameters.env >>"' >> $BASH_ENV
+            echo 'export AWS_REGION="<< parameters.aws-region >>"' >> $BASH_ENV
+            echo 'export ECS_CLUSTER_NAME="<< parameters.env >>"' >> $BASH_ENV
+            echo 'export ECS_SERVICE_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export ECS_TASK_NAME="<< parameters.env >>-${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.<< parameters.aws-region >>.amazonaws.com/hostcompliance/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}"' >> $BASH_ENV
+            echo 'export LOCAL_IMAGE_NAME="hostcompliance/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}"' >> $BASH_ENV
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: AWS_ACCESS_KEY
+          aws-region: AWS_REGION
+      - run:
+          name: Load Image
+          command: |
+            docker load --input workspace/docker-image/image.tar
+      - run:
+          name: Push Image
+          command: |
+            eval $(aws ecr get-login --region ${AWS_REGION} --no-include-email)
+            docker tag $LOCAL_IMAGE_NAME $FULL_IMAGE_NAME
+            docker push $FULL_IMAGE_NAME
+      - aws-ecs/update-service:
+          family: "${ECS_TASK_NAME}"
+          cluster-name: "${ECS_CLUSTER_NAME}"
+          service-name: "${ECS_SERVICE_NAME}"
+          container-image-name-updates: "container=${ECS_SERVICE_NAME},image-and-tag=${FULL_IMAGE_NAME}"
+          container-env-var-updates: "container=${ECS_SERVICE_NAME},name=ENV,value=${ENVIRONMENT},container=${ECS_SERVICE_NAME},name=AWS_REGION,value=<< parameters.aws-region >>,container=${ECS_SERVICE_NAME},name=VERSION_INFO,value=${CIRCLE_SHA1}_${CIRCLE_BUILD_NUM},container=${ECS_SERVICE_NAME},name=BUILD_DATE,value=\"$(date)\""
+          verify-revision-is-deployed: true
+  test_ghostinspector:
+    parameters:
+      SUITE:
+        type: string
+        default: ""
+      DOMAIN:
+        type: string
+        default: ""
+    executor: ghostinspector/default
+
+    steps:
+      - run: echo << parameters.SUITE >>
+      - ghostinspector/execute-suite:
+          id: << parameters.SUITE >>
+          extra-params: '{"domain": "<< parameters.DOMAIN >>"}'
+          wait: true
+
+workflows:
+  build-n-deploy:
+    jobs:
+      - code_quality:
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+      - build:
+          requires:
+            - code_quality
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              only:
+                - staging
+      - test:
+          requires:
+            - code_quality
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+      - api_deploy:
+          name: api_deploy_staging
+          env: staging
+          aws-region: us-east-1
+          requires:
+            - admin_deploy_staging
+          filters:
+            branches:
+              only: staging
+      - admin_deploy:
+          name: admin_deploy_staging
+          env: staging
+          ec2-instance: i-09c19dcd62e46beda
+          aws-region: us-east-1
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only: staging
+      - api_deploy:
+          name: api_deploy_ca_prod
+          env: production
+          aws-region: ca-central-1
+          requires:
+            - admin_deploy_canada_prod
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+      - admin_deploy:
+          name: admin_deploy_canada_prod
+          env: production
+          ec2-instance: i-0c694589796f2cd82
+          aws-region: ca-central-1
+          requires:
+            - test
+            - build
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+      - admin_deploy:
+          name: admin_deploy_us_prod_0
+          env: production
+          ec2-instance: i-09cfc8d533f9323d3
+          aws-region: us-east-1
+          requires:
+            - test
+            - build
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+      - api_deploy:
+          name: api_deploy_us_prod
+          env: production
+          aws-region: us-east-1
+          requires:
+            - admin_deploy_us_prod_0
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+      - test_ghostinspector:
+          name: test_ghost_inspector_prod
+          requires:
+            - api_deploy_us_prod
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+          SUITE: "6000b0fd97354979a94ce9bb"
+          DOMAIN: "https://app.hostcompliance.com"
+					</script></code></pre>
+				</section>
+				<section data-auto-animate>
+					<h2 data-id="code-title">BASH</h2>
+					<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|10|16"><script type="text/template">
+#!/bin/bash
+
+set -e
+
+cd /var/www/data-analytics
+
+echo "Deploying commit ${COMMIT}"
+
+sudo git fetch --all
+sudo git checkout ${COMMIT}
+
+dockerfiles/scripts/clean_workdir.sh
+
+source /home/ubuntu/.pyenv/versions/data-analytics/bin/activate
+pip install -r setup/requirements.txt
+. /var/www/data-analytics/dockerfiles/app/source_vars.sh && python manage.py check-migrations
+if [ "$DEPLOY_GUNICORN" = "true" ]; then
+    echo "Restarting web server"
+    sudo systemctl restart gunicorn
+fi
+sudo supervisorctl signal INT all
+					</script></code></pre>
+					</section>
+					<section data-auto-animate>
+						<h2 data-id="code-title">Python</h2>
+						<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="3"><script type="text/template">
+@cli.command()
+def check_migrations():
+	alembic_safety_check.assert_all_migrations_applied()
+						</script></code></pre>
+					</section>
+					<section data-auto-animate>
+						<h2 data-id="code-title">Python</h2>
+						<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|1-11|13-24|26-39|40-46|47-52|53-60|61-73"><script type="text/template">
+import datetime
+import json
+import logging
+import os
+import tempfile
+import urllib.parse
+import zipfile
+from functools import wraps
+from shared.external import aws
+from time import sleep, time
+from typing import Optional, List
+
+import arrow
+import click
+import dateutil.parser
+import numpy as np
+import pandas as pd
+import sentry_sdk
+import shared.orm
+import sys
+from ddtrace import tracer
+from datadog import initialize, api
+from sqlalchemy import func, or_
+from werkzeug.security import generate_password_hash
+
+import citation.flatfile_generator
+import common
+import constants
+import corrections
+import databricks.jobs
+import databricks.revenue_estimates
+from shared import features
+import mechanical_turk.background_jobs
+import orm
+import payment_reconciliation_report
+import properties
+import raw_occupancy_model_predict
+import settings
+import worker
+from api import cachable_names, geoid_independent_cachable, cache_non_geoid_related_tables
+from api import cache_tables, cacheable
+from api.base import cache
+from background_jobs import data_cleanup, materialized_views, periodic, reports, scraper_tasks, screenshots
+from background_jobs.data_upload import assessor_logic, tasks as upload_tasks
+from background_jobs.data_upload.los_angeles_ca import neighbor_mailing
+from background_jobs.migrations import migrate_evidence_uploads
+from migrations import (
+	str_helper_migration,
+	str_helper_payment_migration,
+	str_helper_complaint_migration,
+	str_helper_letter_migration,
+)
+from background_jobs.permit_registration import (
+	ach,
+	stripe_check_payouts,
+	stripe_check_refunds,
+	stripe_fee,
+	upload_data,
+	neighbor_letters,
+)
+from background_jobs.queue_elk_cache import JOB_TIMEOUT
+from shared.external import mailgun
+from external import auth0api
+from ivr import ivr
+from mechanical_turk.address_identification.task import AddressIdentificationJob
+from orm import alembic_safety_check
+from platforms.helpers import create_new_client_for_platform_api
+from public_pages.extensions.auth0 import get_user_info
+from registration.tasks import resend_missing_certificates
+from registration.utils import get_property_class
+from renewals import renewal_job
+from settings import BERKELEY_GEOID, REDIS_PORT, SAN_ANTONIO_GEOID, WORKER_REDIS_HOST
+from elk.elastic import sync_model
+
+...
+@cli.command()
+def check_migrations():
+	alembic_safety_check.assert_all_migrations_applied()
+						</script></code></pre>
+					</section>
+					<section>
+						<h2>Problem 3 - CI/CD (Solution)</h2>
+						<p>
+							Dockerize the admin app and run it on ECS
+						</p>
+					</section>
+					<section>
+						<h2>Other known problems</h2>
+					</section>
+					<section data-background-image="https://media.giphy.com/media/jR8EDxMbqi1QQ/giphy.gif">
+					</section>
+					<section>
+						<h2>Other known problems</h2>
+						<p>
+							<span style="display: inline-block;" class="fragment fade-up">Apart from CircleCI we have also Jenkins server that runs "something"</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">We are still developing CircleCI and Jenkins, while simultaneously migrating to GitLab</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">No dev environment, only staging & production (but it is currently in development)</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">Two regions, US and Canada, both set up manually</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">Frontend is currently being rewritten without consulting DevOps</span><br/>
+						</p>
+					</section>
+					<section>
+						<h2>DevOps Focus</h2>
+					</section>
+					<section data-background-image="https://media.giphy.com/media/rU7p4CsqaNIac/giphy.gif">
+					</section>
+					<section>
+						<h2>DevOps Focus</h2>
+						<p>
+							<span style="display: inline-block;" class="fragment fade-up">Terraform everything (new DEV environment)</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">Semi-disposable dev environment</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">Reduce AWS Costs</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">Codify the admin machine setup</span><br/>
+							<span style="display: inline-block;" class="fragment fade-up">Clean-up and standardize the CI/CD</span><br/>
+						</p>
+					</section>
+					<section>
+						<h1>Thank you for your attention</h1>
+					</section>
+					<section data-background-image="https://media.giphy.com/media/xTiTnnGAwpXyng7pny/giphy.gif">
+					</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				transition: 'convex',
+				controls: true,
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>

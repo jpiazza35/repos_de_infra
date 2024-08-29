@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dwb-preview
+
+resources:
+- ../../../../base/app-dwb-ui
+- config.yml
+
+replacements:
+  - path: replacements.yml
+
+images:
+- name: app-dwb-ui
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-dwb-ui-ecr-repo
+  newTag: a134bbf2b2-preview

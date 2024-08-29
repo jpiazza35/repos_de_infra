@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-bm-service
+data:
+  key: ""
+  env: prod
+  app: app-bm-service
+  ecr: app-bm-service-ecr-repo
+  acm: arn:aws:acm:us-east-1:071766652168:certificate/86d8972f-25a1-4f62-ab98-246e0aa7a0f5
+

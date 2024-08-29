@@ -1,0 +1,326 @@
+
+mode: deployment
+replicaCount: 1
+
+extraEnvs:
+  - name: NODE_IP
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: status.hostIP
+
+# hostNetwork: false
+
+presets:
+  clusterMetrics:
+    enabled: true
+  hostMetrics:
+    enabled: true
+  kubeletMetrics:
+    enabled: true
+  kubernetesEvents:
+    enabled: true
+  kubernetesAttributes:
+    enabled: true
+    # You can also configure the preset to add all of the associated pod's labels and annotations to you telemetry.
+    # The label/annotation name will become the resource attribute's key.
+    extractAllPodLabels: true
+    extractAllPodAnnotations: true
+  logsCollection:
+    enabled: true
+    includeCollectorLogs: false
+
+config:
+  receivers:
+    elasticsearch:
+      endpoint: "http://elastic-cluster-es-internal-http.monitoring:9200"
+      tls:
+        insecure_skip_verify: true
+      # username: elastic
+      # password: 
+    filelog:
+      include:
+        - /var/log/pods/*/*/*.log
+      exclude:
+        # Exclude logs from all containers named otel-collector
+        - /var/log/pods/*/*opentelemetry-collector*/*.log
+      include_file_name: false
+      include_file_path: true
+      max_log_size: 5MiB
+      start_at: end
+      operators:
+          # Find out which format is used by kubernetes
+          - type: router
+            id: get-format
+            routes:
+              - output: parser-docker
+                expr: 'body matches "^\\{"'
+              - output: parser-crio
+                expr: 'body matches "^[^ Z]+ "'
+              - output: parser-containerd
+                expr: 'body matches "^[^ Z]+Z"'
+          # Parse CRI-O format
+          - type: regex_parser
+            id: parser-crio
+            regex: '^(?P<time>[^ Z]+) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+            output: extract_metadata_from_filepath
+            timestamp:
+              parse_from: attributes.time
+              layout_type: gotime
+              layout: '2006-01-02T15:04:05.999999999Z07:00'
+          # Parse CRI-Containerd format
+          - type: regex_parser
+            id: parser-containerd
+            regex: '^(?P<time>[^ ^Z]+Z) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+            output: extract_metadata_from_filepath
+            timestamp:
+              parse_from: attributes.time
+              layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+          # Parse Docker format
+          - type: json_parser
+            id: parser-docker
+            output: extract_metadata_from_filepath
+            timestamp:
+              parse_from: attributes.time
+              layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+            severity:
+              parse_from: attributes.severity
+          # Extract metadata from file path
+          - type: regex_parser
+            id: extract_metadata_from_filepath
+            regex: '^.*\/(?P<namespace>[^_]+)_(?P<pod_name>[^_]+)_(?P<uid>[a-f0-9\-]{36})\/(?P<container_name>[^\._]+)\/(?P<restart_count>\d+)\.log$'
+            parse_from: attributes["log.file.path"]
+            cache:
+              size: 128  # default maximum amount of Pods per Node is 110
+          # Update body field after finishing all parsing
+          - type: move
+            from: attributes.log
+            to: body
+          # Rename attributes
+          - type: move
+            from: attributes.stream
+            to: attributes["log.iostream"]
+          - type: move
+            from: attributes.container_name
+            to: resource["k8s.container.name"]
+          - type: move
+            from: attributes.namespace
+            to: resource["k8s.namespace.name"]
+          - type: move
+            from: attributes.pod_name
+            to: resource["k8s.pod.name"]
+          - type: move
+            from: attributes.restart_count
+            to: resource["k8s.container.restart_count"]
+          - type: move
+            from: attributes.uid
+            to: resource["k8s.pod.uid"]
+          # - type: json_parser
+          #   id: parser-docker
+          #   # on_error: drop
+          #   timestamp:
+          #     parse_from: attributes.timestamp
+          #     layout: "%Y-%m-%d %H:%M:%S"
+          #   severity:
+          #     parse_from: attributes.severity
+    kubeletstats:
+      auth_type: serviceAccount
+      collection_interval: 20s
+      endpoint: ${K8S_NODE_NAME}:10250
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318" 
+    jaeger:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:14250 #jaeger-collector.monitoring:14250
+        thrift_http:
+          endpoint: 0.0.0.0:14628 #jaeger-collector.monitoring:14268
+        thrift_compact:
+          endpoint: 0.0.0.0:6831 #jaeger-collector.monitoring:14267
+    prometheus:
+      config:
+        scrape_configs:
+          - job_name: 'otel-collector'
+            scrape_interval: 10s
+            static_configs:
+            - targets:
+              - '0.0.0.0:8888'
+          - job_name: k8s
+            kubernetes_sd_configs:
+            - role: pod
+            relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              regex: "true"
+              action: keep
+            metric_relabel_configs:
+            - source_labels: [__name__]
+              regex: "(request_duration_seconds.*|response_duration_seconds.*)"
+              action: keep
+          - job_name: 'node'
+            scrape_interval: 10s
+            static_configs:
+            - targets: 
+              - 'prometheus-prometheus-node-exporter.monitoring:9100'
+
+  processors:
+    batch:
+      send_batch_max_size: 1000
+      send_batch_size: 800
+      timeout: 10s
+    resource:
+      attributes:
+        - key: otel.key
+          value: "otel-collector"
+          action: insert
+    k8sattributes:
+      auth_type: "serviceAccount"
+      passthrough: false
+      extract:
+        metadata:
+          - k8s.pod.name
+          - k8s.pod.uid
+          - k8s.deployment.name
+          - k8s.namespace.name
+          - k8s.node.name
+          - k8s.pod.start_time
+          - k8s.cluster.uid
+          - k8s.namespace.name
+          - k8s.statefulset.name
+          - k8s.daemonset.name
+          - k8s.cronjob.name
+          - k8s.job.name
+        # Pod labels which can be fetched via K8sattributeprocessor
+        labels:
+          - tag_name: key1
+            key: label1
+            from: pod
+          - tag_name: key2
+            key: label2
+            from: pod
+      filter:
+        node_from_env_var: K8S_NODE_NAME
+      # Pod association using resource attributes and connection
+      pod_association:
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.uid
+          - from: resource_attribute
+            name: k8s.pod.ip
+          - from: connection
+      
+    memory_limiter:
+      limit_percentage: 75
+      spike_limit_percentage: 15
+      check_interval: 1s
+
+  extensions:    
+    health_check: {}
+    memory_ballast:
+      size_in_percentage: 20
+      size_mib: 128
+
+  exporters:
+    debug:
+      verbosity: detailed
+      
+    # jaeger:
+    #   endpoint: "jaeger-collector.monitoring.svc.cluster.local:14250"
+    #   tls:
+    #     insecure: true
+
+    otlp:
+      endpoint: "jaeger-collector.monitoring.svc.cluster.local:14250"
+      tls:
+        insecure: true
+
+    # otlphttp/prometheus:
+    #   endpoint: 'http://prometheus-kube-prometheus-prometheus.monitoring:9090/api/v1/otlp'
+    #   tls:
+    #     insecure: true
+
+    prometheusremotewrite:
+      endpoint: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090/api/v1/write"
+      external_labels:
+        cluster: prod
+
+    elasticsearch:
+      endpoints: "http://elastic-cluster-es-internal-http.monitoring.svc.cluster.local:9200"
+      logs_index: "otel-log"
+      tls:
+        insecure_skip_verify: true
+      # retry_on_failure:
+      #   enabled: true
+      #   initial_interval: 1s
+      #   max_interval: 300s
+      #   max_elapsed_time: 120s
+      # logs_index: "logs-test"
+
+    logging:
+      verbosity: detailed
+
+  service:
+    telemetry:
+      metrics:
+        address: 0.0.0.0:8888
+      logs:
+        level: "info"
+
+    extensions:
+      - health_check
+      - memory_ballast
+       #[file_storage/buffer]
+
+    pipelines:
+      logs:
+        receivers: 
+          - otlp
+          - filelog
+
+        processors: 
+          - batch
+          - resource
+          - memory_limiter
+
+        exporters:
+          - debug
+          - elasticsearch
+          - logging
+          # - otlp
+          # - otlphttp/prometheus
+
+      traces:
+        receivers: 
+          - otlp
+          - jaeger
+
+        processors:
+          - batch
+          - resource
+          - memory_limiter
+        exporters: 
+          - debug
+          - elasticsearch
+          - otlp
+          # - otlphttp/prometheus 
+          # - prometheusremotewrite
+          #, prometheusremotewrite] #[elasticsearch, debug, prometheus, otlp]
+
+      metrics:
+        receivers: 
+          - otlp
+          - prometheus
+          - kubeletstats
+          - elasticsearch
+        processors:
+          - batch
+          - resource
+          - memory_limiter
+          - k8sattributes
+        exporters: 
+          - prometheusremotewrite
+          # - otlp
+          # - otlphttp/prometheus

@@ -1,0 +1,71 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+# namespace: monitoring
+
+resources:
+- ingress.yml
+- ../../../base
+- ../../secrets
+- preinit-job-iam.yml
+
+patches:
+- path: alertmanager.yml
+- path: prometheus.yml
+- path: crd-patch-1.yml
+- path: crd-patch-2.yml
+- path: sa-patch.yml
+- path: grafana_pw_patch.yml
+  target:
+    kind: Deployment
+    name: prometheus-grafana
+    version: v1
+    group: apps
+
+configMapGenerator:
+- name: prometheus-grafana
+  namespace: monitoring
+  files:
+  - grafana.ini
+  behavior: merge
+
+- name: cw-grafana-datasource
+  namespace: monitoring
+  files:
+  - datasource.yml
+  options:
+    labels:
+      app: grafana
+      grafana_datasource: "1"
+      grafana_datasource_type: "cloudwatch"
+
+- name: broker-msk-targets
+  namespace: monitoring
+  files:
+  - targets.json
+
+# - name: prometheus-grafana-config-dashboards
+#   namespace: monitoring
+#   behavior: merge
+#   files:
+#   - provider.yaml
+
+
+- name: grafana-policy
+  namespace: default
+  files:
+  - policy.json
+  - trust.json
+
+## https://kubectl.docs.kubernetes.io/references/kustomize/builtins/#_namespacetransformer_
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: any
+      namespace: monitoring
+    unsetOnly: true

@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-iam-role-incumbent
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      serviceAccountName: iam
+      containers:
+      - name: aws-cli
+        image: amazon/aws-cli
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          echo "Installing Envsubst";
+          yum install -y gettext;
+
+          echo "Extracing cluster OIDC endpoint from env var";
+          CLUSTER_ID=$(echo $CLUSTER_ID | awk -F'/' '{print $NF}')
+          echo "Cluster ID: $CLUSTER_ID";
+          
+          echo "Checking if IAM Role exists...";
+          if aws iam get-role --role-name p_mpt_incumbent_role --region us-east-1; then
+            echo "Role exists, updating trust relationship...";
+            envsubst < /etc/config/trust.json > /tmp/trust_processed.json;
+            aws iam update-assume-role-policy --role-name p_mpt_incumbent_role --policy-document file:///tmp/trust_processed.json --region us-east-1;
+          else
+            echo "Role does not exist, creating IAM Role...";
+            envsubst < /etc/config/trust.json > /tmp/trust_processed.json;
+            aws iam create-role --region us-east-1 --role-name p_mpt_incumbent_role --assume-role-policy-document file:///tmp/trust_processed.json;
+          fi
+          
+          echo "Attaching IAM Policy to IAM Role...";
+          envsubst < /etc/config/policy.json > /tmp/policy_processed.json;
+          aws iam put-role-policy --role-name p_mpt_incumbent_role --policy-name incumbent-policy --policy-document file:///tmp/policy_processed.json --region us-east-1;
+        env:
+        - name: CLUSTER_ID
+          valueFrom:
+            configMapKeyRef:
+              name: cluster
+              key: cluster_oidc
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+      volumes:
+      - name: config
+        configMap:
+          name: incumbent-policy
+      restartPolicy: OnFailure

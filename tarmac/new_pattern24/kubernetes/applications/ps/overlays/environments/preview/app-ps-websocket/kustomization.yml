@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ps-preview
+resources:
+- ../../../../base/app-ps-websocket
+- config.yml
+- ingress.yml
+replacements:
+- path: replacements.yml
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=prod,Team=devops
+  target:
+    kind: Ingress
+images:
+- name: app-ps-websocket
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-ps-websocket-ecr-repo
+  digest: sha256:a65c871b989a3292d60643f7d3c34eba47279075e25736c200d08f599a97b1ec

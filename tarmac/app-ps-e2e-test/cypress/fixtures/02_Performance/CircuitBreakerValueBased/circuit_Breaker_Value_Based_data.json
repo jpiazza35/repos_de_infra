@@ -1,0 +1,31 @@
+{
+    "CiruitBreakAPIUrl": "http://localhost:10000/circuit-breaker?",
+    "Mandatparams": "userid=MRE1762&tenant=12&periodId=8&yearmonth=202007",
+    "UserId": "userid=MRE1762&",
+    "Tenant": "tenant=12&",
+    "PeriodId": "periodId=8&",
+    "YearMonth": "yearmonth=202007",
+    "Specialty": "&Speciality=1185",
+    "CircuitBreakerValBasedLabel": {
+        "InfoIcon": "Eligible for Value Based Incentive",
+        "CircuitBreakerValBasedTitle": "Circuit Breaker for Value Based",
+        "ChartClosure": "Chart Closure within 72 Hours",
+        "ProblemListReview": "Problem List Review",
+        "MaintenanceOfHospitalPrivileges": "Maintenance of Hospital Privileges"
+    },
+    "CircuitBreakerValBasedValue": {
+        "TargetMet": true,
+        "TargetValue1": 69.646805,
+        "PerformanceValue1": 100,
+        "Name1": "Panel Size  per FTE:  Pine Valley South",
+        "TargetValue2": 100,
+        "PerformanceValue2": 43.898155,
+        "Name2": "Annualized wRVUs per FTE - Family Medicine",
+        "ChartClosurePercent": "96%",
+        "ProblemListReviewPercent": "93%",
+        "MaintenanceHospitalPrivilPercent": "Met",
+        "ChartClosureprogressBarMarkVal": "90%",
+        "ProblemListReviewProgressBarMarkVal": "85%",
+        "maintenanceHospitalPrivilprogressBarMarkVal": ""
+    }
+}

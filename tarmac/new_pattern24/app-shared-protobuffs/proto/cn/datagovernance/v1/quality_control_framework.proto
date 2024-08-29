@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package cn.datagovernance.v1;
+
+enum QCStatusReason {
+  QC_STATUS_REASON_UNSPECIFIED = 0;
+  QC_STATUS_REASON_FAILED_BUSINESS_RULE = 1;
+  QC_STATUS_REASON_FAILED_ORG_HIERARCHY_CHECK = 2;
+  QC_STATUS_REASON_FAILED_CROSS_REFERENCE_CHECK = 3;
+  QC_STATUS_REASON_FAILED_DATA_TYPE_CHECK = 4;
+  QC_STATUS_REASON_FAILED_NULL_CHECK = 5;
+  QC_STATUS_REASON_MISSING_FIELD_CHECK = 6;
+}
+
+message QCMetadata {
+  // Metadata at the rule level describing any present quality control issue.  Reported at the row level in any audited
+  // table or dead letter queue.
+  // We will have an array of QCMetadata per row.
+  // Each QCMetadata will represent one discrete QC issue.
+  // org_id | physician_id | .... | qc_metadata
+  // 1 | 8265 | ....  | [ [3, 7, 9], Cannot add up to more than 20, ]
+
+  // Multiple column names are supported to enable reporting on cross column checks.  This is a required field.
+  repeated string column_names = 1;
+  // The reason for the QC failure.  This is a required field.
+  QCStatusReason qc_status_reason = 2;
+  // The name of the expectation rule.  This is a required field for GE rules.
+  string expectation_type = 3;
+  // The config of the expectation rule. This is a required field for GE rules.
+  string expectation_config = 4;
+  // The full validation result from Great Expectations.  Adds context to the qc status reason.
+  // This is a required field.
+  string validation_result = 5;
+}
+
+message QcPlan {
+  string fq_target_table = 1;
+  repeated string expectation_suite_ids = 2; // id of expectation suite from Great Expectations
+}

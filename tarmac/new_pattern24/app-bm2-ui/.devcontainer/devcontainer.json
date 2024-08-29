@@ -1,0 +1,48 @@
+{
+  "name": "app-bm2-ui",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "onCreateCommand": "bash .devcontainer/on-create.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2.0.3": {},
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/go:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/tailscale/codespace/tailscale:1": {},
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "forwardPorts": [6080, 5901],
+  "hostRequirements": {
+    "cpus": 4
+  },
+  "extensions": [
+    "ms-dotnettools.csharp",
+    "ms-azuretools.vscode-docker",
+    "ms-azuretools.vscode-dapr",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "davidanson.vscode-markdownlint",
+    "mutantdino.resourcemonitor",
+    "humao.rest-client",
+    "github.copilot",
+    "esbenp.prettier-vscode",
+    "josefpihrt-vscode.roslynator",
+    "svelte.svelte-vscode"
+  ],
+  "customizations": {
+    "codespaces": {
+      "repositories": {
+        "clinician-nexus/app-bm2-service": {
+          "permissions": "write-all"
+        },
+        "clinician-nexus/app-es-legacy": {
+          "permissions": "write-all"
+        },
+        "clinician-nexus/cn-ui": {
+          "permissions": "write-all"
+        },
+        "clinician-nexus/app-shared-protobuffs": {
+          "permissions": "write-all"
+        }
+      }
+    }
+  }
+}

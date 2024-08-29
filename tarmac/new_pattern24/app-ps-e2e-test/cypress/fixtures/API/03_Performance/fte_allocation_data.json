@@ -1,0 +1,66 @@
+{
+     "mockData": {
+          "userId": 1004,
+          "tenant": 1,
+          "dashboardKey": 2,
+          "cardKey": 7,
+          "specialties": 2223,
+          "periodId": 1,
+          "yearMonth": 202201,
+          "fteAllocationResponse": {
+               "cardSettings": {
+                    "title": "FTE Allocation",
+                    "infoIcon": ""
+               },
+               "detail": [
+                    {
+                         "category": "Clinical",
+                         "ytdAvg": 0.52,
+                         "currentMonth": 0.5
+                    },
+                    {
+                         "category": "Administrative",
+                         "ytdAvg": 0.36,
+                         "currentMonth": 0.35
+                    },
+                    {
+                         "category": "Teaching",
+                         "ytdAvg": 0.12,
+                         "currentMonth": 0.15
+                    }
+               ]
+          }
+     },
+     "realData": {
+          "userId": "TI66",
+          "tenant": 2,
+          "dashboardKey": 4,
+          "cardKey": 7,
+          "specialties": 1320,
+          "periodId": 1,
+          "yearMonth": 202306,
+          "fteAllocationResponse": {
+               "cardSettings": {
+                    "title": "FTE Allocation",
+                    "infoIcon": ""
+               },
+               "detail": [
+                    {
+                         "category": "Clinical FTE",
+                         "ytdAvg": 0.6,
+                         "currentMonth": 0.6
+                    },
+                    {
+                         "category": "Protected Time FTE",
+                         "ytdAvg": 0.03,
+                         "currentMonth": 0.03
+                    },
+                    {
+                         "category": "Resident Teaching FTE",
+                         "ytdAvg": 0.1,
+                         "currentMonth": 0.1
+                    }
+               ]
+          }
+     }
+}

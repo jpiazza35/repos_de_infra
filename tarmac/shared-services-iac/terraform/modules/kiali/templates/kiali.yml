@@ -1,0 +1,98 @@
+cr:
+  create: true
+  name: kiali
+  # If you elect to create a Kiali CR (--set cr.create=true)
+  # and the operator is watching all namespaces (--set watchNamespace="")
+  # then this is the namespace where the CR will be created (the default will be the operator namespace).
+  namespace: ${ns}
+  service_account: kiali
+
+  # Annotations to place in the Kiali CR metadata.
+  annotations: {}
+
+  spec:
+    istio_namespace: ${istio_ns}
+    deployment:
+      accessible_namespaces:
+      - '**'
+      service_account: kiali
+    external_services:
+      grafana:
+        auth:
+          insecure_skip_verify: true
+          # username: admin
+          # password: "prom-operator"
+          ## api key created in grafana UI
+          token: "eyJrIjoid3RXVTZhVEt2MVp6VzZqMDdkdmJWblVCMDR1T0ZPc1ciLCJuIjoidGVzdCIsImlkIjoxfQ==" #secret:monitor-grafana:admin-password
+          type: bearer
+        enabled: true
+        in_cluster_url: 'http://monitor-grafana.${ns}:80/'
+        # Public facing URL
+        url: 'http://monitor-grafana.${ns}:80'
+        dashboards:
+          - name: "Istio Service Dashboard"
+            variables:
+              namespace: "var-namespace"
+              service: "var-service"
+          - name: "Istio Workload Dashboard"
+            variables:
+              namespace: "var-namespace"
+              workload: "var-workload"
+          - name: "Istio Mesh Dashboard"
+          - name: "Istio Control Plane Dashboard"
+          - name: "Istio Performance Dashboard"
+          - name: "Istio Wasm Extension Dashboard"
+      prometheus:
+        auth:
+          insecure_skip_verify: true
+        # in_cluster_url: http://prometheus-operated.${ns}:9090/
+        # Public facing URL
+        url: http://prometheus-operated.${ns}:9090/
+        thanos_proxy:
+          enabled: true
+          retention_period: "7d"
+          scrape_interval: "30s"
+      istio:
+        auth:
+          insecure_skip_verify: true
+        root_namespace: ${istio_ns}
+        component_status:
+          enabled: true
+          components:
+          - app_label: istiod
+            is_core: true
+          - app_label: istio-ingressgateway
+            is_core: true
+            is_proxy: true
+            namespace: istio-ingress
+          config_map_name: istio
+          envoy_admin_local_port: 15000
+          istio_identity_domain: svc.cluster.local
+          istio_injection_annotation: sidecar.istio.io/inject
+          istio_sidecar_annotation: sidecar.istio.io/status
+      tracing:
+        auth:
+          insecure_skip_verify: false
+          type: none
+          use_kiali_token: false
+        enabled: true
+        in_cluster_url: 'http://jaeger-operator-jaeger-query.${ns}:16685/'
+        url: 'http://jaeger-operator-jaeger-query.${ns}:16685'
+        use_grpc: true
+        namespace: ${ns}
+        port: 16685
+        service: "jaeger-operator-jaeger-query"
+        # # Public facing URL of Jaeger
+        # url: 'http://my-jaeger-host/jaeger'
+        namespace_selector: true
+        whitelist_istio_system:
+        - jaeger-operator-jaeger-query
+        - jaeger-operator-jaeger-collector
+        - istio-ingressgateway
+
+# metrics.enabled: set to true if you want Prometheus to collect metrics from the operator
+metrics:
+  enabled: true
+
+# Defines where the operator will look for Kial CR resources. "" means "all namespaces".
+watchNamespace: ""

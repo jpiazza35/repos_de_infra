@@ -1,0 +1,51 @@
+{
+  "postLoginAPIUrl": "post-login?",
+  "invalidEmail": "test@cliniciannexus.com",
+  "mockData": {
+    "email": "cypress-test-user@cliniciannexussca.com",
+    "auth0Id": "testId",
+    "postLoginResponse": {
+      "userID": "1004",
+      "applicationKey": 1,
+      "tenantKey": 1,
+      "persona": [
+        "admin",
+        "clinician"
+      ],
+      "role": [
+        "SuperAdmin",
+        "Physician - Suburban"
+      ]
+    }
+  },
+  "fy_realData": {
+    "email": "ppmt-dev-user2@cliniciannexussca.com",
+    "auth0Id": "auth0|6579e290473cbef8411eeb45",
+    "postLoginResponse": {
+      "userID": "BS216",
+      "applicationKey": 1,
+      "tenantKey": 2,
+      "persona": [
+        "clinician"
+      ],
+      "role": [
+        "Physician - Suburban"
+      ]
+    }
+  },
+  "cy_realData": {
+    "email": "ppmt-dev-user13@cliniciannexussca.com",
+    "auth0Id": "auth0|6579e415473cbef8411eedad",
+    "postLoginResponse": {
+      "userID": "RA41",
+      "applicationKey": 1,
+      "tenantKey": 1,
+      "persona": [
+        "clinician"
+      ],
+      "role": [
+        "Provider"
+      ]
+    }
+  }
+}

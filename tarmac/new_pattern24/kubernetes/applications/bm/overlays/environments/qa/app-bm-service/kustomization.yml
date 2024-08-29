@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+
+namespace: bm
+
+resources:
+- ../../../../base/app-bm-service
+- config.yml
+- ingress.yml
+
+replacements:
+- path: replacements.yml
+
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1tags
+      value: Environment=qa,Team=devops
+  target:
+    kind: Ingress
+
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/external-dns.alpha.kubernetes.io~1hostname
+      value: bm.qa.sullivancotter.com
+  target:
+    kind: Ingress
+
+- patch: |-
+    - op: replace
+      path: /metadata/annotations/alb.ingress.kubernetes.io~1certificate-arn
+      value: arn:aws:acm:us-east-1:063890802877:certificate/31c7d75e-71b5-40df-bc1a-46fb13b1d5c4
+  target:
+    kind: Ingress
+
+images:
+- name: app-bm-service
+  newName: 163032254965.dkr.ecr.us-east-1.amazonaws.com/app-bm-service-ecr-repo
+  digest: sha256:9de6cd284f4780fb230395fd0e8bd10aa0286df1a67840496495b9af6c734c2b

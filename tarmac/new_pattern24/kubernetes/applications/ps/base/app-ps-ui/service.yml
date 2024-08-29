@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-ps-ui
+spec:
+  ports:
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app.kubernetes.io/instance: app-ps-ui
+    app.kubernetes.io/name: app-ps-ui
+  sessionAffinity: None
+  type: ClusterIP

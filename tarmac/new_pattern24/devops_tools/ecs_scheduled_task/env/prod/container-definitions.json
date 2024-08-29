@@ -1,0 +1,15 @@
+[
+    {
+      "name": "${container_name}",
+      "image": "${ecr_url}/${ecr_name}:latest",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "ecs/${container_name}-prod",
+            "awslogs-region": "_______",
+            "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]

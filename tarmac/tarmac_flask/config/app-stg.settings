@@ -1,0 +1,2 @@
+DEBUG = True
+DATABASE_URL = "postgresql://xxx.xxx.xxx:3306/tarmac_flask_db"

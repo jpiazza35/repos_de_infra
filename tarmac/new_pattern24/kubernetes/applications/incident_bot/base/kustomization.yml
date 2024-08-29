@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+namespace: incident-bot
+
+helmGlobals:
+  chartHome: charts
+
+helmCharts:
+- name: incident-bot
+  includeCRDs: true
+  valuesFile: values.yml
+  valuesMerge: merge
+  releaseName: incident-bot
+  version: v1.10.1
+  repo: https://charts.echoboomer.net
+
+patches:
+  - path: patch.yml
+    target:
+      kind: Deployment
+      name: incident-bot
+
+  - path: svc_patch.yml
+    target:
+      kind: Service
+      name: incident-bot
+
+configMapGenerator:
+- name: incident-bot-config
+  files:
+    - config.yml

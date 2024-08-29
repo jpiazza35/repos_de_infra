@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: monitoring
+
+resources:
+- ../../../base
+- preinit-job-s3.yaml
+
+configMapGenerator:
+  - name: loki
+    namespace: monitoring
+    behavior: replace
+    files: 
+      - config.yaml
+      
+patches:
+  - patch: |-
+      - op: replace
+        path: /metadata/annotations/eks.amazonaws.com~1role-arn
+        value: arn:aws:iam::964608896914:role/cluster-devops-mGETPE-worker-node-eks-node-group #eks-node-group-cluster-devops
+    target:
+      kind: ServiceAccount
+      name: loki

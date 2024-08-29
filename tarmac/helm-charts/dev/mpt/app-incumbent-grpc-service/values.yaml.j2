@@ -1,0 +1,47 @@
+fullnameOverride: {{ project_name }}-{{ environment }}
+namespace:
+  name: mpt
+  
+service:
+  port: 8004
+  targetPort: 8004
+  name: {{ project_name }}-{{ environment }}
+  type: ClusterIP
+
+image:
+  repository: '{{ ss_tools_ecr_url }}/{{ project_name }}-ecr-repo'
+  tag: '{{ docker_image_tag }}'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+serviceAccountName:
+  create: false
+  name: app-incumbent-api-sa
+  automountServiceAccountToken: true
+
+
+envvars:
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+  - name: "CN_AWSCONFIGURATION__AWSBUCKETNAME"
+    value: "{{ environment }}-mpt-etl-source-data-472485266432"
+
+
+##we set limit of memory in the pods to 256Mi
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "256Mi"
+
+environment: {{ environment }}

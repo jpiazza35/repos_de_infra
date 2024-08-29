@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Grpc.Core.Testing" Version="2.46.6" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+	  <PackageReference Include="Moq" Version="4.18.4" />
+	  <PackageReference Include="NUnit" Version="3.13.3" />
+	  <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+	  <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+	  <PackageReference Include="coverlet.collector" Version="3.1.2" />
+	  <PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="6.5.0" />
+	  <PackageReference Include="ServiceStack.OrmLite.SqlServer" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\grpc-server\CN.Survey.GrpcServer.csproj" />
+    <ProjectReference Include="..\rest-api\CN.Survey.RestApi.csproj" />
+    <ProjectReference Include="..\domain\CN.Survey.Domain.csproj" />
+    <ProjectReference Include="..\infrastructure\CN.Survey.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

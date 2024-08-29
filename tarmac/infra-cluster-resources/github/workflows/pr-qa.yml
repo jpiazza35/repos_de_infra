@@ -1,0 +1,405 @@
+name: 'Terraform Plan Pull Request for Q_EKS Clusters'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+    - 'terraform/**'
+    - '.github/**'
+    - 'eks_cluster/**'
+
+env:
+  AWS_REGION: us-east-1
+  SLACK_CHANNEL_ID: "#devops-pipeline-alerts"
+  ORG: clinician-nexus
+  VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+  VAULT_AWSLB_SG_ID: "sg-059e1bfdc0847f319"
+  EKS_CLUSTER_NAME: cluster-qa-lUc4lh
+  ENVIR: qa
+  TF_WORKSPACE: q_eks
+
+jobs:
+  terraform-plan-apply-eks:
+    name: 'Terraform Plan/Apply - EKS Target'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: eks_cluster
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: tibdex/github-app-token@v1
+      id: get_installation_token
+      with: 
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_id: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: git config --global url."https://git:${{ steps.get_installation_token.outputs.token }}@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+
+    - name: Configure AWS credentials from SS_TOOLS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSToolsConfig
+
+    - name: Setup Profile for SS_TOOLS
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_tools
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_tools
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_tools
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_tools
+
+    - name: Configure AWS credentials from SS_NETWORK account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.SS_NETWORKING_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSNetworkConfig
+    
+    - name: Setup Profile for ss_network
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_network
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_network
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_network
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_network
+
+    - name: Configure AWS credentials from INFRA_PROD account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::836442743669:role/infra-prod-github-oidc-custom-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: InfraProdConfig
+
+    - name: Setup Profile for infra_prod
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile infra_prod
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile infra_prod
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile infra_prod
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile infra_prod
+
+    - name: Configure AWS credentials from Q_EKS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.Q_EKS_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: QEKSConfig
+
+    - name: Configure kubeConfig
+      run: |
+        aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }}
+
+    - name: Get Runner IP
+      run: |
+          echo "ip=$(curl icanhazip.com)" >> $GITHUB_ENV
+
+    - name: Add IP to Vault SG for access
+      run: |
+        export cidr=$ip/32
+        echo $cidr
+        aws ec2 authorize-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --protocol tcp \
+          --port 8200 \
+          --cidr $cidr
+          # --ip-permissions FromPort=8200,ToPort=8200,IpProtocol=tcp,IpRanges='[{CidrIp="$cidr",Description="GithubActionRunner"}]'
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+      
+    - name: Terraform Init
+      run: |
+        cp ../support_resources/vault/vault_mgmt.tf .
+        terraform init
+
+    - name: Terraform Validate
+      id: tf-validate
+      run: terraform validate
+
+    - name: Terraform Format
+      id: tf-fmt
+      run: terraform fmt -check -recursive
+
+    - name: Terraform Plan - EKS Target
+      id: tf-plan-eks
+      run: |
+        export exitcode=0
+        terraform plan -var-file envvars/${{ env.ENVIR }}.tfvars -target=module.eks_mgmt -no-color -detailed-exitcode -out tfplan_eks || export exitcode=$?
+        terraform show -no-color tfplan_eks > ${{ github.workspace }}/eks_cluster/tfplan_eks.out
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+        if [ $exitcode -eq 1 ]; then
+          echo Terraform Plan Failed!
+          exit 1
+        else
+          exit 0
+        fi
+
+    - name: Terraform Apply - EKS Target
+      id: tf-apply-eks
+      run: terraform apply -target=module.eks_mgmt -auto-approve tfplan_eks
+
+    - name: Remove IP from Vault SG
+      if: always()
+      run: |
+        aws ec2 revoke-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --protocol tcp \
+          --port 8200 \
+          --cidr $ip/32
+
+    - name: Slack Notify - Failure
+      uses: rtCamp/action-slack-notify@v2
+      if: failure()
+      env:
+        SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: ':cry: infra-cluster-resources Terraform Plan Step :small_red_triangle_down: ${{ job.status }}'
+        SLACK_TITLE: Q_EKS Github Action EKS Target - infra-cluster-resources
+        SLACK_USERNAME: DevOps
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Slack Notify - Success
+      uses: rtCamp/action-slack-notify@v2
+      if: success()
+      env:
+        SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: ':celery-man: infra-cluster-resources Terraform Plan Step :rocket: ${{ job.status }}'
+        SLACK_TITLE: Q_EKS Github Action EKS Target - infra-cluster-resources
+        SLACK_USERNAME: DevOps
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  terraform-plan:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+    needs: [terraform-plan-apply-eks]
+    defaults:
+      run:
+        working-directory: eks_cluster
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - uses: tibdex/github-app-token@v1
+      id: get_installation_token
+      with: 
+        app_id: ${{ secrets.PIPELINE_GH_APP_ID }}
+        installation_id: ${{ secrets.PIPELINE_GH_APP_INSTALLATION_ID }}
+        private_key: ${{ secrets.PIPELINE_GH_APP_PRIVATE_KEY }}
+
+    - name: Setup private repo credentials for private modules
+      run: git config --global url."https://git:${{ steps.get_installation_token.outputs.token }}@github.com/${{ env.ORG }}".insteadOf "https://github.com/${{ env.ORG }}"
+
+    - name: Configure AWS credentials from SS_TOOLS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.SS_TOOLS_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSToolsConfig
+
+    - name: Setup Profile for SS_TOOLS
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_tools
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_tools
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_tools
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_tools
+
+    - name: Configure AWS credentials from SS_NETWORK account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.SS_NETWORKING_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: SSNetworkConfig
+    
+    - name: Setup Profile for ss_network
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile ss_network
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ss_network
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ss_network
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ss_network
+
+    - name: Configure AWS credentials from INFRA_PROD account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::836442743669:role/infra-prod-github-oidc-custom-role
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: InfraProdConfig
+
+    - name: Setup Profile for infra_prod
+      run: |
+          aws configure set region ${{ env.AWS_REGION }} --profile infra_prod
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile infra_prod
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile infra_prod
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile infra_prod
+
+
+    - name: Configure AWS credentials from Q_EKS account
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.Q_EKS_GH_OIDC_IAM_ROLE }}
+        aws-region: ${{ env.AWS_REGION }}
+        role-session-name: QEKSConfig
+
+    - name: Configure kubeConfig
+      run: |
+        aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }}
+
+    - name: Get Runner IP
+      run: |
+        echo "ip=$(curl icanhazip.com)" >> $GITHUB_ENV
+
+    - name: Add IP to Vault SG for access
+      run: |
+        export cidr=$ip/32
+        echo $cidr
+        aws ec2 authorize-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --protocol tcp \
+          --port 8200 \
+          --cidr $cidr
+          # --ip-permissions FromPort=8200,ToPort=8200,IpProtocol=tcp,IpRanges='[{CidrIp="$cidr",Description="GithubActionRunner"}]'
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+
+    - name: Terraform Init
+      run: |
+        cp ../support_resources/vault/vault_mgmt.tf .
+        terraform init
+
+    - name: Terraform Validate
+      id: tf-validate
+      run: terraform validate
+
+    - name: Terraform Format
+      id: tf-fmt
+      run: terraform fmt -check -recursive
+
+    # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
+    - name: Terraform Plan
+      id: tf-plan
+      run: |
+        export exitcode=0
+        terraform plan -var-file envvars/${{ env.ENVIR }}.tfvars -no-color -detailed-exitcode -out tfplan || export exitcode=$?
+        terraform show -no-color tfplan > ${{ github.workspace }}/eks_cluster/tfplan.out
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+        if [ $exitcode -eq 1 ]; then
+          echo Terraform Plan Failed!
+          exit 1
+        else
+          exit 0
+        fi
+
+    # Save plan to artifacts
+    - name: Publish Terraform Plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: tfplan
+        path: ${{ github.workspace }}/eks_cluster/tfplan
+
+    - name: Set terraform plan output
+      uses: actions/github-script@v6
+      id: tf-plan-output
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        result-encoding: string
+        script: |
+          const run_url = process.env.GITHUB_SERVER_URL + '/' + process.env.GITHUB_REPOSITORY + '/actions/runs/' + process.env.GITHUB_RUN_ID
+          const run_link = '<a href="' + run_url + '">Actions</a>.'
+          const fs = require('fs')
+          const plan_file = fs.readFileSync('${{ github.workspace }}/eks_cluster/tfplan.out', 'utf8')
+          const plan = plan_file.length > 120000 ? plan_file.toString().substring(0, 120000) + " ..." : plan_file
+          const truncated_message = plan_file.length > 65000 ? "Output is too long and was truncated. You can read full Plan in " + run_link + "<br /><br />" : ""
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.tf-fmt.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.tf-validate.outcome }}\`
+
+          #### Terraform Plan 📖\`${{ steps.tf-plan.outcome }}\`
+          
+          <details><summary>Show Plan</summary>
+          
+          \`\`\`\n
+          ${plan}
+          \`\`\`
+          
+          </details>
+          ${truncated_message}
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ github.workspace }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+          core.setOutput('plan_output', output);
+
+    - name: Publish Terraform Plan to Task Summary
+      env:
+        SUMMARY: ${{ steps.tf-plan-output.outputs.plan_output }}
+      run: |
+        echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+    - name: Push Terraform Output to PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      env:
+        SUMMARY: ${{ steps.tf-plan-output.outputs.plan_output }}
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = `${process.env.SUMMARY}`;
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+            })
+
+    - name: Remove IP from Vault SG
+      if: always()
+      run: |
+        aws ec2 revoke-security-group-ingress \
+          --profile ss_tools \
+          --group-id ${{ env.VAULT_AWSLB_SG_ID }} \
+          --protocol tcp \
+          --port 8200 \
+          --cidr $ip/32
+
+    - name: Slack Notify - Failure
+      uses: rtCamp/action-slack-notify@v2
+      if: failure()
+      env:
+        SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: ':cry: infra-cluster-resources PR Terraform Plan Step :small_red_triangle_down: ${{ job.status }}'
+        SLACK_TITLE: Q_EKS Github Action - infra-cluster-resources
+        SLACK_USERNAME: DevOps
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Slack Notify - Success
+      uses: rtCamp/action-slack-notify@v2
+      if: success()
+      env:
+        SLACK_CHANNEL: ${{ env.SLACK_CHANNEL_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: ':celery-man: infra-cluster-resources PR Terraform Plan Step :rocket: ${{ job.status }}'
+        SLACK_TITLE: Q_EKS Github Action - infra-cluster-resources
+        SLACK_USERNAME: DevOps
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

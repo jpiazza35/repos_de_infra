@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CN.Incumbent.GrpcServer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    }
+  }
+}

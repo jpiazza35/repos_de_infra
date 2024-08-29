@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: app-tenant-api-service
+    app.kubernetes.io/name: app-ps-tenant-api-service
+  name: app-ps-tenant-api-service
+  annotations:
+    reloader.stakater.com/auto: "true"
+  namespace: ps
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: app-tenant-api-service
+      app.kubernetes.io/name: app-ps-tenant-api-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: app-tenant-api-service
+        app.kubernetes.io/name: app-ps-tenant-api-service
+    spec:
+      containers:
+      - env:
+        - name: AUTH0_AUDIENCE
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-auth0-audience
+              name: ps-external-secret
+        - name: AUTH0_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-auth0-clientid
+              name: ps-external-secret
+        - name: AUTH0_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-auth0-domain
+              name: ps-external-secret
+        - name: LAUNCH_DARKLY_KEY
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-launch-darkly-key
+              name: ps-external-secret
+        - name: CONNECTION_STRING_SETTINGS_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: ps-cn-connection-string-settings-database
+              name: ps-external-secret
+        image: app-ps-tenant-api-service
+        imagePullPolicy: Always
+        name: app-ps-tenant-api-service
+        ports:
+        - containerPort: 10001
+          name: https
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

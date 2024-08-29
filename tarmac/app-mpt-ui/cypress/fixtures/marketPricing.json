@@ -1,0 +1,15 @@
+{
+  "orgName": "Hospital of the University of Pennsylvania",
+  "orgID": "90",
+  "projectVersionId": 3,
+  "marketSegmentId": 1,
+  "marketPricingSheetId": 6,
+  "Project": {
+    "projectName": "cypress api test raj",
+    "Success_Msg_1": "Data has been saved successfully",
+    "Delete_Success_Msg_1": "Data has been deleted successfully",
+    "Delete": "Data has been deleted successfully",
+    "Delete_Comment": "deleted by cypress automation",
+    "projectUIName": "cypress ui test"
+  }
+}

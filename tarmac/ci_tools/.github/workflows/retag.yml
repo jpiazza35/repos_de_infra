@@ -1,0 +1,23 @@
+name: Re-tag a container image
+
+on:
+  workflow_call: 
+    inputs:
+      old_image_name:
+        description: 'name of the existing container image'
+        required: true
+        type: string
+      new_image_name:
+        description: 'new tag for the container image'
+        required: true
+        type: string
+
+jobs:
+  retag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tag with image with a new tag - ${{ inputs.new_image_name }}
+        shell: bash
+        run: |
+          docker tag ${{ inputs.old_image_name }} ${{ inputs.new_image_name }}
+          docker image push ${{ inputs.new_image_name }}

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package cn.dataworkbench.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+service SurveyDataWorkbenchService {
+  rpc ListSubmissionData(ListSubmissionDataRequest) returns (ListSubmissionDataResponse);
+  rpc ChangeSubmissionData(ChangeSubmissionDataRequest) returns (ChangeSubmissionDataResponse);
+}
+
+message ListSubmissionDataRequest {
+  string submission_id = 1;
+  // consider parameters for including or excluding pending changes?
+}
+
+message ListSubmissionDataResponse {}
+
+message PublishDataRequest {
+  repeated string submission_ids = 1;
+  repeated string org_ids = 2;
+}
+
+message ChangeSubmissionDataRequest {
+  string schema_id = 1;
+  string submission_id = 2;
+  repeated RowChange row_changes = 3;
+}
+
+message RowChange {
+  string row_key = 1;
+  repeated ColumnChange column_changes = 2;
+  string change_note = 3;
+}
+
+message ColumnChange {
+  int32 column_order = 1;
+  oneof old_value {
+    string old_value_string_value = 2;
+    int32 old_value_int32_value = 3;
+    int64 old_value_int64_value = 4;
+    bool old_value_bool_value = 5;
+    google.protobuf.Timestamp old_value_timestamp_value = 6;
+    double old_value_double = 7;
+    google.protobuf.NullValue old_value_null_value = 8;
+  }
+  oneof new_value {
+    string new_value_string_value = 9;
+    int32 new_value_int32_value = 10;
+    int64 new_value_int64_value = 11;
+    bool new_value_bool_value = 12;
+    google.protobuf.Timestamp new_value_timestamp_value = 13;
+    double new_value_double = 14;
+    google.protobuf.NullValue new_value_null_value = 15;
+  }
+}
+
+message ChangeSubmissionDataResponse {}

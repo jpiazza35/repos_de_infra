@@ -1,0 +1,105 @@
+{
+    "Version": "2012-10-17",
+    "Id": "AllowIAMOtherAccounts",
+    "Statement": [{
+       "Sid": "1",
+       "Effect": "Allow",
+       "Principal": {
+          "AWS": [
+            "arn:aws:iam::${aws_account_id}:root",
+            "arn:aws:iam::${shared_services_aws_account_id}:root",
+            "arn:aws:iam::${security_aws_account_id}:root",
+            "arn:aws:iam::${proxy_dev_aws_account_id}:root",
+            "arn:aws:iam::${proxy_test_aws_account_id}:root",
+            "arn:aws:iam::${proxy_prod_aws_account_id}:root",
+            "arn:aws:iam::${infra_code_aws_account_id}:root",
+            "arn:aws:iam::${networking_aws_account_id}:root",
+            "arn:aws:iam::${master_aws_account_id}:root"
+          ]
+       },
+       "Action": [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage"
+       ],
+          "Resource": "arn:aws:sqs:${region}:${aws_account_id}:${sqs_queue_name}"
+       },
+       {
+         "Sid": "AllowS3",
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "s3.amazonaws.com"
+         },
+         "Action": [
+            "sqs:SendMessage"
+         ],
+         "Resource": [
+            "arn:aws:sqs:${region}:${aws_account_id}:${sqs_queue_name}"
+         ],
+         "Condition": {
+            "StringEquals": {
+              "aws:SourceAccount": [
+                  "${aws_account_id}",
+                  "${shared_services_aws_account_id}",
+                  "${security_aws_account_id}",
+                  "${proxy_dev_aws_account_id}",
+                  "${proxy_test_aws_account_id}",
+                  "${infra_code_aws_account_id}",
+                  "${proxy_prod_aws_account_id}",
+                  "${networking_aws_account_id}"
+              ]
+            },
+            "ArnLike": {
+              "aws:SourceArn": "arn:aws:s3:*:*:*"
+            }
+         }
+       },
+       {
+         "Sid": "AllowSNS",
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "sns.amazonaws.com"
+         },
+         "Action": [
+            "sqs:SendMessage"
+         ],
+         "Resource": [
+            "arn:aws:sqs:${region}:${aws_account_id}:${sqs_queue_name}"
+         ],
+         "Condition":{
+            "ArnEquals":{
+              "aws:SourceArn":"arn:aws:sns:${region}:${security_aws_account_id}:aws-controltower-AggregateSecurityNotifications"
+            }
+          }
+       },
+       {
+         "Sid": "AllowSNSOtherAccounts",
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "sns.amazonaws.com"
+         },
+         "Action": [
+            "sqs:SendMessage"
+         ],
+         "Resource": [
+            "arn:aws:sqs:${region}:${aws_account_id}:${sqs_queue_name}"
+         ],
+         "Condition": {
+            "StringEquals": {
+              "aws:SourceAccount": [
+                  "${aws_account_id}",
+                  "${shared_services_aws_account_id}",
+                  "${security_aws_account_id}",
+                  "${proxy_dev_aws_account_id}",
+                  "${proxy_test_aws_account_id}",
+                  "${infra_code_aws_account_id}",
+                  "${proxy_prod_aws_account_id}",
+                  "${networking_aws_account_id}"
+              ]
+            },
+            "ArnLike": {
+              "aws:SourceArn": "arn:aws:sns:${region}:*:*"
+            }
+         }
+       }
+    ]
+ }

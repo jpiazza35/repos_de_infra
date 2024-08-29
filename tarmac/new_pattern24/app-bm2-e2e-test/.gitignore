@@ -1,0 +1,24 @@
+# to be added to .gitignore
+
+# dotenv environment variables file
+.env
+.env.test
+
+# screenshot, video
+**.png
+**.mp4
+
+# mochawesome
+mochawesome-report/**
+**.reports/
+cypress/reports/mocha/
+cypress/downloads/
+
+#vsc
+.vscode
+
+# cypress test downloads
+cypress/downloads/
+cypress/reports/
+node_modules
+package-lock.json

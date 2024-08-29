@@ -1,0 +1,101 @@
+{
+    "specialtyGroupv23": [
+        "Primary Care",
+        "Medical Specialties",
+        "Surgical Specialties",
+        "Hospital Based Specialties",
+        "Pediatric Subspecialties",
+        "Ancillary Specialties"
+    ],
+
+    "specialtyGroup2019": [
+        "Primary Care",
+        "Medical Specialties",
+        "Surgical Specialties",
+        "Hospital Based Specialties",
+        "Pediatric Subspecialties"
+    ],
+
+    "specialtyGroup2020": [
+        "Primary Care",
+        "Medical Specialties",
+        "Surgical Specialties",
+        "Hospital Based Specialties",
+        "Pediatric Subspecialties"
+    ],
+
+    "primaryCareSpecialties": [
+        "Family Medicine",
+        "Internal Medicine",
+        "Pediatrics"
+    ],
+
+    "medicalSpecialties": [
+        "Allergy & Immunology",
+        "Bariatric Medicine",
+        "Cardiology",
+        "Dermatology",
+        "Endocrinology & Metabolism",
+        "Gastroenterology",
+        "Hospice & Palliative Medicine",
+        "Hyperbaric & Wound Care",
+        "Infectious Disease",
+        "Neonatology/Perinatology",
+        "Nephrology & Hypertension",
+        "Neurology",
+        "Occupational & Environmental Medicine",
+        "Oncology",
+        "Pain Medicine",
+        "Physical Medicine & Rehabilitation",
+        "Podiatry",
+        "Psychiatry",
+        "Pulmonology",
+        "Rheumatology",
+        "Sleep Medicine",
+        "Sports Medicine"
+    ],
+
+    "surgicalSpecialties": [
+        "Cardiothoracic Surgery",
+        "General Surgery",
+        "Neurological Surgery",
+        "OB/GYN",
+        "Ophthalmology",
+        "Orthopedic Surgery",
+        "Otolaryngology",
+        "Plastic & Reconstructive Surgery",
+        "Surgical Oncology",
+        "Urology"
+    ],
+    
+    "hospitalBasedSpecialties": [
+        "Anesthesiology",
+        "Critical Care",
+        "Emergency Medicine",
+        "Hospitalist",
+        "Pathology",
+        "Radiology"
+    ],
+
+    "pediatricSubspecialties": [
+        "Pediatric Subspecialties"
+    ],
+    
+    "ancillarySpecialties": [
+        "Acupuncture",
+        "Audiology",
+        "Chiropractic Medicine",
+        "Dentistry",
+        "Dietary/Nutrition",
+        "Occupational Therapy/Physical Therapy",
+        "Optometry",
+        "Pharmacy",
+        "Psychology",
+        "Social Work",
+        "Speech-Language Pathology"
+    ]
+
+
+
+
+}

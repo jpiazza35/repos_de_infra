@@ -1,0 +1,48 @@
+fullnameOverride: app-incumbent-grpc-service-prod
+namespace:
+  name: mpt
+  
+service:
+  port: 8004
+  targetPort: 8004
+  name: app-incumbent-grpc-service-prod
+  type: ClusterIP
+
+image:
+  repository: '163032254965.dkr.ecr.us-east-1.amazonaws.com/app-incumbent-grpc-service-ecr-repo'
+  tag: '3ee178bce4'
+  pullPolicy: 'Always'
+
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+serviceAccountName:
+  create: false
+  name: app-incumbent-api-sa
+  automountServiceAccountToken: true
+
+envvars:
+  - name: "CN_AWSCONFIGURATION__AWSBUCKETNAME"
+    value: "prod-mpt-etl-source-data-993562814415"
+  - name: "CN_USERSERVERURL"
+    value: "https://mpt.cliniciannexus.com:7051"
+  - name: "CN_SWAGGER__ISENABLED"
+    value: "\"true\""
+  - name: "CN_AZUREADB2C__INSTANCE"
+    value: "https://auth.cliniciannexus.com"
+  - name: "CN_AZUREADB2C__DOMAIN"
+    value: "auth.cliniciannexus.com"
+  - name: "CN_AZUREADB2C__SIGNEDOUTCALLBACKPATH"
+    value: "/signout/B2C_1A_CN_HRD_SIGNIN"
+  - name: "CN_AZUREADB2C__SIGNUPSIGNINPOLICYID"
+    value: "B2C_1A_CN_HRD_SIGNIN"
+  
+environment: prod

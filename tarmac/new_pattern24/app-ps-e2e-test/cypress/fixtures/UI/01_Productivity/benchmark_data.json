@@ -1,0 +1,10 @@
+{
+    "cardTitle": "Benchmark",
+    "benchmarkTiles": [
+        "YTD wRVUs",
+        "Benchmark FTE",
+        "wRVUs/FTE",
+        "YTD Benchmark %ile"
+    ],
+    "exportDataPDF": "Export Data to PDF"
+}

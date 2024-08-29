@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: '{{ include "app-user-grpc-service.fullname" . }}'
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "app-user-grpc-service.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.targetPort }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: grpc
+  selector:
+    {{- include "app-user-grpc-service.selectorLabels" . | nindent 4 }}

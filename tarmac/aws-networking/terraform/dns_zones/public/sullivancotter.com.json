@@ -1,0 +1,1440 @@
+{
+    "ZoneDefinition": {
+        "Name": "sullivancotter.com",
+        "Parent": null
+    },
+    "ResourceRecordSets": [
+        {
+            "Name": "sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "104.154.180.169"
+                }
+            ]
+        },
+        {
+            "Name": "sullivancotter.com.",
+            "Type": "MX",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10 sullivancotter-com.mail.protection.outlook.com"
+                }
+            ]
+        },
+        {
+            "Name": "sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "MS=ms81327508"
+                },
+                {
+                    "Value": "v=spf1 ip4:12.218.63.72/29 ip4:209.10.195.32/28 a:mailers.sullivancotter.com include:spf.protection.outlook.com include:amazonses.com include:_spf.qemailserver.com include:spf.constantcontact.com -all"
+                },
+                {
+                    "Value": "smartsheet-site-validation=BuFWfk2i3FjKU39TlNTRrCqUD_m9VfqT"
+                },
+                {
+                    "Value": "hcp-domain-verification=f6c02257ffc95c15f3d30798032f9db39246a1c8a912a9acc6a2dbbabe11b3d7"
+                },
+                {
+                    "Value": "lucid-verification=m4fX.-WdwRmXBn8.EgXu"
+                }
+            ]
+        },
+        {
+            "Name": "14367759.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "_03ed72617c6f42e8a79af22836c950b7.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_170e4db4ba51b407e8c91bc4cf5d2c92.duyqrilejt.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_amazonses.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "JI8GvTiM0mD1/EoSb4CtEvi4VrNd4rC8wYxaZsonRD8="
+                }
+            ]
+        },
+        {
+            "Name": "_dmarc.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=DMARC1; p=none; rua=mailto:a09c68f9@mxtoolbox.dmarc-report.com;ruf=mailto:a09c68f9@forensics.dmarc-report.com; fo=1; adkim=r; aspf=r"
+                }
+            ]
+        },
+        {
+            "Name": "_dnsauth.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "dvyq3qqcmjf86mrr51qg422ftmlm63tm"
+                },
+                {
+                    "Value": "phgddjmft28zvg08rmnkmp5ymdkw7q2m"
+                },
+                {
+                    "Value": "vczl6jwn23jzm8vrb36gd63b55fskrj3"
+                },
+                {
+                    "Value": "2cnw99yfsd8xfv75mxtk8phvrb3nrp7j"
+                },
+                {
+                    "Value": "k0cjzwn1mt8hg9s0v3dm4vnd2jr8r23t"
+                },
+                {
+                    "Value": "42k9c0q95xw4yf4qn2wtp6fr5v9yshcb"
+                }
+            ]
+        },
+        {
+            "Name": "2020183829._domainkey.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCibw9AMf4xoK3i5TiA0FEo7lYJxRD9i3M0Bh1glZ+nZDP7sqVeuO2eNKy/0ViOFFhMyYMJC+U0VgjZRS6a0dCdkkuWsIXrdBv/YWASrpVRW2ItJkucK5LSmYp88mQViJyPWyU8cIGi1wMhYwxy30H39EKL6yAn2tkzdnnFHtwmfQIDAQAB"
+                }
+            ]
+        },
+        {
+            "Name": "2020183847._domainkey.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCUkUwMmJlXG0IKYVCaykWa7tXv8frEz6Z3Q91x6o+kI/Yh7EuhG+wSpf2rMDYtACIQYJqPu8JlY1e4xPBAsPdYyonwgTVSTe8PvbD8XxKGLHIxluZ7+kjuM3ShQ2U9VafItfaaTFJP63aAfBHeiJYP2eBFcE9GQ+r/EqMTUCWMsQIDAQAB"
+                }
+            ]
+        },
+        {
+            "Name": "hcowsyrzaosnyu3exulm2p3hbux2l3zc._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "hcowsyrzaosnyu3exulm2p3hbux2l3zc.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "hs1-20796010._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sullivancotter-com.hs18a.dkim.hubspotemail.net."
+                }
+            ]
+        },
+        {
+            "Name": "hs2-20796010._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sullivancotter-com.hs18b.dkim.hubspotemail.net."
+                }
+            ]
+        },
+        {
+            "Name": "ihsnj3k4szddre6pqho76sambuj7tczl._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "ihsnj3k4szddre6pqho76sambuj7tczl.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "lw5ro6wi77zpsn5cwp3gsiiga5xzl5yn._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 1800,
+            "ResourceRecords": [
+                {
+                    "Value": "lw5ro6wi77zpsn5cwp3gsiiga5xzl5yn.dkim.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "qualtrics._domainkey.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDFbhffMZLDHfisRLJ3JU6W3pnuJrdmwfw8Yjz15XwDen3gF1ooax/EqYyx2xFcC9JKF8PKc6SEFyJrWVspq7vbndc+yBHsQoTeUp+pn7nwGvaNec5nvtZBo7/0jHh4XQJTFyG0JRzoG9gX1W218q1iFr040CkhEq53gchmgEhRmwIDAQAB"
+                }
+            ]
+        },
+        {
+            "Name": "s1._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "s1.domainkey.u14367759.wl010.sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "s2._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "s2.domainkey.u14367759.wl010.sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "selector1._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "selector1-sullivancotter-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "selector2._domainkey.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "selector2-sullivancotter-com._domainkey.sullivancotter.onmicrosoft.com"
+                }
+            ]
+        },
+        {
+            "Name": "_sipfederationtls._tcp.sullivancotter.com.",
+            "Type": "SRV",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "100 1 5061 sipfed.online.lync.com."
+                }
+            ]
+        },
+        {
+            "Name": "_sip._tls.sullivancotter.com.",
+            "Type": "SRV",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "100 1 443 sipdir.online.lync.com."
+                }
+            ]
+        },
+        {
+            "Name": "alx01.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.201.11.50"
+                }
+            ]
+        },
+        {
+            "Name": "api-locationservice.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.internal-aws-va2-alb02-private-1148750107.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "api-pdfservice.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.internal-aws-va2-alb02-private-1148750107.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "apppref.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "apps.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.37"
+                }
+            ]
+        },
+        {
+            "Name": "audits.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "autodiscover.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "autodiscover.outlook.com."
+                }
+            ]
+        },
+        {
+            "Name": "autovpn.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "209.10.195.36"
+                }
+            ]
+        },
+        {
+            "Name": "autovpn2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "12.218.63.76"
+                }
+            ]
+        },
+        {
+            "Name": "aws-idp.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z2FDTNDATAQYW2",
+                "DNSName": "dim03dfbj1e8z.cloudfront.net.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "aws-ses.sullivancotter.com.",
+            "Type": "MX",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10 feedback-smtp.us-east-1.amazonses.com"
+                }
+            ]
+        },
+        {
+            "Name": "aws-ses.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "v=spf1 include:amazonses.com ~all"
+                }
+            ]
+        },
+        {
+            "Name": "aws-va-app01.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.37"
+                }
+            ]
+        },
+        {
+            "Name": "ccb-dev.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "sca-pfmv-dev.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "ces-prod-db-replica.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-production-replica.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-prod-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-production.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-qa-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-qa.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-sandbox-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-sandbox.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces-stage-db.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "ces-stage.cwilbglj8ke5.us-east-1.rds.amazonaws.com"
+                }
+            ]
+        },
+        {
+            "Name": "ces.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "52.5.233.110"
+                }
+            ]
+        },
+        {
+            "Name": "cesprod-jobs.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.236"
+                }
+            ]
+        },
+        {
+            "Name": "cesprod-jobs2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.158"
+                }
+            ]
+        },
+        {
+            "Name": "cesprod.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.237"
+                }
+            ]
+        },
+        {
+            "Name": "cesqa.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.242"
+                }
+            ]
+        },
+        {
+            "Name": "cessandbox.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.244"
+                }
+            ]
+        },
+        {
+            "Name": "cesstage-jobs.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.238"
+                }
+            ]
+        },
+        {
+            "Name": "cesstage.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.11.239"
+                }
+            ]
+        },
+        {
+            "Name": "clientportal.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "cpt.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "dch.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "devops.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sca-devops01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "dpa.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.200.12.36"
+                }
+            ]
+        },
+        {
+            "Name": "em9272.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "u14367759.wl010.sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "enterpriseenrollment.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "enterpriseenrollment.manage.microsoft.com."
+                }
+            ]
+        },
+        {
+            "Name": "enterpriseregistration.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "enterpriseregistration.windows.net."
+                }
+            ]
+        },
+        {
+            "Name": "epo.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-epo01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "ftp.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "3.213.102.163"
+                }
+            ]
+        },
+        {
+            "Name": "google.sullivancotter.com.",
+            "Type": "TXT",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "google-site-verification=5H-ifUwpfawN4I0LH53W08uIvg76C5dsP2QFvA_7V4A"
+                }
+            ]
+        },
+        {
+            "Name": "hr-sc.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-hr01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "info.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [{
+                "Value": "20796010.group10.sites.hubspot.net"
+            }]
+        },
+        {
+            "Name": "insights360-ab.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "insights360-bm360.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "insights360-pna.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "insights360-wi360.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "insights360.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.internal-aws-va2-alb02-private-1148750107.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "itsupport.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-mgt01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "jmeter.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "18.214.167.125"
+                }
+            ]
+        },
+        {
+            "Name": "jt-only-dominant-mapping-ssl.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "fbd08433-2565-4574-b2ed-4170179487e2.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "lansweeper.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-mgt01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "loadtest.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "18.214.167.125"
+                }
+            ]
+        },
+        {
+            "Name": "lyncdiscover.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "webdir.online.lync.com."
+                }
+            ]
+        },
+        {
+            "Name": "mailers.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "18.235.19.102"
+                },
+                {
+                    "Value": "34.225.206.171"
+                },
+                {
+                    "Value": "23.22.87.67"
+                },
+                {
+                    "Value": "52.2.35.232"
+                },
+                {
+                    "Value": "34.195.86.111"
+                },
+                {
+                    "Value": "34.194.133.141"
+                },
+                {
+                    "Value": "52.4.101.165"
+                }
+            ]
+        },
+        {
+            "Name": "mktg-sd.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-mktg01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "ml-jtm-aaf1-jt.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "e93c94b6-64c9-4dde-b9e8-db8e6cebf0cd.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "ml-jtm-aaf1.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "1b2aab85-31a5-4a54-8292-7fb05bf8fa13.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "ml-jtm-aaf2-jt.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "12ab1fb7-4e44-4b65-a5f2-9617cb3c1faf.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "ml-jtm-aaf2.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "fbeefdc5-d56a-4120-9b97-9cb027330fcf.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "ml-jtm-aaf3-jt.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "91d8278d-50c9-4ed8-b6b6-2e4cf68a9008.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "ml-jtm-aaf3.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "b8f7b6ec-4f18-4b7b-99f3-cda12f110461.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "ml-jtm-poc.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "d705a0c3-67f7-4881-8ddb-96aab7a3e455.centralus.azurecontainer.io"
+                }
+            ]
+        },
+        {
+            "Name": "mp.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "msoid.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "clientconfig.microsoftonline-p.net."
+                }
+            ]
+        },
+        {
+            "Name": "obi01.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "paypractices.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "pb.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "pki.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z26RNL4JYFTOTI",
+                "DNSName": "aws-va-nlb01-public-94107c604f47a6f9.elb.us-east-1.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "pna.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "portal.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "67.216.78.83"
+                }
+            ]
+        },
+        {
+            "Name": "ppmt-admin.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "10.100.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "ppmt-c0001.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0006.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0007.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0008.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0010.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0011.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0012.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0013.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0014.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0015.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0016.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0017.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0018.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0019.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0020.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0021.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0022.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0023.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0024.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0025.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0026.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0027.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0028.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-c0029.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-demo.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmt-sca.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "ppmtsupport.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-ppmt01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "ppmweb01-dev.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.104.11.93"
+                }
+            ]
+        },
+        {
+            "Name": "practicedb-dev.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "sca-pfmv-dev.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "practicedb-test.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "10.104.11.96"
+                }
+            ]
+        },
+        {
+            "Name": "practicedb.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "o1.ptr779.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "149.72.155.23"
+                }
+            ]
+        },
+        {
+            "Name": "report-test.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sull02vma05.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "rsnet.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "12.218.63.74"
+                }
+            ]
+        },
+        {
+            "Name": "securevpn.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "209.10.195.36"
+                }
+            ]
+        },
+        {
+            "Name": "securevpn2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "12.218.63.76"
+                }
+            ]
+        },
+        {
+            "Name": "sgmail.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "u7775079.wl080.sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "_c985d3cc6d8773d622bb3aba871e5823.sharedservices.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "_3839fed1936dbd9a7bd088a560eea479.dqxlbvzbzt.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "sip.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 3600,
+            "ResourceRecords": [
+                {
+                    "Value": "sipdir.online.lync.com."
+                }
+            ]
+        },
+        {
+            "Name": "ss-tools.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "ss-lb-741645814.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": true
+            }
+        },
+        {
+            "Name": "st-staging.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sca-survey-dev.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "sts.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z26RNL4JYFTOTI",
+                "DNSName": "aws-va-nlb01-public-94107c604f47a6f9.elb.us-east-1.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "surveydata.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "209.17.116.8"
+                }
+            ]
+        },
+        {
+            "Name": "surveytracker.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sca-survey-prod.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "svpn.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "209.10.195.36"
+                }
+            ]
+        },
+        {
+            "Name": "svpn2.sullivancotter.com.",
+            "Type": "A",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "12.218.63.76"
+                }
+            ]
+        },
+        {
+            "Name": "tab01.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "tfs-test.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sca-devops-tfs.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "url9669.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sendgrid.net"
+                }
+            ]
+        },
+        {
+            "Name": "wa.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "wmm.sullivancotter.com.",
+            "Type": "A",
+            "AliasTarget": {
+                "HostedZoneId": "Z35SXDOTRQ7X7K",
+                "DNSName": "dualstack.aws-va2-alb01-public-984815271.us-east-1.elb.amazonaws.com.",
+                "EvaluateTargetHealth": false
+            }
+        },
+        {
+            "Name": "wug.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "chi-dc-mgt01.sca.local"
+                }
+            ]
+        },
+        {
+            "Name": "www.sullivancotter.com.",
+            "Type": "CNAME",
+            "TTL": 300,
+            "ResourceRecords": [
+                {
+                    "Value": "sullivancotter.com"
+                }
+            ]
+        }
+    ]
+}

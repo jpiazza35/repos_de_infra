@@ -1,0 +1,29 @@
+{
+  "name": "app-ps-e2e-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "e2e.js",
+  "retries": {
+    "runMode": 1,
+    "openMode": 1
+  },
+  "devDependencies": {
+    "cypress": "^13.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cy:open": "npx cypress open",
+    "cy:chrome": "npx cypress run  --browser chrome",
+    "cy:smoke": "npx cypress run --browser chrome --env tags='@smoke'",
+    "cy:regression": "npx cypress run --browser chrome --env tags='@regression'",
+    "cy:qa_realdata_fiscal_chrome":"npx cypress run  --config-file env-configs/qa.config.js --browser chrome --env enableRealData=on,reportingPeriod=fiscal",
+    "cy:qa_realdata_calendar_chrome":"npx cypress run --config-file env-configs/qa.config.js --browser chrome --env enableRealData=on,reportingPeriod=calendar",
+    "cy:qa_mockdata_chrome":"npx cypress run --config-file env-configs/qa.config.js --browser chrome --env enableRealData=off"
+   
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress-mochawesome-reporter": "^3.5.1"
+  }
+}

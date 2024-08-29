@@ -1,0 +1,40 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": ["eslint:recommended", "plugin:svelte/recommended", "plugin:import/recommended", "plugin:cypress/recommended", "plugin:prettier/recommended"],
+    "plugins": ["import", "jquery", "prettier", "cypress"],
+    "overrides": [
+      {
+        "files": ["**/*.svelte"],
+        "parser": "svelte-eslint-parser"
+      }
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-extend-native": "off",
+      "cypress/unsafe-to-chain-command": "off",
+      "cypress/no-unnecessary-waiting": "off",
+      "import/prefer-default-export": "off",
+      "import/no-unresolved": ["off"],
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "svelte/no-at-html-tags": "warn",
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
+    },
+    "globals": {
+      "jQuery": "writable",
+      "kendo": "writable",
+      "__APP_VERSION__": true
+    }
+  } 

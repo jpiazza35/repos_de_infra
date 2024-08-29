@@ -1,0 +1,49 @@
+name: Running Rubocop tool for analysis
+
+on:
+  workflow_call:
+    inputs:
+      filter_mode:
+        description: 'Filtering mode for the reviewdog command [added,diff_context,file,nofilter]'
+        type: string
+        default: 'added'
+      rubocop_version:
+        description: 'Rubocop version'
+        type: string
+        default: 'gemfile'
+      rubocop_extensions:
+        description: 'Rubocop extensions'
+        type: string
+        default: 'rubocop-rails:gemfile rubocop-rspec:gemfile rubocop-packaging:gemfile rubocop-performance:gemfile rubocop-i18n:gemfile rubocop-rake:gemfile'
+      reporter:
+        description: 'Reporter of reviewdog command [github-pr-check,github-check,github-pr-review]'
+        default: 'github-pr-check'
+        type: string
+      fail_on_error:
+        description: 'Exit code for reviewdog when errors are found [true,false]'
+        type: string
+        default: 'false'
+
+
+jobs:
+  rubocop:
+    name: runner / rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.7
+      - name: rubocop
+        uses: reviewdog/action-rubocop@v2
+        with:
+          filter_mode: ${{ inputs.filter_mode }}
+          rubocop_version: ${{ inputs.rubocop_version }}
+          rubocop_extensions: ${{inputs.rubocop_extensions}}
+          reporter: ${{ inputs.reporter }} # Default is github-pr-check
+          fail_on_error: ${{ inputs.fail_on_error }}
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo "This job's status is ${{ job.status }}."

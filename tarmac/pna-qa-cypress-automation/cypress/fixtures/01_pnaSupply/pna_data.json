@@ -1,0 +1,91 @@
+{
+    
+    
+    "productName": "Client Portal",
+    "boxHeader": "Applications",
+    "welName": "Welcome Demo User02",
+    "applications": [
+        "Provider Affiliation & Needs Assessment"
+    ],
+
+
+    "client": [
+        "SullivanCotter Demo_Child - 10424",
+        "SullivanCotter Demo_Grandchild - 10425",
+        "SullivanCotter Demo_Parent - 10423"
+    ],
+
+    "engagementVersion": [
+        "Uploaded File - v23"
+
+    ],
+
+    "advFilter": [
+        "Provider ID",
+        "Main Specialty",
+        "Service Area",
+        "Provider Status",
+        "Provider Name/NPI",
+        "Employer",
+        "Location Status",
+        "Medical Credential",
+        "Affiliation",
+        "Location Status Reason",
+        "Age Band",
+        "Call Status",
+        "Order By",
+        "Order By Columns",
+        "Last Modified Days"
+    ],
+
+    "ageBandDropDownOptions":  [
+        "Unknown",
+        "< 35",
+        "35 - 49",
+        "50 - 64",
+        "65 - 69",
+        "70+"
+    ],
+
+    "serviceAreaDropDownValues": [
+        "All",
+        "Central Region",
+        "County - Arthur, NE (Stark)",
+        "County - Blaine, NE",
+        "County - Box Butte, NE",
+        "County - Chase, NE",
+        "CSA",
+        "PSA",
+        "Stark SA 1",
+        "Stark SA 2",
+        "Strategic SA"
+    ],
+
+    "listOfQueryFilterReports": [
+        "Select below",
+        "Provider Name Variation - Nightly Report",
+        "Provider with Duplicate Locations - Nightly Report",
+        "Same NPI Assigned to Multiple Providers",
+        "Total cFTE >1 per Provider for all Active Locations",
+        "Total Work Days > 7 days per Provider for all Active Locations"
+    ],
+
+    "deleteProviderLinkConfirmMessage": [
+        "This provider location record will be deleted.  If there are no other locations associated with this provider, the provider record will also be deleted.  Do you want to proceed?"
+    ],
+
+    "itemPerPagePicker": [
+        "10",
+        "25",
+        "50",
+        "100",
+        "200"
+    ]
+
+  
+    
+
+
+
+
+}

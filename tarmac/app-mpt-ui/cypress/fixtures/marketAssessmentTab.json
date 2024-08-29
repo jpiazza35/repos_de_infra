@@ -1,0 +1,10 @@
+{
+    "topLevelFilters": {
+      "orgName": "Hospital of the University of Pennsylvania",
+      "orgID": "90"
+    },
+    "organizationErrorMessage": "To visualize Market Segment please select an Organization, Project ID and Project Version.",
+    "projectIdErrorMessage": "To visualize Market Segment please select a Project ID and Project Version.",
+    "projectVersionErrorMessage": "To visualize Market Segment please select a Project Version.",
+    "projectVersionId": 3
+  }
