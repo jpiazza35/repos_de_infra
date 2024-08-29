@@ -23,7 +23,7 @@ cr:
           # username: admin
           # password: "prom-operator"
           ## api key created in grafana UI
-          token: "eyJrIjoid3RXVTZhVEt2MVp6VzZqMDdkdmJWblVCMDR1T0ZPc1ciLCJuIjoidGVzdCIsImlkIjoxfQ==" #secret:monitor-grafana:admin-password
+          token: "" #secret:monitor-grafana:admin-password
           type: bearer
         enabled: true
         in_cluster_url: 'http://monitor-grafana.${ns}:80/'
